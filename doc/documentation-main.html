@@ -2036,7 +2036,7 @@ Note that the <tt>@Listeners</tt> annotation will apply to your entire suite fil
 Here's how it can be done.
 
 <ol>
-  <li>First define a new custom annotation that can be used to specify this restriction.
+  <li>First define a new custom annotation that can be used to specify this restriction:
 
       <pre class="brush: java">
       @Retention(RetentionPolicy.RUNTIME)
@@ -2044,7 +2044,7 @@ Here's how it can be done.
       public @interface DisableListener {}
       </pre>
 
-  <li>Add an edit check as below within your regular listeners
+  <li>Add an edit check as below within your regular listeners:
 
       <pre class="brush: java">
       public void beforeInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
@@ -2057,7 +2057,7 @@ Here's how it can be done.
       }
       </pre>
 
-  <li>Annotate test classes wherein the listener is not to be invoked as shown below
+  <li>Annotate test classes wherein the listener is not to be invoked:
 
     <pre class="brush: java">
     @DisableListener
