@@ -1,2 +1,4 @@
 
 AddHandler php4-script .php
+
+Redirect temp /dtd http://testng.org/testng-1.0.dtd.html
