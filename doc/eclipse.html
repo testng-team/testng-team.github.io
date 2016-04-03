@@ -298,14 +298,13 @@ TestNG workbench preferences:
 <p>
 The preferences here are shared among projects and launch configurations.
 <ul>
-<li><b>Output directory</b>: the path where to store the output including temp files, report files, etc. By default, the path is relative to each project except you check the option <b>Absolute ouput path</b> below.</li>
-<li><b>Disalbe default listeners</b>: disable the default listeners when launch testng runtime</li>
-<li><b>Show view when test complete</b>: active the TestNG result view when the test complete</li>
-<li><strike><b>Use Project TestNG jar</b></strike>: (<b>NOTE: this property was removed in 6.9.11, which means TestNG plugin won't append the plugin's embedded testng jar to the runtime test process.</b>) <br/>
-It is checked by default, so the TestNG Eclipse plug-in will use the project's testng.jar by default.<br/></li>
-<li><b>Template XML file</b>: the absolute path of the template xml file used to genernate the custom test suite xml before launch</li>
+<li><b>Output directory</b>: the path where to store the output including temp files, report files, etc... By default, the path is relative to each project except if you check the option <b>Absolute ouput path</b> below.</li>
+<li><b>Absolute output path</b>: whether the path above is absolute or relative to the current project.</li>
+<li><b>Disable default listeners</b>: disable the default listeners when launching TestNG.</li>
+<li><b>Show view when test complete</b>: activate the TestNG result view when the test completes.</li>
+<li><b>Template XML file</b>: the absolute path of the template XML file used to genernate the custom test suite XML file before launching.</li>
 <li><b>Excluded stack traces</b>: </li>
-<li><b>Pre Defined Listeners</b>: </li>
+<li><b>Predefined Listeners</b>: </li>
 </ul>
 </p>
 
@@ -320,8 +319,7 @@ Here are properties on each project level, it will override the same properties 
 <li><b>Output directory</b>: for example, in the figure above, I prefer to put the output to maven 'target' directory rather than the default one under project root</li>
 <li><b>Watch testng-result.xml</b>:</li>
 <li><b>Template XML file</b>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
-<li><strike><b>Use Project TestNG jar</b></strike>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
-<li><b>Pre Defined Listeners</b>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
+<li><b>Predefined Listeners</b>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
 </ul>
 </p>
 
