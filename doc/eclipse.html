@@ -301,12 +301,8 @@ The preferences here are shared among projects and launch configurations.
 <li><b>Output directory</b>: the path where to store the output including temp files, report files, etc. By default, the path is relative to each project except you check the option <b>Absolute ouput path</b> below.</li>
 <li><b>Disalbe default listeners</b>: disable the default listeners when launch testng runtime</li>
 <li><b>Show view when test complete</b>: active the TestNG result view when the test complete</li>
-<li><b>Use Project TestNG jar</b>: It's default to be checked which means TestNG Eclipse Plugin will use the project TestNG jar (for example, the TestNG version managed with maven) when launch TestNG runtime. Otherwise, the TestNG eclipse plugin embedded TestNG version will be used.<br/>
-When to check this option?
-<ul>
-  <li>you want it behviour as close as running outside IDE, e.g. with maven surefire plugin, since the Plugin embedded version of TestNG most likely different with the version of your project.</li>
-  <li>you don't want the Plugin embedded plugin and it's dependent libs (e.g. snakeyaml, etc.) pollute your TestNG runtime classpath.</li>
-</ul></li>
+<li><strike><b>Use Project TestNG jar</b></strike>: (<b>NOTE: this property was removed in 6.9.11, which means TestNG plugin won't append the plugin's embedded testng jar to the runtime test process.</b>) <br/>
+It is checked by default, so the TestNG Eclipse plug-in will use the project's testng.jar by default.<br/></li>
 <li><b>Template XML file</b>: the absolute path of the template xml file used to genernate the custom test suite xml before launch</li>
 <li><b>Excluded stack traces</b>: </li>
 <li><b>Pre Defined Listeners</b>: </li>
@@ -324,7 +320,7 @@ Here are properties on each project level, it will override the same properties 
 <li><b>Output directory</b>: for example, in the figure above, I prefer to put the output to maven 'target' directory rather than the default one under project root</li>
 <li><b>Watch testng-result.xml</b>:</li>
 <li><b>Template XML file</b>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
-<li><b>Use Project TestNG jar</b>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
+<li><strike><b>Use Project TestNG jar</b></strike>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
 <li><b>Pre Defined Listeners</b>: see in <a class="summary" href="#eclipse-workbench-preferences">TestNG workbench preferences</a></li>
 </ul>
 </p>
