@@ -1,3 +1,7 @@
-Redirect 301 /eclipse-beta https://dl.bintray.com/testng-team/testng-eclipse/
-AddHandler php4-script .php
-Redirect temp /dtd http://testng.org/testng-1.0.dtd.html
+Redirect 301 /eclipse-beta http://dl.bintray.com/testng-team/testng-eclipse/
+Redirect 301 /testng-1.0.dtd http://raw.githubusercontent.com/cbeust/testng/master/src/main/resources/testng-1.0.dtd
+Redirect 301 /index.html http://testng.org/doc/
+Redirect 301 /license/index.html http://testng.org/doc/license/index.html
+Redirect 301 /javadoc/ http://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/
+RedirectMatch 301 /picture/(.*) http://testng.org/doc/pics/$1
+
