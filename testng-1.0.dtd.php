@@ -52,7 +52,7 @@ function http_get_contents($url)
   }
 }
 
-print(htmlentities(http_get_contents("https://raw.githubusercontent.com/cbeust/testng/master/src/main/resources/testng-1.0.dtd")));
+print(htmlentities(http_get_contents("http:/testng.org/testng-1.0.dtd")));
 
 print "</pre>";
 
