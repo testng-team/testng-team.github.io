@@ -39,7 +39,20 @@ DTD for TestNG
 '
 ;
 
-print(htmlentities(file_get_contents("testng-1.0.dtd")));
+function http_get_contents($url)
+{
+  $ch = curl_init();
+  curl_setopt($ch, CURLOPT_TIMEOUT, 1);
+  curl_setopt($ch, CURLOPT_URL, $url);
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  if(FALSE === ($retval = curl_exec($ch))) {
+    error_log(curl_error($ch));
+  } else {
+    return $retval;
+  }
+}
+
+print(htmlentities(http_get_contents("https://raw.githubusercontent.com/cbeust/testng/master/src/main/resources/testng-1.0.dtd")));
 
 print "</pre>";
 
