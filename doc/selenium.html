@@ -194,7 +194,7 @@ public void setupAfterSuite() {
 
 <p>To define the order of the tests, we will have to create an XML file listing the test methods we would like to run. Make sure that the test methods are annotated with <tt>@Test</tt>, or else the TestNG engine will not invoke them.</p>
 
-<p>Before TestNG 5.13.1, you had to use Method Interceptors if you wanted to run the tests in the order defined in the XML file. I have posted <a href="http://gist.github.com/416310">my implementation of a Method Interceptor</a> on my Github account. From TestNG 5.13.1+, you can just add the <tt>preserve-order</tt> parameter to your test tag and include the methods you would like to run, reducing unecessary code in your test suite.</p>
+<p>Before TestNG 5.13.1, you had to use Method Interceptors if you wanted to run the tests in the order defined in the XML file. I have posted <a href="http://gist.github.com/416310">my implementation of a Method Interceptor</a> on my Github account. From TestNG 5.13.1+, you can just add the <tt>preserve-order</tt> parameter to your test tag and include the methods you would like to run, reducing unnecessary code in your test suite.</p>
 
 <p>Here is the XML file:</p>
 
