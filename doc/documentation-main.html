@@ -585,7 +585,7 @@ You can also specify groups and methods to be included and excluded:
 
 By default, TestNG will run your tests in the order they are found in the XML
 file. If you want the classes and methods listed in this file to be
-run in an unpredictible order, set the <tt>preserve-order</tt>
+run in an unpredictable order, set the <tt>preserve-order</tt>
 attribute to <tt>false</tt>
 
 <h3 class="sourcetitle">testng.xml</h3>
@@ -720,7 +720,7 @@ You need to specify at least one XML file describing the TestNG suite you are tr
 	      <br>
             Example: <tt>-reporter com.test.MyReporter:methodFilter=*insert*,enableFiltering=true</tt>
 	      <br>
-            You can have as many occurences of this option, one for each reporter that needs to be added.</td>
+            You can have as many occurrences of this option, one for each reporter that needs to be added.</td>
         </tr>
 
         <tr>
@@ -1777,7 +1777,7 @@ testng.run();
 
 This example creates a <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/TestNG.html">TestNG</a></tt> object and runs the test class <tt>Run2</tt>.  It also adds a <tt>TestListener</tt>.  You can either use the adapter class <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/TestListenerAdapter.html">org.testng.TestListenerAdapter</a></tt> or implement <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/ITestListener.html">org.testng.ITestListener</a></tt> yourself.  This interface contains various callback methods that let you keep track of when a test starts, succeeds, fails, etc...
 <p>
-Similary, you can invoke TestNG on a <tt>testng.xml</tt> file or you can create a virtual <tt>testng.xml</tt> file yourself.  In order to do this, you can use the classes found the package <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/xml/package-frame.html">org.testng.xml</a></tt>:  <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/xml/XmlClass.html">XmlClass</a></tt>, <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/xml/XmlTest.html">XmlTest</a></tt>, etc...  Each of these classes correspond to their XML tag counterpart.
+Similarly, you can invoke TestNG on a <tt>testng.xml</tt> file or you can create a virtual <tt>testng.xml</tt> file yourself.  In order to do this, you can use the classes found the package <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/xml/package-frame.html">org.testng.xml</a></tt>:  <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/xml/XmlClass.html">XmlClass</a></tt>, <tt><a href="https://jitpack.io/com/github/cbeust/testng/master-SNAPSHOT/javadoc/org/testng/xml/XmlTest.html">XmlTest</a></tt>, etc...  Each of these classes correspond to their XML tag counterpart.
 <p>
 For example, suppose you want to create the following virtual file:
 
@@ -2621,7 +2621,7 @@ If you need to log messages that should appear in the generated HTML reports, yo
 <h5><a class="section" indent="..." name="logging-xml-reports">XML Reports</a></h5>
 
 <p>
-TestNG offers an XML reporter capturing TestNG specific information that is not available in JUnit reports. This is particulary useful when the user's test environment needs to consume XML results with TestNG-specific data that the JUnit format can't provide.  Below is a sample of the output of such a reporter:
+TestNG offers an XML reporter capturing TestNG specific information that is not available in JUnit reports. This is particularly useful when the user's test environment needs to consume XML results with TestNG-specific data that the JUnit format can't provide.  Below is a sample of the output of such a reporter:
 </p>
 
 <pre class="brush: xml">
@@ -2672,7 +2672,7 @@ TestNG offers an XML reporter capturing TestNG specific information that is not 
   </tr>
   <tr>
     <td>outputDirectory</td>
-    <td>A <tt>String</tt> indicating the directory where should the XML files be outputed.</td>
+    <td>A <tt>String</tt> indicating the directory where should the XML files be output.</td>
     <td>The TestNG output directory</td>
   </tr>
   <tr>
