@@ -2182,7 +2182,7 @@ TestNG lets you declare additional parameters in your methods.  When this happen
 <li>
   Any @AfterMethod method can declare a parameter of type <tt>ITestResult</tt>, which will reflect the result of the test method that was just run.
 <li>
-  Any @Before and @After methods can declare a parameter of type <tt>XmlTest</tt>, which contain the current <tt>&lt;test&gt;</tt> tag.
+  Any @Before and @After methods (except @BeforeSuite and @AfterSuite) can declare a parameter of type <tt>XmlTest</tt>, which contain the current <tt>&lt;test&gt;</tt> tag.
 <li>
   Any @BeforeMethod (and @AfterMethod) can declare a parameter of type
   <tt>java.lang.reflect.Method</tt>.  This parameter will receive the
@@ -2217,6 +2217,118 @@ public class NoInjectionTest {
   }
 }
 </pre>
+
+The below table summarises the parameter types that can be natively injected for the various TestNG annotations:<br><br>
+
+<table id="native-deps-injection">
+	<tbody>
+		<tr>
+			<th>Annotation</th>
+			<th>&nbsp;ITestContext&nbsp;</th>
+			<th>&nbsp;XmlTest&nbsp;</th>
+			<th>&nbsp;Method&nbsp;</th>
+			<th>&nbsp;Object[]&nbsp;</th>
+			<th>&nbsp;ITestResult&nbsp;</th>
+		</tr>
+		<tr>
+			<td>BeforeSuite</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeTest</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeGroups</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeClass</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeMethod</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>Test</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>DataProvider</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>AfterMethod</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>AfterClass</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>AfterGroups</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>AfterTest</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>		
+		<tr>
+			<td>AfterSuite</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>		
+	</tbody>
+</table>
+
 
 <h5><a class="section" indent="..." name="guice-dependency-injection">Guice dependency injection</a></h5>
 
