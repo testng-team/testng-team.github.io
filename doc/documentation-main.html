@@ -2218,6 +2218,118 @@ public class NoInjectionTest {
 }
 </pre>
 
+The below table summarises the parameter types that can be natively injected for the various TestNG annotations:<br><br>
+
+<table id="native-deps-injection">
+	<tbody>
+		<tr>
+			<th>Annotation</th>
+			<th>&nbsp;ITestContext&nbsp;</th>
+			<th>&nbsp;XmlTest&nbsp;</th>
+			<th>&nbsp;Method&nbsp;</th>
+			<th>&nbsp;Object[]&nbsp;</th>
+			<th>&nbsp;ITestResult&nbsp;</th>
+		</tr>
+		<tr>
+			<td>BeforeSuite</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeTest</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeGroups</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeClass</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>BeforeMethod</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>Test</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>DataProvider</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>AfterMethod</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>Yes</td>
+		</tr>
+		<tr>
+			<td>AfterClass</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>AfterGroups</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>
+		<tr>
+			<td>AfterTest</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>		
+		<tr>
+			<td>AfterSuite</td>
+			<td>Yes</td>
+			<td>Yes</td>
+			<td>No</td>
+			<td>No</td>
+			<td>No</td>
+		</tr>		
+	</tbody>
+</table>
+
+
 <h5><a class="section" indent="..." name="guice-dependency-injection">Guice dependency injection</a></h5>
 
 If you use Guice, TestNG gives you an easy way to inject your test objects with a Guice module:
