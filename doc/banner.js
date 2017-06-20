@@ -50,3 +50,44 @@ function displayMenu(pCurrentPage) {
 
 }
 
+
+function mavenCentralLatestVersion(func) {
+  var url = "https://cors-anywhere.herokuapp.com/https://search.maven.org/solrsearch/select?q=g%3A%22org.testng%22%20AND%20a%3A%22testng%22&rows=20&wt=json";
+
+  xhr(url, function(resp) {
+    func(resp.response.docs[0].latestVersion);
+  }); 
+}
+
+function mavenCentralLatestSnapshotVersion(func) {
+  var url = "https://cors-anywhere.herokuapp.com/https://oss.sonatype.org/service/local/lucene/search?g=org.testng&a=testng&repositoryId=snapshots";
+
+  xhr(url, function(resp) {
+    func(resp.data[0].latestSnapshot);
+  });  
+}
+
+function jcenterLatestVersion(func) {
+  var url = "https://cors-anywhere.herokuapp.com/https://api.bintray.com/packages/cbeust/maven/testng/";
+
+  xhr(url, function(resp) {
+    func(resp.latest_version);
+  });
+}
+
+function xhr(url, func) {
+  var xhr = new XMLHttpRequest();
+
+  xhr.open("GET", url, true);
+  xhr.setRequestHeader("Accept", "application/json");
+  xhr.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      var resp = JSON.parse(this.responseText);
+      func(resp);
+    }
+  };
+
+  xhr.send();
+}
+
+

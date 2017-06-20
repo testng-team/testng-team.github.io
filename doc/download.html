@@ -16,7 +16,18 @@
       <script type="text/javascript">
         SyntaxHighlighter.config.clipboardSwf = 'scripts/clipboard.swf';
         SyntaxHighlighter.defaults['gutter'] = false;
-        SyntaxHighlighter.all();
+
+        jcenterLatestVersion(function(version) {
+          document.getElementById("gradle").innerHTML = document.getElementById("gradle").innerHTML.replace("$version$", version);
+          document.getElementById("maven").innerHTML = document.getElementById("maven").innerHTML.replace("$version$", version);
+          SyntaxHighlighter.highlight();
+        });
+        mavenCentralLatestVersion(function(version) {
+          document.getElementById("mc_version").innerHTML = version;
+        });
+        mavenCentralLatestSnapshotVersion(function(version) {
+          document.getElementById("snap_version").innerHTML = version;
+        });
       </script>
       <script type="text/javascript" src="toc.js"></script>
 
@@ -40,7 +51,7 @@
 
 <h4>Maven</h4>
 
-<pre class="brush: xml">
+<pre id="maven" class="brush: xml">
     &lt;repositories&gt;
       &lt;repository&gt;
         &lt;id&gt;jcenter&lt;/id&gt;
@@ -52,22 +63,26 @@
     &lt;dependency&gt;
       &lt;groupId&gt;org.testng&lt;/groupId&gt;
       &lt;artifactId&gt;testng&lt;/artifactId&gt;
-      &lt;version&gt;6.10&lt;/version&gt;
+      &lt;version&gt;$version$&lt;/version&gt;
       &lt;scope&gt;test&lt;/scope&gt;
     &lt;/dependency&gt;
 </pre>
 
 <h4>Gradle</h4>
 
-<pre class="brush: java">
+<pre id="gradle" class="brush: java">
 repositories {
     jcenter()
 }
 
 dependencies {
-    testCompile 'org.testng:testng:6.10'
+    testCompile 'org.testng:testng:$version$'
 }
 </pre>
+
+<p>
+If you cannot use JCenter but Maven central only, then the latest available version is <span id="mc_version">$version$</span>.
+</p>
 
 <h3>Snapshots</h3>
 
@@ -80,6 +95,10 @@ repositories {
     }
 }
 </pre>
+
+<p>
+The latest available snapshot is: <span id="snap_version">$version$</span>.
+</p>
 
 <h3>Eclipse plug-in</h3>
 

@@ -25,6 +25,10 @@
 
 <script type="text/javascript">
    displayMenu("index.html");
+
+   jcenterLatestVersion(function(version) {
+        document.getElementById("version").innerHTML = version;
+   });
 </script>
 
 
@@ -42,7 +46,7 @@
 
 
 <p align="right"><font size="-2"><em>C&eacute;dric Beust (cedric at beust.com)<br>
-Current version: 6.9.10<br>
+Current version: <span id="version">6.9.10</span><br>
 Created:&nbsp;April 27th, 2004<br>
 Last Modified:&nbsp; December 19th, 2015</em></font></p>
 
