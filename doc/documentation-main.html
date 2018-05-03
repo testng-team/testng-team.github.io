@@ -1277,7 +1277,7 @@ The data provider supports injection too. TestNG will use the test context for t
 The Data Provider method can return one of the following two types:
 
 <ul>
-<li>An array of array of objects (<tt>Object[][]</tt>) where the first dimension's size is the number of times the test method will be invoked and the second dimension size contains an array of objects that must be compatible with the parameter types of the test method. This is the cast illustrated by the example above.</li><li>An <tt>Iterator&lt;Object[]&gt;</tt>.  The only difference with <tt>Object[][]</tt> is that an <tt>Iterator</tt> lets you create your test data lazily.  TestNG will invoke the iterator and then the test method with the parameters returned by this iterator one by one.  This is particularly useful if you have a lot of parameter sets to pass to the method and you don't want to create all of them upfront.
+<li>An array of array of objects (<tt>Object[][]</tt>) where the first dimension's size is the number of times the test method will be invoked and the second dimension size contains an array of objects that must be compatible with the parameter types of the test method. This is the case illustrated by the example above.</li><li>An <tt>Iterator&lt;Object[]&gt;</tt>.  The only difference with <tt>Object[][]</tt> is that an <tt>Iterator</tt> lets you create your test data lazily.  TestNG will invoke the iterator and then the test method with the parameters returned by this iterator one by one.  This is particularly useful if you have a lot of parameter sets to pass to the method and you don't want to create all of them upfront.
 </ul>
 Here is an example of this feature:
 
