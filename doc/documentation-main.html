@@ -1793,6 +1793,54 @@ java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs test-ou
 methods so that you are guaranteed to run the methods that failed without any 
 SKIP failures.</p>
 
+Sometimes, you might want TestNG to automatically retry a test whenever it fails. In those situations, you can use a retry analyzer.
+When you bind a retry analyzer to a test, TestNG automatically invokes the retry analyzer to determine if TestNG can retry a
+test case again in an attempt to see if the test that just fails now passes.
+
+Here is how you use a retry analyzer:
+
+<ol>
+  <li>Build an implementation of the interface <tt>org.testng.IRetryAnalyzer</tt></li>
+  <li>Bind this implementation to the <tt>@Test</tt> annotation for e.g., <tt>@Test(retryAnalyzer = LocalRetry.class)</tt></li>
+</ol>
+
+Following is a sample implementation of the retry analyzer that retries a test for a maximum of three times.
+
+<h3 class="sourcetitle">Java</h3>
+<pre class="brush: java">
+import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
+public class MyRetry implements IRetryAnalyzer {
+
+  private int retryCount = 0;
+  private static final int maxRetryCount = 3;
+
+  @Override
+  public boolean retry(ITestResult result) {
+    if (retryCount < maxRetryCount) {
+      retryCount++;
+      return true;
+    }
+    return false;
+  }
+}
+</pre>
+
+<h3 class="sourcetitle">Java</h3>
+<pre class="brush: java">
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class TestclassSample {
+
+  @Test(retryAnalyzer = MyRetry.class)
+  public void test2() {
+    Assert.fail();
+  }
+}
+</pre>
+
 <h4><a class="section" indent=".." name="junit">JUnit tests</a></h4>
 
 TestNG can run JUnit 3 and JUnit 4 tests.&nbsp; All you need to do is
