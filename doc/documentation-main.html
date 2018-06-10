@@ -697,13 +697,16 @@ You need to specify at least one XML file describing the TestNG suite you are tr
 	    <td>A comma-separated list of groups.</td>
 	    <td>The list of groups you want to run (e.g. <tt>"windows,linux,regression"</tt>).</td>
 	</tr>
-
-        <tr>
+  <tr>
             <td>-listener</td>
 	    <td>A comma-separated list of Java classes that can be found on your classpath.</td>
 	    <td>Lets you specify your own test listeners.  The classes need to implement <a href="https://jitpack.io/com/github/cbeust/testng/master/javadoc/org/testng/ITestListener.html"> <tt>org.testng.ITestListener</tt></a></td>
         </tr>
-
+  <tr>
+    <td>-usedefaultlisteners</td>
+    <td><tt>true</tt>|<tt>false</tt></td>
+    <td>Whether to use the default listeners</td>
+  </tr>
 	<tr>
             <td>-methods</td>
 	    <td>A comma separated list of fully qualified class name and method. For example <tt>com.example.Foo.f1,com.example.Bar.f2</tt>.</td>
