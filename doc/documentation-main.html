@@ -2996,6 +2996,83 @@ Below is a sample of the output of such a reporter:
   you will have to add it manually with one of the two methods and disable the default listeners.
 </p>
 
+<h5><a class="section" indent="..." name="testng-exit-codes">TestNG Exit Codes</a></h5>
+<p>
+  When TestNG completes execution, it exits with a return code.<br>
+  This return code can be inspected to get an idea on the nature of failures (if there were any).<br>
+  The following table summarises the different exit codes that TestNG currently uses.
+<br>
+<table>
+  <thead>
+      <tr>
+          <th>FailedWithinSuccess</th>
+          <th>Skipped</th>
+          <th>Failed</th>
+          <th>Status Code</th>
+          <th>Remarks</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>No</td>
+          <td>No</td>
+          <td>No</td>
+          <td>0</td>
+          <td>Passed tests</td>
+      </tr>
+      <tr>
+          <td>No</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>1</td>
+          <td>Failed tests</td>
+      </tr>
+      <tr>
+          <td>No</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>2</td>
+          <td>Skipped tests</td>
+      </tr>
+      <tr>
+          <td>No</td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>3</td>
+          <td>Skipped/Failed tests</td>
+      </tr>
+      <tr>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+          <td>4</td>
+          <td>FailedWithinSuccess tests</td>
+      </tr>
+      <tr>
+          <td>Yes</td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>5</td>
+          <td>FailedWithinSuccess/Failed tests</td>
+      </tr>
+      <tr>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>6</td>
+          <td>FailedWithinSuccess/Skipped tests</td>
+      </tr>
+      <tr>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>7</td>
+          <td>FailedWithinSuccess/Skipped/Failed tests</td>
+      </tr>
+  </tbody>
+</table>
+  
+</p>
 <!------------------------------------
   YAML
   ------------------------------------>
