@@ -3120,6 +3120,27 @@ Here is <a href="https://github.com/cbeust/testng/blob/master/src/test/resources
 <p>
 
 You might find the YAML file format easier to read and to maintain. YAML files are also recognized by the TestNG Eclipse plug-in. You can find more information about YAML and TestNG in this <a href="http://beust.com/weblog/2010/08/15/yaml-the-forgotten-victim-of-the-format-wars/">blog post</a>.
+<br><br>
+<b>Note:</b><br>TestNG by default does not bring in the YAML related library into your classpath.
+So depending upon your build system (Gradle/Maven) you need to add an explicit reference to YAML library in your build file.
+
+<br>For e.g,
+
+If you were using Maven, you would need to add a dependency as below into your <tt>pom.xml</tt> file:
+
+<pre class="brush: xml">
+<dependency>
+  <groupId>org.yaml</groupId>
+  <artifactId>snakeyaml</artifactId>
+  <version>1.23</version>
+</dependency>
+</pre>
+
+Or if you were using Gradle, you would add a dependency as below into your <tt>build.gradle</tt> file:
+
+<pre class="brush: plain">
+  compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+</pre>
 
 <!------------------------------------
   Dry Run for TestNG
