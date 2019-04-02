@@ -3,17 +3,17 @@
 print '<html><head><title>TestNG DTD</title>
 
         <link rel="stylesheet" href="testng.css" type="text/css" />
-        <link type="text/css" rel="stylesheet" href="http://beust.com/beust.css"  />
-        <script type="text/javascript" src="http://beust.com/prettify.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://beust.com/beust.css"  />
+        <script type="text/javascript" src="https://beust.com/prettify.js"></script>
         <script type="text/javascript" src="banner.js"></script>
 
-      <script type="text/javascript" src="http://beust.com/scripts/shCore.js"></script>
-      <script type="text/javascript" src="http://beust.com/scripts/shBrushJava.js"></script>
-      <script type="text/javascript" src="http://beust.com/scripts/shBrushXml.js"></script>
-      <script type="text/javascript" src="http://beust.com/scripts/shBrushBash.js"></script>
-      <script type="text/javascript" src="http://beust.com/scripts/shBrushPlain.js"></script>
-      <link type="text/css" rel="stylesheet" href="http://beust.com/styles/shCore.css"/>
-      <link type="text/css" rel="stylesheet" href="http://beust.com/styles/shThemeCedric.css"/>
+      <script type="text/javascript" src="https://beust.com/scripts/shCore.js"></script>
+      <script type="text/javascript" src="https://beust.com/scripts/shBrushJava.js"></script>
+      <script type="text/javascript" src="https://beust.com/scripts/shBrushXml.js"></script>
+      <script type="text/javascript" src="https://beust.com/scripts/shBrushBash.js"></script>
+      <script type="text/javascript" src="https://beust.com/scripts/shBrushPlain.js"></script>
+      <link type="text/css" rel="stylesheet" href="https://beust.com/styles/shCore.css"/>
+      <link type="text/css" rel="stylesheet" href="https://beust.com/styles/shThemeCedric.css"/>
       <script type="text/javascript">
         SyntaxHighlighter.config.clipboardSwf = "scripts/clipboard.swf";
         SyntaxHighlighter.defaults["gutter"] = false;
@@ -52,7 +52,7 @@ function http_get_contents($url)
   }
 }
 
-print(htmlentities(http_get_contents("http://testng.org/testng-1.0.dtd")));
+print(htmlentities(http_get_contents("https://testng.org/testng-1.0.dtd")));
 
 print "</pre>";
 

@@ -1,7 +1,7 @@
 Redirect 301 /eclipse-beta https://dl.bintray.com/testng-team/testng-eclipse/
 AddHandler php4-script .php
 
-Redirect 301 /index.html http://testng.org/doc/
+Redirect 301 /index.html https://testng.org/doc/
 
 AddType application/xml-dtd .dtd
 

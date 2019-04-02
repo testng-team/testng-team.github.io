@@ -523,16 +523,16 @@ invocationCount. <br>Note:  this attribute is ignored if invocationCount is not 
 <p>You can invoke TestNG in several different ways:</p><ul>
 	<li>With a <tt>testng.xml</tt> file</li><li><a href="ant.html">With ant</a></li><li>From the command line</li></ul><p>This section describes the format of <tt>testng.xml</tt> (you will find documentation
 on ant and the command line below).</p><p>The current DTD for <tt>testng.xml</tt> can be found on the main Web site:&nbsp;
-<a href="http://testng.org/testng-1.0.dtd">testng-1.0.dtd</a>
+<a href="https://testng.org/testng-1.0.dtd">testng-1.0.dtd</a>
 (for your convenience, you might prefer to browse the
-<a href="http://testng.org/dtd">HTML version</a>).</p>
+<a href="https://testng.org/dtd">HTML version</a>).</p>
 
 Here is an example <tt>testng.xml</tt> file:
 
 <p>
 <h3 class="sourcetitle">testng.xml</h3>
 <pre class="brush: xml">
-&lt;!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" &gt;
+&lt;!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" &gt;
  
 &lt;suite name="Suite1" verbose="1" &gt;
   &lt;test name="Nopackage" &gt;
@@ -554,7 +554,7 @@ You can specify package names instead of class names:
 
 <h3 class="sourcetitle">testng.xml</h3>
 <pre class="brush: xml; highlight: [5,6,7]">
-&lt;!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" &gt;
+&lt;!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" &gt;
 
 &lt;suite name="Suite1" verbose="1" &gt;
   &lt;test name="Regression1"   &gt;
@@ -1425,7 +1425,7 @@ expressions as parameters.&nbsp; For <tt>dependsOnMethods</tt>, if you are
 depending on a method which happens to have several overloaded versions, all the 
 overloaded methods will be invoked.&nbsp; If you only want to invoke one of the 
 overloaded methods, you should use <tt>dependsOnGroups</tt>.</p><p>For a more advanced example of dependent methods, please refer to 
-<a href="http://beust.com/weblog/archives/000171.html">this article</a>, which 
+<a href="https://beust.com/weblog/archives/000171.html">this article</a>, which
 uses inheritance to provide an elegant solution to the problem of multiple 
 dependencies.</p>
 
@@ -3082,7 +3082,7 @@ Below is a sample of the output of such a reporter:
 TestNG supports <a href="http://www.yaml.org/">YAML</a> as an alternate way of specifying your suite file. For example, the following XML file:
 
 <pre class="brush: xml">
-<!DOCTYPE suite SYSTEM "http://beust.com/testng/testng-1.0.dtd" >
+<!DOCTYPE suite SYSTEM "https://beust.com/testng/testng-1.0.dtd" >
 
 <suite name="SingleSuite" verbose="2" thread-count="4" >
 
@@ -3119,7 +3119,7 @@ Here is <a href="https://github.com/cbeust/testng/blob/master/src/test/resources
 
 <p>
 
-You might find the YAML file format easier to read and to maintain. YAML files are also recognized by the TestNG Eclipse plug-in. You can find more information about YAML and TestNG in this <a href="http://beust.com/weblog/2010/08/15/yaml-the-forgotten-victim-of-the-format-wars/">blog post</a>.
+You might find the YAML file format easier to read and to maintain. YAML files are also recognized by the TestNG Eclipse plug-in. You can find more information about YAML and TestNG in this <a href="https://beust.com/weblog/2010/08/15/yaml-the-forgotten-victim-of-the-format-wars/">blog post</a>.
 <br><br>
 <b>Note:</b><br>TestNG by default does not bring in the YAML related library into your classpath.
 So depending upon your build system (Gradle/Maven) you need to add an explicit reference to YAML library in your build file.
@@ -3157,12 +3157,12 @@ You can enable dry run mode for TestNG by passing the JVM argument <tt>-Dtestng.
 
 <a name="testng-dtd">
 &nbsp;<hr width="100%">
-<p>Back to my <a href="http://beust.com/weblog">home page</a>.</p><p>Or check out some of my other projects:</p><ul>
-	<li><a href="http://beust.com/ejbgen">EJBGen</a>:&nbsp; an EJB tag 
-	generator.</li><li><a href="http://testng.org">TestNG</a>:&nbsp; A testing framework using annotations, test groups and method parameters. </li><li><a href="http://beust.com/doclipse">Doclipse</a>:&nbsp; a JavaDoc tag 
-	Eclipse plug-in.</li><li><a href="http://beust.com/j15">J15</a>:&nbsp; an Eclipse plug-in to help 
-	you migrate your code to the new JDK 1.5 constructs.</li><li><a href="http://beust.com/sgen">SGen</a>:&nbsp; a replacement for 
-	XDoclet with an easy plug-in architecture.</li><li><a href="http://beust.com/canvas">Canvas</a>:&nbsp; a template generator 
+<p>Back to my <a href="https://beust.com/weblog">home page</a>.</p><p>Or check out some of my other projects:</p><ul>
+	<li><a href="https://beust.com/ejbgen">EJBGen</a>:&nbsp; an EJB tag
+	generator.</li><li><a href="https://testng.org">TestNG</a>:&nbsp; A testing framework using annotations, test groups and method parameters. </li><li><a href="https://beust.com/doclipse">Doclipse</a>:&nbsp; a JavaDoc tag
+	Eclipse plug-in.</li><li><a href="https://beust.com/j15">J15</a>:&nbsp; an Eclipse plug-in to help
+	you migrate your code to the new JDK 1.5 constructs.</li><li><a href="https://beust.com/sgen">SGen</a>:&nbsp; a replacement for
+	XDoclet with an easy plug-in architecture.</li><li><a href="https://beust.com/canvas">Canvas</a>:&nbsp; a template generator
 	based on the Groovy language.</li></ul><p>
 </p>
 
