@@ -1277,11 +1277,13 @@ public class MyTest {
 
 The data provider supports injection too. TestNG will use the test context for the injection.
 
-The Data Provider method can return one of the following two types:
+The Data Provider method can return one of the following types:
 
-<ul>
-<li>An array of array of objects (<tt>Object[][]</tt>) where the first dimension's size is the number of times the test method will be invoked and the second dimension size contains an array of objects that must be compatible with the parameter types of the test method. This is the case illustrated by the example above.</li><li>An <tt>Iterator&lt;Object[]&gt;</tt>.  The only difference with <tt>Object[][]</tt> is that an <tt>Iterator</tt> lets you create your test data lazily.  TestNG will invoke the iterator and then the test method with the parameters returned by this iterator one by one.  This is particularly useful if you have a lot of parameter sets to pass to the method and you don't want to create all of them upfront.
-</ul>
+<ul><li>An array of array of objects (<tt>Object[][]</tt>) where the first dimension's size is the number of times the test method will be invoked and the second dimension size contains an array of objects that must be compatible with the parameter types of the test method. This is the case illustrated by the example above.</li><li>An <tt>Iterator&lt;Object[]&gt;</tt>.  The only difference with <tt>Object[][]</tt> is that an <tt>Iterator</tt> lets you create your test data lazily.  TestNG will invoke the iterator and then the test method with the parameters returned by this iterator one by one.  This is particularly useful if you have a lot of parameter sets to pass to the method and you don't want to create all of them upfront.<ul><li>An array of objects (<tt>Object[]</tt>). This is similar to <tt>Iterator&lt;Object[]&gt;</tt> but causes the test method to be invoked once for each element of the source array.</li><li>An <tt>Iterator&lt;Object&gt;></tt>. Lazy alternative of <tt>Object[]</tt>. Causes the test method to be invoked once for each element of the iterator.</li></ul></li></ul>
+
+It must be said that return type is not limited to <tt>Object</tt> only thus <tt>MyCustomData[][]</tt> or <tt>Iterator&lt;Supplier&gt;</tt>
+are also possible. The only limitation is that in case of iterator its parameter type can't be explicitly parametrized itself.
+
 Here is an example of this feature:
 
 <pre class="brush: java">
@@ -1289,6 +1291,34 @@ Here is an example of this feature:
 public Iterator&lt;Object[]> createData() {
   return new MyIterator(DATA);
 } 
+</pre>
+
+Using <tt>MyCustomData[]</tt> as a return type
+
+<pre class="brush: java">
+@DataProvider(name = "test1")
+public MyCustomData[] createData() {
+  return new MyCustomData[]{ new MyCustomData() };
+}
+</pre>
+
+Or its lazy option with <tt>Iterator&lt;MyCustomData&gt;</tt>
+
+<pre class="brush: java">
+@DataProvider(name = "test1")
+public Iterator&lt;MyCustomData&gt; createData() {
+  return Arrays.asList(new MyCustomData()).iterator();
+}
+</pre>
+
+
+Parameter type (<tt>Stream</tt>) of <tt>Iterator</tt> can't be explicitly parametrized
+
+<pre class="brush: java">
+@DataProvider(name = "test1")
+public Iterator&lt;Stream&gt; createData() {
+  return Arrays.asList(Stream.of("a", "b", "c")).iterator();
+}
 </pre>
 
 If you declare your <tt>@DataProvider</tt> as taking a <tt>java.lang.reflect.Method</tt>
