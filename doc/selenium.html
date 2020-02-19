@@ -36,7 +36,7 @@
 
 <h2 align="center">Selenium and TestNG</h2>
 
-<em>This documentation was written by Felipe Knorr Kuhn and is adapted from <a href="http://knorrium.info/2010/08/31/using-testng-to-launch-your-tests-and-the-selenium-server/">a series of articles</a> posted on <a href="http://knorrium.info">his blog</a></em>.
+<em>This documentation was written by Felipe Knorr Kuhn and is adapted from <a href="https://knorrium.info/2010/08/31/using-testng-to-launch-your-tests-and-the-selenium-server/">a series of articles</a> posted on <a href="https://knorrium.info">his blog</a></em>.
 
 
 <h3>Content</h3>
@@ -51,11 +51,11 @@
 
 <h3><a name="#modeling">Modeling your test case</a></h3>
 
-<p>Before writing a test case, you need to know how and what will be validated. Let's use the WordPress <a href="http://knorrium.info/2010/05/19/a-java-approach-to-selenium">"Create New Post" test case</a>.
+<p>Before writing a test case, you need to know how and what will be validated. Let's use the WordPress <a href="https://knorrium.info/2010/05/19/a-java-approach-to-selenium">"Create New Post" test case</a>.
 
 <ol>
   
-  <li>Go to <a href="http://demo.opensourcecms.com/wordpress/wp-login.php">http://demo.opensourcecms.com/wordpress/wp-login.php</a>
+  <li>Go to <a href="https://demo.opensourcecms.com/wordpress/wp-login.php">https://demo.opensourcecms.com/wordpress/wp-login.php</a>
   <li>Enter "admin" in the "Username" field
   <li>Enter "demo123" in the "Password" field
   <li>Click on the "Log In" button
@@ -194,7 +194,7 @@ public void setupAfterSuite() {
 
 <p>To define the order of the tests, we will have to create an XML file listing the test methods we would like to run. Make sure that the test methods are annotated with <tt>@Test</tt>, or else the TestNG engine will not invoke them.</p>
 
-<p>Before TestNG 5.13.1, you had to use Method Interceptors if you wanted to run the tests in the order defined in the XML file. I have posted <a href="http://gist.github.com/416310">my implementation of a Method Interceptor</a> on my Github account. From TestNG 5.13.1+, you can just add the <tt>preserve-order</tt> parameter to your test tag and include the methods you would like to run, reducing unnecessary code in your test suite.</p>
+<p>Before TestNG 5.13.1, you had to use Method Interceptors if you wanted to run the tests in the order defined in the XML file. I have posted <a href="https://gist.github.com/416310">my implementation of a Method Interceptor</a> on my Github account. From TestNG 5.13.1+, you can just add the <tt>preserve-order</tt> parameter to your test tag and include the methods you would like to run, reducing unnecessary code in your test suite.</p>
 
 <p>Here is the XML file:</p>
 
@@ -205,7 +205,7 @@ public void setupAfterSuite() {
   &lt;parameter name="selenium.host" value="localhost" /&gt;
   &lt;parameter name="selenium.port" value="3737" /&gt;
   &lt;parameter name="selenium.browser" value="*firefox" /&gt;
-  &lt;parameter name="selenium.url" value="http://demo.opensourcecms.com/wordpress/" /&gt;
+  &lt;parameter name="selenium.url" value="https://demo.opensourcecms.com/wordpress/" /&gt;
 
   <test name="Write new post" preserve-order="true">
     <classes>
@@ -248,7 +248,7 @@ public void setupAfterSuite() {
 <h3><a name="future">Thinking about the future</a></h3>
 
 
-<p>If you really want to think about the future of your test suite, I would recommend you to read <a href="http://adam.goucher.ca/">Adam</a> <a href="http://twitter.com/adamgoucher">Goucher&#8217;s</a> <a href="http://www.pragprog.com/magazines">article</a> published on PragPub. He talks about Selenium 2 and the Page Objects Model (a very nice way to model your tests, especially if you use Selenium 2).</p>
+<p>If you really want to think about the future of your test suite, I would recommend you to read <a href="https://adam.goucher.ca/">Adam</a> <a href="https://twitter.com/adamgoucher">Goucher&#8217;s</a> <a href="https://www.pragprog.com/magazines">article</a> published on PragPub. He talks about Selenium 2 and the Page Objects Model (a very nice way to model your tests, especially if you use Selenium 2).</p>
 
 <p>Since there are lots of people still using Selenium 1, I'll stick to that for a while, but Selenium 2 will eventually be covered here.</p>
 

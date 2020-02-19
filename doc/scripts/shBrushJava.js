@@ -1,9 +1,9 @@
 /**
  * SyntaxHighlighter
- * http://alexgorbatchev.com/
+ * https://alexgorbatchev.com/
  *
  * SyntaxHighlighter is donationware. If you are using it, please donate.
- * http://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
+ * https://alexgorbatchev.com/wiki/SyntaxHighlighter:Donate
  *
  * @version
  * 2.1.364 (October 15 2009)
@@ -25,7 +25,7 @@
  * GNU General Public License for more details.
  * 
  * You should have received a copy of the GNU General Public License
- * along with SyntaxHighlighter.  If not, see <http://www.gnu.org/copyleft/lesser.html>.
+ * along with SyntaxHighlighter.  If not, see <https://www.gnu.org/copyleft/lesser.html>.
  */
 SyntaxHighlighter.brushes.Java = function()
 {

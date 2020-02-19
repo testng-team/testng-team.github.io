@@ -4,7 +4,7 @@
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
 //
-//      http://www.apache.org/licenses/LICENSE-2.0
+//      https://www.apache.org/licenses/LICENSE-2.0
 //
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
@@ -1336,7 +1336,7 @@ function prettyPrintOne(s) {
         // into pre blocks for some strange reason.
         // It's necessary for IE though which seems to lose the preformattedness
         // of <pre> tags when their innerHTML is assigned.
-        // http://stud3.tuwien.ac.at/~e0226430/innerHtmlQuirk.html
+        // https://stud3.tuwien.ac.at/~e0226430/innerHtmlQuirk.html
         html = html
                .replace(/(\r\n?|\n| ) /g, '$1&nbsp;')
                .replace(/\r\n?|\n/g, '<br>');

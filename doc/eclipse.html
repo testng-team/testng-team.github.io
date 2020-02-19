@@ -358,16 +358,16 @@ Let's say there is maven-surefire-plugin confguration in your pom.xml:
 
 You can pass the following Maven configuration parameters to the TestNG process:
 <ul>
-  <li><b><a href="http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#argLine">argLine</a></b>: the JVM arguments</li>
-  <li><b><a href="http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#systemPropertyVariables">systemPropertyVariables</a></b>: the system properties</li>
-  <li><b><a href="http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#environmentVariables">environmentVariables</a></b>: the environment variables</li>
+  <li><b><a href="https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#argLine">argLine</a></b>: the JVM arguments</li>
+  <li><b><a href="https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#systemPropertyVariables">systemPropertyVariables</a></b>: the system properties</li>
+  <li><b><a href="https://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#environmentVariables">environmentVariables</a></b>: the environment variables</li>
 </ul>
 <p>
   NOTE: as the snippet of the configuration above shows, properties placeholders (e.g. <code>${aspectj.version}</code>) in <code>argLine</code> or <code>systemPropertyVariables</code> will be substituted and correctly passed to the TestNG process as long as the properties are visible on the Maven project (e.g. defined in the current <code>pom.xml</code>, or inherited from the parent <code>pom.xml</code>, etc.).<br/>
   NOTE: if your maven-surefire-plugin is defined in a Maven profile, you will need to select the Maven profile which contains the maven-surefire-plugin configuration: "Right click on the project -> Maven -> Select Maven Profiles...", then check the profile you need.
 </p>
 
-<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+<script src="https://www.google-analytics.com/urchin.js" type="text/javascript">
 </script>
 <script type="text/javascript">
 _uacct = "UA-238215-2";
