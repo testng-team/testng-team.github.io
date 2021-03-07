@@ -3183,6 +3183,93 @@ When launched in dry run mode, TestNG will display a list of the test methods th
 You can enable dry run mode for TestNG by passing the JVM argument <tt>-Dtestng.mode.dryrun=true</tt>
 </p>
 
+<!------------------------------------
+  JVM arguments available in TestNG
+  ------------------------------------>
+
+<h3><a class="section" name="jvmargs">JVM Arguments in TestNG</a></h3>
+<table border="1" id="jvmargsTable">
+  <thead>
+    <tr>
+      <th>JVM Argument</th>
+      <th>Comment</th>
+      <th>Default value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><tt>testng.thread.affinity</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should resort to running dependent methods on the same thread as the upstream methods.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>testng.mode.dryrun</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should simulate a real execution. In this mode the test methods are not actually executed.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>testng.test.classpath</tt></td>
+      <td>A <tt>String</tt> that represents a list of zip files or jars that need to be added to the TestNG classpath for it to retrieve test classes for execution.</td>
+      <td><tt>""</tt></td>
+    </tr>
+    <tr>
+      <td><tt>skip.caller.clsLoader</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should skip using the current ClassLoader for loading classes.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>testng.dtd.http</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should load DTDs from <tt>http</tt> endpoints.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>testng.show.stack.frames</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should show detailed stack traces in reports.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>testng.memory.friendly</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should be memory cognizant and use light weight test method representations.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>testng.strict.parallel</tt></td>
+      <td>A <tt>Boolean</tt> indicating that TestNG should attempt to start all test methods simultaneously when there are more than one <tt>test</tt> tags and parallelism has been set to <tt>methods</tt>.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>emailable.report2.name</tt></td>
+      <td>A <tt>String</tt> indicating the file name into which the emailable reports are to be written into.</td>
+      <td><tt>emailable-report.html</tt></td>
+    </tr>
+    <tr>
+      <td><tt>oldTestngEmailableReporter</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should use the old emailable report listener for building simple html emailable report.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>noEmailableReporter</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should use the NEW emailable report listener for building simple html emailable report.</td>
+      <td><tt>true</tt></td>
+    </tr>
+    <tr>
+      <td><tt>testng.report.xml.name</tt></td>
+      <td>A <tt>String</tt> indicating the file name into which the xml reports are to be written into.</td>
+      <td><tt>testng-results.xml</tt></td>
+    </tr>
+    <tr>
+      <td><tt>fileStringBuffer</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should output verbose logs when working with very large text data.</td>
+      <td><tt>false</tt></td>
+    </tr>
+    <tr>
+      <td><tt>stacktrace.success.output.level</tt></td>
+      <td>A <tt>String</tt> indicating the log levels to be included in the XML Reports (Valid values include : <tt>NONE</tt> (no stacktraces), <tt>SHORT</tt> (short stacktrace), <tt>FULL</tt> (full stacktrace), <tt>BOTH</tt> (both short and full stacktrace).</td>
+      <td><tt>FULL</tt></td>
+    </tr>
+  </tbody>
+</table>
+
 <!---------------------------------------------------------------------->
 
 <a name="testng-dtd">
