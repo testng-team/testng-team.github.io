@@ -41,14 +41,6 @@
 <h4>Maven</h4>
 
 <pre class="brush: xml">
-    &lt;repositories&gt;
-      &lt;repository&gt;
-        &lt;id&gt;jcenter&lt;/id&gt;
-        &lt;name&gt;bintray&lt;/name&gt;
-        &lt;url&gt;https://jcenter.bintray.com&lt;/url&gt;
-      &lt;/repository&gt;
-    &lt;/repositories&gt;
-
     &lt;dependency&gt;
       &lt;groupId&gt;org.testng&lt;/groupId&gt;
       &lt;artifactId&gt;testng&lt;/artifactId&gt;
@@ -60,12 +52,8 @@
 <h4>Gradle</h4>
 
 <pre class="brush: java">
-repositories {
-    jcenter()
-}
-
 dependencies {
-    testCompile 'org.testng:testng:6.10'
+    testCompile 'org.testng:testng:7.4.0'
 }
 </pre>
 
