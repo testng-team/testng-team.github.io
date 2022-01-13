@@ -2000,6 +2000,13 @@ TestNG defines the following variables for your convenience:<br>&nbsp; <b><tt>ja
 You might want to surround your expression with a <tt>CDATA</tt> declaration (as shown above) to avoid tedious quoting of reserved XML characters).<br>&nbsp;
 </li>
 </ul>
+<b>Note:</b>
+<p class="prettyprint">
+  Starting from version <b>7.5</b> TestNG does not bring in any dependency on BeanShell implementations by default. <br>
+  So in order to leverage BeanShell based method selectors, please remember to add an explicit dependency on BeanShell. <br>
+  For example <a href='https://mvnrepository.com/artifact/org.apache-extras.beanshell/bsh'>org.apache-extras.beanshell</a>
+</p>
+
 
 <!-------------------------------------
   ANNOTATION TRANSFORMERS
@@ -3281,6 +3288,18 @@ You can enable dry run mode for TestNG by passing the JVM argument <tt>-Dtestng.
 	you migrate your code to the new JDK 1.5 constructs.</li><li><a href="https://beust.com/sgen">SGen</a>:&nbsp; a replacement for
 	XDoclet with an easy plug-in architecture.</li><li><a href="https://beust.com/canvas">Canvas</a>:&nbsp; a template generator
 	based on the Groovy language.</li></ul><p>
+</p>
+
+<!------------------------------------
+  Logging in TestNG
+  ------------------------------------>
+
+  <h3><a class="section" name="slf4j">Logging framework integration in TestNG</a></h3>
+<p>
+  Starting from TestNG version <b>7.5</b> TestNG makes use of the logging facade provided by Slf4j. <br>
+  TestNG by default does not bring in any explicit Slf4j facade implementation. <br>
+  To control the logs being output by TestNG internals, please add a dependency on any suitable Slf4j implementation (<i>Native Or Wrapped implementation</i>) 
+  from <a href='https://www.slf4j.org/docs.html'>here</a>
 </p>
 
 <script src="https://www.google-analytics.com/urchin.js" type="text/javascript">
