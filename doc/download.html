@@ -44,7 +44,7 @@
     &lt;dependency&gt;
       &lt;groupId&gt;org.testng&lt;/groupId&gt;
       &lt;artifactId&gt;testng&lt;/artifactId&gt;
-      &lt;version&gt;6.10&lt;/version&gt;
+      &lt;version&gt;7.6.0&lt;/version&gt;
       &lt;scope&gt;test&lt;/scope&gt;
     &lt;/dependency&gt;
 </pre>
@@ -53,7 +53,7 @@
 
 <pre class="brush: java">
 dependencies {
-    testCompile 'org.testng:testng:7.4.0'
+    testCompile 'org.testng:testng:7.6.0'
 }
 </pre>
 
@@ -102,10 +102,10 @@ Go to the <a href="https://marketplace.eclipse.org/content/testng-eclipse">TestN
 <pre class="brush: plain">
 $ git clone git://github.com/cbeust/testng.git
 $ cd testng
-$ ./build-with-gradle
+$ ./gradlew build
 </pre>
 
-<p>You will then find the jar file in the <tt>target</tt> directory</p>
+<p>You will then find the jar file in the <tt>testng/build/libs</tt> directory</p>
 
 <h3>Build the TestNG Eclipse Plugin from source code</h3>
 <p>TestNG Eclipse Plugin is <a href="https://github.com/cbeust/testng-eclipse">hosted on GitHub</a>,
