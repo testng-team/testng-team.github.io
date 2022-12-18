@@ -1127,14 +1127,16 @@ at the class level, while method1() belongs to both &quot;checkin-test&quot; and
 <p>
 
 
-Test methods don't have to be parameterless.&nbsp; You can use an arbitrary 
-number of parameters on each of your test method, and you instruct TestNG to 
-pass you the correct parameters with the <tt>@Parameters</tt> annotation.</p><p>
+TestNG allows you to pass an arbitrary number of parameters to each of your tests
+using the <tt>@Parameters</tt> annotation.</p><p>
 
 
-There are two ways to set these parameters:&nbsp; with <tt>testng.xml</tt> or 
-programmatically.</p>
-
+There are three ways to set these parameters
+<ol>
+  <li>The <tt>testng.xml</tt> file</li>
+  <li>Programmatically</li>
+  <li>Java system properties</li>
+</ol>
 
 <h5><a class="section" indent="..." name="parameters-testng-xml">Parameters from <tt>testng.xml</tt></a></h5>
 
@@ -1368,6 +1370,24 @@ Parallel data providers running from an XML file share the same pool of threads,
 </pre>
 
 If you want to run a few specific data providers in a different thread pool, you need to run them from a different XML file.
+
+<p>
+
+<h5><a class="section" indent="..." name="parameters-system-properties">Parameters from System Properties</a></h5>
+
+TestNG can be passed parameters on the command line of the Java Virtual Machine using system properties (-D). Parameters
+passed in this way are not required to be pre-defined in <tt>testng.xml</tt>, but will override any parameters defined there.
+
+<pre class="brush: text">
+java -Dfirst-name=Cedrick -Dlast-name="von Braun" org.testng.TestNG testng.xml
+</pre>
+
+The Java system property variable is a string with no spaces that represents the name of the property. The value variable is
+a string that represents the value of the property. If the value is a string with spaces, then enclose it in quotation marks.
+
+<blockquote>
+	<p><i>Note:&nbsp; In TestNG 6.x parameters defined in <tt>testng.xml</tt> could not be overwritten by system properties</i></p>
+</blockquote>
 
 <p>
 
