@@ -3321,6 +3321,51 @@ You can enable dry run mode for TestNG by passing the JVM argument <tt>-Dtestng.
   To control the logs being output by TestNG internals, please add a dependency on any suitable Slf4j implementation (<i>Native Or Wrapped implementation</i>) 
   from <a href='https://www.slf4j.org/docs.html'>here</a>
 </p>
+<p>
+  Prior to TestNG version <b>7.5</b>, TestNG supports logging via a custom logging framework similar to Log4j. To control logging, add a resource named
+  "log4testng.properties" to your classpath. The logging levels are TRACE, DEBUG, INFO, WARN, ERROR and FATAL. The Logging framework has the following
+  characteristics:
+  
+  <ul>
+    <li>All logging is done using System.out (for levels < ERROR) or System.err. There is no way to specify Appenders.</li>
+    <li>There is no way to control logging programmatically.</li>
+    <li>The log4testng.properties resource is searched in the classpath on the first call to the logging API. If it is not present, logging defaults to the WARN level.</li>
+  </ul>
+</p>
+
+<p>
+  The property file contains lines in the following format:
+  
+  <pre class="brush: text">
+    # log4testng will log its own behavior (generally used for debugging this package only).
+    log4testng.debug=true
+
+    # Specifies the root Loggers logging level. Will log DEBUG level and above
+    log4testng.rootLogger=DEBUG
+
+    # The org.testng.reporters.EmailableReporter Logger will log TRACE level and above
+    log4testng.logger.org.testng.reporters.EmailableReporter=TRACE
+
+    # All Logger in packages below org.testng will log WARN level and above
+    log4testng.logger.org.testng=WARN
+  </pre>
+ 
+  In your source files you will typically instantiate and use loggers this ways:
+
+  <pre class="brush: java">
+    import org.testng.log4testng.Logger;
+
+    class ThisClass {
+      private static final Logger LOGGER = Logger.getLogger(ThisClass.class);
+
+      ...
+      LOGGER.debug("entering myMethod()");
+      ...
+      LOGGER.warn("unknown file: " + filename);
+      ...
+      LOGGER.error("Unexpected error", exception);
+ </pre>
+</p>
 
 <script src="https://www.google-analytics.com/urchin.js" type="text/javascript">
 </script>
