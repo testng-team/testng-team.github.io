@@ -1369,7 +1369,7 @@ Data providers can run in parallel with the attribute <tt>parallel</tt>:
 // ...
 </pre>
 
-Parallel data providers running from an XML file share the same pool of threads, which has a size of 10 by default.  You can modify this value in the <tt>&lt;suite&gt;</tt> tag of your XML file:
+Each of the parallel data providers running from an XML file runs with a thread pool which has a size of 10 by default.  You can modify this value in the <tt>&lt;suite&gt;</tt> tag of your XML file:
 
 
 <pre class="brush: xml">
@@ -1379,7 +1379,23 @@ Parallel data providers running from an XML file share the same pool of threads,
 
 If you want to run a few specific data providers in a different thread pool, you need to run them from a different XML file.
 
+<h5><a class="section" indent="...." name="controlling-threadpool-usage">Controlling ThreadPool Usage</a></h5>
+
+Starting from <tt>TestNG 7.9.0</tt>, there are some additional ways in which the threadpools that run the parallel tests can be controlled.
+
+For these new features to be consumed, update your suite file to use the <tt>testng-1.1.dtd</tt> (as seen below) so that your IDE can provide you with auto completion:
+
 <p>
+<pre class="brush: xml">
+&lt;!DOCTYPE suite SYSTEM "https://testng.org/testng-1.1.dtd" &gt;
+</pre>
+
+
+<ul>
+  <li><tt>share-thread-pool-for-data-providers</tt> - When this attribute is set to <tt>true</tt> at the suite level, TestNG will start using a shared thread pool for all the data driven tests in a given <tt>&lt;suite&gt;</tt>. The size of the thread pool is determined using the attribute <tt>data-provider-thread-count</tt>. This attribute has a default value of <tt>false</tt>.</li>
+  <li><tt>use-global-thread-pool</tt> - When this attribute is set to <tt>true</tt> at the suite level, TestNG will start using a common thread pool for running both your regular test methods and data driven test methods. The size of the thread pool is determined using the attribute <tt>thread-count</tt>. This attribute has a default value of <tt>false</tt>.</li>
+</ul>
+
 
 <h5><a class="section" indent="..." name="parameters-system-properties">Parameters from System Properties</a></h5>
 
@@ -3272,6 +3288,11 @@ You can enable dry run mode for TestNG by passing the JVM argument <tt>-Dtestng.
     </tr>
   </thead>
   <tbody>
+    <tr>
+      <td><tt>testng.favor.custom.thread-pool.executor</tt></td>
+      <td>A <tt>Boolean</tt> indicating whether TestNG should resort to going back to using the custom implementation for manaing Thread pools. If this flag is enabled, then thread pool sharing between data driven tests and thread pool sharing between regular and data driven tests WILL NOT work properly.</td>
+      <td><tt>false</tt></td>
+    </tr>
     <tr>
       <td><tt>testng.thread.affinity</tt></td>
       <td>A <tt>Boolean</tt> indicating whether TestNG should resort to running dependent methods on the same thread as the upstream methods.</td>
