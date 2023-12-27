@@ -789,7 +789,111 @@ You need to specify at least one XML file describing the TestNG suite you are tr
 	    <td>The path of the XML file inside the jar file.</td>
 	    <td>This attribute should contain the path to a valid XML file inside the test jar (e.g. <tt>"resources/testng.xml"</tt>). The default is <tt>"testng.xml"</tt>, which means a file called "<tt>testng.xml</tt>" at the root of the jar file. This option will be ignored unless <tt>-testjar</tt> is specified.</td>
         </tr>
-
+       <tr>
+            <td>-shareThreadPoolForDataProviders</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Indicates if TestNG should use a global shared thread-pool (at suite level) for running data driven tests. TestNG will consider the value set for the configuration parameter <tt>-dataproviderthreadcount</tt> as the size of the thread pool.</td>
+        </tr>
+       <tr>
+            <td>-useGlobalThreadPool</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Indicates if TestNG should use a global shared thread-pool (at suite level) for running regular and data driven tests. TestNG will consider the value set for the configuration parameter <tt>-threadcount</tt> as the size of the thread pool.</td>
+        </tr>
+       <tr>
+            <td>-log (or) -verbose</td>
+	          <td>a valid log level</td>
+	          <td>Level of verbosity to be used when logging messages.</td>
+        </tr>
+       <tr>
+            <td>-junit</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG run in JUnit mode.</td>
+        </tr>
+       <tr>
+            <td>-mixed</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Mixed mode - autodetect the type of current test and run it with appropriate runner.</td>
+        </tr>
+       <tr>
+            <td>-objectfactory</td>
+	          <td>A string that represents a fully qualified class name</td>
+	          <td>Fully qualified class name that implements <tt>org.testng.ITestObjectFactory</tt> which can be used to create test class and listener instances.</td>
+        </tr>
+       <tr>
+            <td>-ignoreMissedTestNames</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Ignore missed test names given by <tt>-testnames</tt> and continue to run existing tests, if any.</td>
+        </tr>
+       <tr>
+            <td>-skipfailedinvocationcounts</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG skip failed invocation counts for data driven tests and tests driven by invocation counts.</td>
+        </tr>        
+       <tr>
+            <td>-testRunFactory</td>
+	          <td>A string that represents a fully qualified class name</td>
+	          <td>Fully qualified class name that implements <tt>org.testng.ITestRunnerFactory</tt> which can be used to create custom test runners for running tests.</td>
+        </tr>
+       <tr>
+            <td>-suitethreadpoolsize</td>
+	          <td>An integer value that represents the thread pool size. When not specified, defaults to <tt>1</tt></td>
+	          <td>Size of the thread pool to use to run suites.</td>
+        </tr>
+       <tr>
+            <td>-randomizesuites</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Whether to run suites in same order as specified in XML or not.</td>
+        </tr>
+       <tr>
+            <td>-alwaysrunlisteners</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should method invocation listeners be run even for skipped methods.</td>
+        </tr>
+       <tr>
+            <td>-dependencyinjectorfactory</td>
+	          <td>A string that represents a fully qualified class name</td>
+	          <td>Fully qualified class name that implements <tt>org.testng.IInjectorFactory</tt> which can be used to handle with dependency injection.</td>
+        </tr>
+       <tr>
+            <td>-failwheneverythingskipped</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG fail execution if all tests were skipped and nothing was run.</td>
+        </tr>
+       <tr>
+            <td>-spilistenerstoskip</td>
+	          <td>A comma seperated string that represents a fully qualified class name(s)</td>
+	          <td>Comma separated fully qualified class names of listeners that should be skipped from being wired in via Service Loaders.</td>
+        </tr>
+       <tr>
+            <td>-overrideincludedmethods</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG exclude explicitly included test methods if they belong to any excluded groups as defined in the suite xml file.</td>
+        </tr>
+       <tr>
+            <td>-includeAllDataDrivenTestsWhenSkipping</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG report all iterations of a data driven test as individual skips, in-case of upstream failures.</td>
+        </tr>
+       <tr>
+            <td>-propagateDataProviderFailureAsTestFailure</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG consider failures in Data Providers  as test failures.</td>
+        </tr>
+       <tr>
+            <td>-generateResultsPerSuite</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG generate results on a per suite basis by creating a sub directory for each suite and dumping results into it.</td>
+        </tr>
+       <tr>
+            <td>-shareThreadPoolForDataProviders</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG use a global Shared ThreadPool (At suite level) for running data providers.</td>
+        </tr>
+       <tr>
+            <td>-useGlobalThreadPool</td>
+	          <td><tt>true</tt>|<tt>false</tt></td>
+	          <td>Should TestNG use a global Shared ThreadPool (At suite level) for running regular and data driven tests.</td>
+        </tr>
       </tbody>
 </table>
 
