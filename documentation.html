@@ -1,0 +1,3786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>TestNG Documentation</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_testng_documentation">TestNG Documentation</a>
+<ul class="sectlevel2">
+<li><a href="#_introduction">Introduction</a></li>
+<li><a href="#_annotations">Annotations</a></li>
+<li><a href="#_testng_xml"><code>testng.xml</code></a></li>
+<li><a href="#_running_testng">Running TestNG</a></li>
+<li><a href="#_test_methods_test_classes_and_test_groups">Test methods, Test classes and Test groups</a></li>
+<li><a href="#_parameters">Parameters</a></li>
+<li><a href="#_dependencies">Dependencies</a></li>
+<li><a href="#_factories">Factories</a></li>
+<li><a href="#_class_level_annotations">Class level annotations</a></li>
+<li><a href="#_ignoring_tests">Ignoring tests</a></li>
+<li><a href="#_parallelism_and_time_outs">Parallelism and time-outs</a></li>
+<li><a href="#_rerunning_failed_tests">Rerunning failed tests</a></li>
+<li><a href="#_junit_tests">JUnit tests</a></li>
+<li><a href="#_running_testng_programmatically">Running TestNG programmatically</a></li>
+<li><a href="#_beanshell_and_advanced_group_selection">BeanShell and advanced group selection</a></li>
+<li><a href="#_method_interceptors">Method Interceptors</a></li>
+<li><a href="#_testng_listeners">TestNG Listeners</a></li>
+<li><a href="#_dependency_injection">Dependency injection</a></li>
+<li><a href="#_listening_to_method_invocations">Listening to method invocations</a></li>
+<li><a href="#_overriding_test_methods">Overriding test methods</a></li>
+<li><a href="#_altering_suites_or_tests">Altering suites (or) tests</a></li>
+</ul>
+</li>
+<li><a href="#_test_results">Test results</a>
+<ul class="sectlevel2">
+<li><a href="#_success_failure_and_assert">Success, failure and assert</a></li>
+<li><a href="#_logging_and_results">Logging and results</a></li>
+<li><a href="#_logging_listeners">Logging Listeners</a></li>
+<li><a href="#_logging_reporters">Logging Reporters</a></li>
+<li><a href="#_junit_reports">JUnit Reports</a></li>
+<li><a href="#_reporter_api">Reporter API</a></li>
+<li><a href="#_xml_reports">XML Reports</a></li>
+<li><a href="#_testng_exit_codes">TestNG Exit Codes</a></li>
+</ul>
+</li>
+<li><a href="#_yaml">YAML</a></li>
+<li><a href="#_dry_run_for_your_tests">Dry Run for your tests</a></li>
+<li><a href="#_jvm_arguments_in_testng">JVM Arguments in TestNG</a></li>
+<li><a href="#_logging_framework_integration_in_testng">Logging framework integration in TestNG</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_testng_documentation">TestNG Documentation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_introduction">Introduction</h3>
+<div class="paragraph">
+<p>TestNG is a testing framework designed to simplify a broad range of testing needs, from unit testing (testing a class in isolation of the others) to integration testing (testing entire systems made of several classes, several packages and even several external frameworks, such as application servers).</p>
+</div>
+<div class="paragraph">
+<p>Writing a test is typically a three-step process:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Write the business logic of your test and insert <a href="annotations.html">TestNG annotations</a> in your code.</p>
+</li>
+<li>
+<p>Add the information about your test (e.g. the class name, the groups you wish to run, etc&#8230;&#8203;) in a testng.xml file or in <code>build.xml</code>.</p>
+</li>
+<li>
+<p><a href="../ant.html">Run TestNG</a>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can find a quick example on the <a href="../welcome.html">Welcome page</a>.</p>
+</div>
+<div class="paragraph">
+<p>The concepts used in this documentation are as follows:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A suite is represented by one XML file. It can contain one or more tests and is defined by the <code>&lt;suite&gt;</code> tag.</p>
+</li>
+<li>
+<p>A test is represented by &lt;test&gt; and can contain one or more TestNG classes.</p>
+</li>
+<li>
+<p>A TestNG class is a Java class that contains at least one TestNG annotation. It is represented by the &lt;class&gt; tag and can contain one or more test methods.</p>
+</li>
+<li>
+<p>A test method is a Java method annotated by <code>@Test</code> in your source.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>A TestNG test can be configured by <code>@BeforeXXX</code> and <code>@AfterXXX</code> annotations which allows to perform some Java logic before and after a certain point, these points being either of the items listed above.</p>
+</div>
+<div class="paragraph">
+<p>The rest of this manual will explain the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A list of all the annotations with a brief explanation. This will give you an idea of the various functionalities offered by TestNG but you will probably want to consult the section dedicated to each of these annotations to learn the details.</p>
+</li>
+<li>
+<p>A description of the testng.xml file, its syntax and what you can specify in it.</p>
+</li>
+<li>
+<p>A detailed list of the various features and how to use them with a combination of annotations and testng.xml.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_annotations">Annotations</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>@BeforeSuite</code></p>
+</li>
+<li>
+<p><code>@AfterSuite</code></p>
+</li>
+<li>
+<p><code>@BeforeTest</code></p>
+</li>
+<li>
+<p><code>@AfterTest</code></p>
+</li>
+<li>
+<p><code>@BeforeGroups</code></p>
+</li>
+<li>
+<p><code>@AfterGroups</code></p>
+</li>
+<li>
+<p><code>@BeforeClass</code></p>
+</li>
+<li>
+<p><code>@AfterClass</code></p>
+</li>
+<li>
+<p><code>@BeforeMethod</code></p>
+</li>
+<li>
+<p><code>@AfterMethod</code></p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Configuration information for a TestNG class:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@BeforeSuite</code>: The annotated method will be run before all tests in this suite have run.</p>
+</li>
+<li>
+<p><code>@AfterSuite</code>: The annotated method will be run after all tests in this suite have run.</p>
+</li>
+<li>
+<p><code>@BeforeTest</code>: The annotated method will be run before any test method belonging to the classes inside the &lt;test&gt; tag is run.</p>
+</li>
+<li>
+<p><code>@AfterTest</code>: The annotated method will be run after all the test methods belonging to the classes inside the &lt;test&gt; tag have run.</p>
+</li>
+<li>
+<p><code>@BeforeGroups</code>: The list of groups that this configuration method will run before. This method is guaranteed to run shortly before the first test method that belongs to any of these groups is invoked.</p>
+</li>
+<li>
+<p><code>@AfterGroups</code>: The list of groups that this configuration method will run after. This method is guaranteed to run shortly after the last test method that belongs to any of these groups is invoked.</p>
+</li>
+<li>
+<p><code>@BeforeClass</code>: The annotated method will be run before the first test method in the current class is invoked.</p>
+</li>
+<li>
+<p><code>@AfterClass</code>: The annotated method will be run after all the test methods in the current class have been run.</p>
+</li>
+<li>
+<p><code>@BeforeMethod</code>: The annotated method will be run before each test method.</p>
+</li>
+<li>
+<p><code>@AfterMethod</code>: The annotated method will be run after each test method.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Behaviour of annotations in superclass of a TestNG class</strong></p>
+</div>
+<div class="paragraph">
+<p>The annotations above will also be honored (inherited) when placed on a superclass of a TestNG class. This is useful for example to centralize test setup for multiple test classes in a common superclass.</p>
+</div>
+<div class="paragraph">
+<p>In that case, TestNG guarantees that the "@Before" methods are executed in inheritance order (highest superclass first, then going down the inheritance chain), and the "@After" methods in reverse order (going up the inheritance chain).</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="7"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>alwaysRun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For before methods (beforeSuite, beforeTest, beforeTestClass and beforeTestMethod, but not beforeGroups): If set to true, this configuration method will be run regardless of what groups it belongs to.
+For after methods (afterSuite, afterClass, &#8230;&#8203;): If set to true, this configuration method will be run even if one or more methods invoked previously failed or was skipped.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnMethods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of methods this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether methods on this class/method are enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this class/method belongs to.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inheritGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, this method will belong to groups specified in the @Test annotation at the class level.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>onlyForGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only for @BeforeMethod and @AfterMethod. If specified, then this setup/teardown method will only be invoked if the corresponding test method belongs to one of the listed groups.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@DataProvider</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marks a method as supplying data for a test method. The annotated method must return an <code>Object[][]</code> where each <code>Object[]</code> can be assigned the parameter list of the test method. The @Test method that wants to receive data from this <code>DataProvider</code> needs to use a dataProvider name equals to the name of this annotation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of this data provider. If it&#8217;s not supplied, the name of this data provider will automatically be set to the name of the method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>parallel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If set to true, tests generated using this data provider are run in parallel. Default value is false.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Factory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marks a method as a factory that returns objects that will be used by TestNG as Test classes. The method must return <code>Object[]</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Listeners</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines listeners on a test class.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An array of classes that extend org.testng.ITestNGListener.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Parameters</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Describes how to pass parameters to a @Test method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of variables used to fill the parameters of this method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Test</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marks a class or a method as part of the test.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="16"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>alwaysRun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If set to true, this test method will always be run even if it depends on a method that failed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dataProvider</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the data provider for this test method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dataProviderClass</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The class where to look for the data provider. If not specified, the data provider will be looked on the class of the current test method or one of its base classes. If this attribute is specified, the data provider method needs to be static on the specified class.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnMethods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of methods this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The description for this method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether methods on this class/method are enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expectedExceptions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of exceptions that a test method is expected to throw. If no exception or a different than one on this list is thrown, this test will be marked a failure.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this class/method belongs to.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>invocationCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The number of times this method should be invoked.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>invocationTimeOut</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of milliseconds this test should take for the cumulated time of all the invocationcounts. This attribute will be ignored if invocationCount is not specified.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>priority</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The priority for this test method. Lower priorities will be scheduled first.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>successPercentage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The percentage of success expected from this method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>singleThreaded</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If set to true, all the methods on this test class are guaranteed to run in the same thread, even if the tests are currently being run with <code>parallel="methods"</code>. This attribute can only be used at the class level and it will be ignored if used at the method level. Note: this attribute used to be called sequential (now deprecated).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeOut</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of milliseconds this test should take.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>threadPoolSize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The size of the thread pool for this method. The method will be invoked from multiple threads as specified by invocationCount.
+NOTE: this attribute is ignored if invocationCount is not specified</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_testng_xml"><code>testng.xml</code></h3>
+<div class="paragraph">
+<p>You can invoke TestNG in several different ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>With a <code>testng.xml</code> file</p>
+</li>
+<li>
+<p>With <code>ant</code></p>
+</li>
+<li>
+<p>From the command line</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This section describes the format of <code>testng.xml</code> (you will find documentation on ant and the command line below).</p>
+</div>
+<div class="paragraph">
+<p>The current DTD for testng.xml can be found on the main Web site:  <a href="https://testng.org/testng-1.0.dtd">testng-1.0.dtd</a>.
+Here is an example testng.xml file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd"&gt;
+
+&lt;suite name="Suite1" verbose="1"&gt;
+  &lt;test name="Nopackage"&gt;
+    &lt;classes&gt;
+       &lt;class name="NoPackageTest"/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt;
+
+  &lt;test name="Regression1"&gt;
+    &lt;classes&gt;
+      &lt;class name="test.sample.ParameterSample"/&gt;
+      &lt;class name="test.sample.ParameterTest"/&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can specify package names instead of class names:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd"&gt;
+
+&lt;suite name="Suite1" verbose="1"&gt;
+  &lt;test name="Regression1"&gt;
+    &lt;packages&gt;
+      &lt;package name="test.sample"/&gt;
+   &lt;/packages&gt;
+ &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, TestNG will look at all the classes in the package <code>test.sample</code> and will retain only classes that have TestNG annotations.</p>
+</div>
+<div class="paragraph">
+<p>You can also specify groups and methods to be included and excluded:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Regression1"&gt;
+  &lt;groups&gt;
+    &lt;run&gt;
+      &lt;exclude name="brokenTests"/&gt;
+      &lt;include name="checkinTests"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+
+  &lt;classes&gt;
+    &lt;class name="test.IndividualMethodsTest"&gt;
+      &lt;methods&gt;
+        &lt;include name="testMethod"/&gt;
+      &lt;/methods&gt;
+    &lt;/class&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can also define new groups inside <code>testng.xml</code> and specify additional details in attributes, such as whether to run the tests in parallel, how many threads to use, whether you are running JUnit tests, etc&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>By default, TestNG will run your tests in the order they are found in the XML file. If you want the classes and methods listed in this file to be run in an unpredictable order, set the <code>preserve-order</code> attribute to false.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Regression1" preserve-order="false"&gt;
+  &lt;classes&gt;
+    &lt;class name="test.Test1"&gt;
+      &lt;methods&gt;
+        &lt;include name="m1"/&gt;
+        &lt;include name="m2"/&gt;
+      &lt;/methods&gt;
+    &lt;/class&gt;
+    &lt;class name="test.Test2"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please see the DTD for a complete list of the features, or read on.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_running_testng">Running TestNG</h3>
+<div class="paragraph">
+<p>TestNG can be invoked in different ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Command line</p>
+</li>
+<li>
+<p><a href="../ant.html">ant</a></p>
+</li>
+<li>
+<p><a href="../eclipse.html">Eclipse</a></p>
+</li>
+<li>
+<p><a href="../idea.html">IntelliJ&#8217;s IDEA</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This section only explains how to invoke TestNG from the command line.
+Please click on one of the links above if you are interested in one of the other ways.</p>
+</div>
+<div class="paragraph">
+<p>Assuming that you have TestNG in your class path, the simplest way to invoke TestNG is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">java org.testng.TestNG testng1.xml [testng2.xml testng3.xml ...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You need to specify at least one XML file describing the TestNG suite you are trying to run.
+Additionally, the following command-line switches are available:</p>
+</div>
+<div class="sect3">
+<h4 id="_command_line_parameters">Command Line Parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Argument</th>
+<th class="tableblock halign-left valign-top">Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-configfailurepolicy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skip</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>continue</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether TestNG should continue to execute the remaining tests in the suite or skip them if an @Before* method fails. Default behavior is <code>skip</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-d</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A directory</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where the reports will be generated (defaults to <code>test-output</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-dataproviderthreadcount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default number of threads to use for data providers when running tests in parallel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This sets the default maximum number of threads to use for data providers when running tests in parallel. It will only take effect if the parallel mode has been selected (for example, with the <code>-parallel</code> option). This can be overridden in the suite definition.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-excludegroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of groups.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups you want to be excluded from this run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of groups.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups you want to run (e.g. "windows,linux,regression").</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-listener</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of Java classes that can be found on your classpath.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify your own test listeners. The classes need to implement <code>org.testng.ITestListener</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-usedefaultlisteners</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to use the default listeners</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-methods</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of fully qualified class name and method. For example <code>com.example.Foo.f1,com.example.Bar.f2</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify individual methods to run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-methodselectors</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of Java classes and method priorities that define method selectors.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify method selectors on the command line. For example: <code>com.example.Selector1:3,com.example.Selector2:2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-parallel</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">`methods</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classes`</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If specified, sets the default mechanism used to determine how to use parallel threads when running tests. If not set, default mechanism is not to use parallel threads at all. This can be overridden in the suite definition.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-reporter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The extended configuration for a custom report listener.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Similar to the <code>-listener</code> option, except that it allows the configuration of JavaBeans-style properties on the reporter instance.
+Example: <code>-reporter com.test.MyReporter:methodFilter=<strong>insert</strong>,enableFiltering=true</code>
+You can have as many occurrences of this option, one for each reporter that needs to be added.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-sourcedir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A semicolon separated list of directories.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directories where your javadoc annotated test sources are. This option is only necessary if you are using javadoc type annotations. (e.g. <code>src/test</code> or <code>src/test/org/testng/eclipse-plugin;src/test/org/testng/testng</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-suitename</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default name to use for a test suite.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This specifies the suite name for a test suite defined on the command line. This option is ignored if the <code>suite.xml</code> file or the source code specifies a different suite name. It is possible to create a suite name with spaces in it if you surround it with double-quotes <code>"like this"</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testclass</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of classes that can be found in your classpath.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A list of class files separated by commas (e.g. <code>org.foo.Test1,org.foo.test2</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testjar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A jar file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a jar file that contains test classes. If a <code>testng.xml</code> file is found at the root of that jar file, it will be used, otherwise, all the test classes found in this jar file will be considered test classes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default name to use for a test.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This specifies the name for a test defined on the command line. This option is ignored if the suite.xml file or the source code specifies a different test name. It is possible to create a test name with spaces in it if you surround it with double-quotes <code>"like this"</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testnames</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of test names.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only tests defined in a &lt;test&gt; tag matching one of these names will be run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testrunfactory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Java classes that can be found on your classpath.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify your own test runners. The class needs to implement <code>org.testng.ITestRunnerFactory</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-threadcount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default number of threads to use when running tests in parallel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This sets the default maximum number of threads to use for running tests in parallel. It will only take effect if the parallel mode has been selected (for example, with the -parallel option). This can be overridden in the suite definition.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-xmlpathinjar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path of the XML file inside the jar file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute should contain the path to a valid XML file inside the test jar (e.g. <code>resources/testng.xml</code>). The default is <code>testng.xml</code>, which means a file called <code>testng.xml</code> at the root of the jar file. This option will be ignored unless <code>-testjar</code> is specified.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-shareThreadPoolForDataProviders</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates if TestNG should use a global shared thread-pool (at suite level) for running data driven tests. TestNG will consider the value set for the configuration parameter <code>-dataproviderthreadcount</code> as the size of the thread pool.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-useGlobalThreadPool</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates if TestNG should use a global shared thread-pool (at suite level) for running regular and data driven tests. TestNG will consider the value set for the configuration parameter <code>-threadcount</code> as the size of the thread pool.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-log</code> (or) <code>-verbose</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a valid log level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Level of verbosity to be used when logging messages.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-junit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG run in JUnit mode.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-mixed</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mixed mode - autodetect the type of current test and run it with appropriate runner.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-objectfactory</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string that represents a fully qualified class name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fully qualified class name that implements <code>org.testng.ITestObjectFactory</code> which can be used to create test class and listener instances.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-ignoreMissedTestNames</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ignore missed test names given by <code>-testnames</code> and continue to run existing tests, if any.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-skipfailedinvocationcounts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG skip failed invocation counts for data driven tests and tests driven by invocation counts.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testRunFactory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string that represents a fully qualified class name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fully qualified class name that implements <code>org.testng.ITestRunnerFactory</code> which can be used to create custom test runners for running tests.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-suitethreadpoolsize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An integer value that represents the thread pool size. When not specified, defaults to <code>1</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size of the thread pool to use to run suites.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-randomizesuites</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run suites in same order as specified in XML or not.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-alwaysrunlisteners</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should method invocation listeners be run even for skipped methods.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-dependencyinjectorfactory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string that represents a fully qualified class name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fully qualified class name that implements org.testng.IInjectorFactory which can be used to handle with dependency injection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">`-failwheneverythingskipped'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG fail execution if all tests were skipped and nothing was run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-spilistenerstoskip</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma seperated string that represents a fully qualified class name(s).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated fully qualified class names of listeners that should be skipped from being wired in via Service Loaders.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-overrideincludedmethods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG exclude explicitly included test methods if they belong to any excluded groups as defined in the suite xml file.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-includeAllDataDrivenTestsWhenSkipping</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG report all iterations of a data driven test as individual skips, in-case of upstream failures.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-propagateDataProviderFailureAsTestFailure</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG consider failures in Data Providers as test failures.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-generateResultsPerSuite</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG generate results on a per suite basis by creating a sub directory for each suite and dumping results into it.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-shareThreadPoolForDataProviders</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG use a global Shared ThreadPool (At suite level) for running data providers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-useGlobalThreadPool</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This documentation can be obtained by invoking TestNG without any arguments.</p>
+</div>
+<div class="paragraph">
+<p>You can also put the command line switches in a text file, say <code>c:\command.txt</code>, and tell TestNG to use that file to retrieve its parameters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">C:&gt; more c:\command.txt
+-d test-output testng.xml
+C:&gt; java org.testng.TestNG @c:\command.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Additionally, TestNG can be passed properties on the command line of the Java Virtual Machine, for example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">java -Dtestng.test.classpath="c:/build;c:/java/classes;" org.testng.TestNG testng.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the properties that TestNG understands:</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_system_properties">System properties</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.test.classpath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A semicolon separated series of directories that contain your test classes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this property is set, TestNG will use it to look for your test classes instead of the class path. This is convenient if you are using the package tag in your XML file and you have a lot of classes in your classpath, most of them not being test classes.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Example:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">java org.testng.TestNG -groups windows,linux -testclass org.test.MyTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The ant task and <code>testng.xml</code> allow you to launch TestNG with more parameters (methods to include, specifying parameters, etc&#8230;&#8203;), so you should consider using the command line only when you are trying to learn about TestNG and you want to get up and running quickly.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The command line flags that specify what tests should be run will be ignored if you also specify a testng.xml file, with the exception of <code>-includedgroups</code> and <code>-excludedgroups</code>, which will override all the group inclusions/exclusions found in <code>testng.xml</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test_methods_test_classes_and_test_groups">Test methods, Test classes and Test groups</h3>
+<div class="sect3">
+<h4 id="_test_methods">Test methods</h4>
+<div class="paragraph">
+<p>Test methods are annotated with @Test. Methods annotated with @Test that happen to return a value will be ignored, unless you set allow-return-values to true in your testng.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite allow-return-values="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test allow-return-values="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_test_groups">Test groups</h4>
+<div class="literalblock">
+<div class="content">
+<pre>TestNG allows you to perform sophisticated groupings of test methods. Not only can you declare that methods belong to groups, but you can also specify groups that contain other groups. Then TestNG can be invoked and asked to include a certain set of groups (or regular expressions) while excluding another set.  This gives you maximum flexibility in how you partition your tests and doesn't require you to recompile anything if you want to run two different sets of tests back to back.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groups are specified in your <code>testng.xml</code> file and can be found either under the <code>&lt;test&gt;</code> or <code>&lt;suite&gt;</code> tag. Groups specified in the <code>&lt;suite&gt;</code> tag apply to all the <code>&lt;test&gt;</code> tags underneath. Note that groups are accumulative in these tags: if you specify group "a" in <code>&lt;suite&gt;</code> and "b" in <code>&lt;test&gt;</code>, then both "a" and "b" will be included.</p>
+</div>
+<div class="paragraph">
+<p>For example, it is quite common to have at least two categories of tests:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Check-in tests.</strong>  These tests should be run before you submit new code.  They should typically be fast and just make sure no basic functionality was broken.</p>
+</li>
+<li>
+<p><strong>Functional tests.</strong>  These tests should cover all the functionalities of your software and be run at least once a day, although ideally you would want to run them continuously.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Typically, check-in tests are a subset of functional tests.  TestNG allows you to specify this in a very intuitive way with test groups. For example, you could structure your test by saying that your entire test class belongs to the "functest" group, and additionally that a couple of methods belong to the group "checkintest":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class Test1 {
+  @Test(groups = { "functest", "checkintest" })
+  public void testMethod1() {
+  }
+
+  @Test(groups = {"functest", "checkintest"} )
+  public void testMethod2() {
+  }
+
+  @Test(groups = { "functest" })
+  public void testMethod3() {
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Invoking TestNG with</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Test1"&gt;
+  &lt;groups&gt;
+    &lt;run&gt;
+      &lt;include name="functest"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will run all the test methods in that classes, while invoking it with <code>checkintest</code> will only run <code>testMethod1()</code> and <code>testMethod2()</code>.
+Here is another example, using regular expressions this time.  Assume that some of your test methods should not be run on Linux, your test would look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test
+public class Test1 {
+  @Test(groups = { "windows.checkintest" })
+  public void testWindowsOnly() {
+  }
+
+  @Test(groups = {"linux.checkintest"} )
+  public void testLinuxOnly() {
+  }
+
+  @Test(groups = { "windows.functest" } )
+  public void testWindowsToo() {
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You could use the following <code>testng.xml</code> to launch only the Windows methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Test1"&gt;
+  &lt;groups&gt;
+    &lt;run&gt;
+      &lt;include name="windows.*"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Note: TestNG uses <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>, and not <a href="https://en.wikipedia.org/wiki/Wildmat">wildmats</a>. Be aware of the difference (for example, <code>"anything"</code> is matched by <code>".<strong>"</code>&#8201;&#8212;&#8201;dot star&#8201;&#8212;&#8201;and not <code>"</strong>"</code>).
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_method_groups">Method groups</h5>
+<div class="paragraph">
+<p>You can also exclude or include individual methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Test1"&gt;
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"&gt;
+      &lt;methods&gt;
+        &lt;include name=".*enabledTestMethod.*"/&gt;
+        &lt;exclude name=".*brokenTestMethod.*"/&gt;
+      &lt;/methods&gt;
+     &lt;/class&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This can come in handy to deactivate a single method without having to recompile anything, but I don&#8217;t recommend using this technique too much since it makes your testing framework likely to break if you start refactoring your Java code (the regular expressions used in the tags might not match your methods anymore).</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_groups_of_groups">Groups of groups</h4>
+<div class="paragraph">
+<p>Groups can also include other groups. These groups are called "MetaGroups".  For example, you might want to define a group "all" that includes "checkintest" and "functest".  "functest" itself will contain the groups "windows" and "linux" while "checkintest will only contain "windows".  Here is how you would define this in your property file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Regression1"&gt;
+  &lt;groups&gt;
+    &lt;define name="functest"&gt;
+      &lt;include name="windows"/&gt;
+      &lt;include name="linux"/&gt;
+    &lt;/define&gt;
+
+    &lt;define name="all"&gt;
+      &lt;include name="functest"/&gt;
+      &lt;include name="checkintest"/&gt;
+    &lt;/define&gt;
+
+    &lt;run&gt;
+      &lt;include name="all"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+
+  &lt;classes&gt;
+    &lt;class name="test.sample.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exclusion_groups">Exclusion groups</h4>
+<div class="paragraph">
+<p>TestNG allows you to include groups as well as exclude them.
+For example, it is quite usual to have tests that temporarily break because of a recent change, and you don&#8217;t have time to fix the breakage yet.  4 However, you do want to have clean runs of your functional tests, so you need to deactivate these tests but keep in mind they will need to be reactivated.</p>
+</div>
+<div class="paragraph">
+<p>A simple way to solve this problem is to create a group called "broken" and make these test methods belong to it.  For example, in the above example, I know that <code>testMethod2()</code> is now broken so I want to disable it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(groups = {"checkintest", "broken"} )
+public void testMethod2() {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All I need to do now is to exclude this group from the run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Simple example"&gt;
+  &lt;groups&gt;
+    &lt;run&gt;
+      &lt;include name="checkintest"/&gt;
+      &lt;exclude name="broken"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This way, I will get a clean test run while keeping track of what tests are broken and need to be fixed later.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+you can also disable tests on an individual basis by using the "enabled" property available on both <code>@Test</code> and <code>@Before</code>/<code>@After</code> annotations.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_partial_groups">Partial groups</h4>
+<div class="paragraph">
+<p>You can define groups at the class level and then add groups at the method level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(groups = { "checkin-test" })
+public class All {
+
+  @Test(groups = { "func-test" })
+  public void method1() {
+      //test code goes here
+  }
+
+  public void method2() {
+      //more code goes here
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this class, <code>method2()</code> is part of the group "checkin-test", which is defined at the class level, while <code>method1()</code> belongs to both "checkin-test" and "func-test".</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_parameters">Parameters</h3>
+<div class="literalblock">
+<div class="content">
+<pre>TestNG allows you to pass an arbitrary number of parameters to each of your tests using the `@Parameters` annotation.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are three ways to set these parameters</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The testng.xml file</p>
+</li>
+<li>
+<p>Programmatically</p>
+</li>
+<li>
+<p>Java system properties</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_parameters_from_testng_xml">Parameters from testng.xml</h4>
+<div class="paragraph">
+<p>If you are using simple values for your parameters, you can specify them in your <code>testng.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Parameters({ "first-name" })
+@Test
+public void testSingleString(String firstName) {
+  System.out.println("Invoked testString " + firstName);
+  assert "Cedric".equals(firstName);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this code, we specify that the parameter <code>firstName</code> of your Java method should receive the value of the XML parameter called <code>first-name</code>.  This XML parameter is defined in <code>testng.xml</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite"&gt;
+  &lt;parameter name="first-name"  value="Cedric"/&gt;
+  &lt;test name="Simple example"&gt;
+  &lt;!-- ... --&gt;
+  &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The same technique can be used for <code>@Before</code>/<code>@After</code> and <code>@Factory</code> annotations:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Parameters({ "datasource", "jdbc-driver" })
+@BeforeMethod
+public void beforeTest(String ds, String driver) {
+  m_dataSource =  buildDataSource();    // look up the value of datasource
+  m_jdbcDriver = driver;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This time, the two Java parameter <code>ds</code> and <code>driver</code> will receive the value given to the properties <code>datasource</code> and <code>jdbc-driver</code> respectively.</p>
+</div>
+<div class="paragraph">
+<p>Parameters can be declared optional with the {javadocs-base-url}/org/testng/annotations/Optional.html[org.testng.annotations.Optional] annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Parameters("db")
+@Test
+public void testNonExistentParameter(@Optional("mysql") String db) {
+    //more code
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If no parameter named "db" is found in your <code>testng.xml</code> file, your test method will receive the default value specified inside the <code>@Optional</code> annotation: "mysql".</p>
+</div>
+<div class="paragraph">
+<p>The <code>@Parameters</code> annotation can be placed at the following locations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>On any method that already has a <code>@Test</code>, <code>@Before</code>/<code>@After</code> or <code>@Factory</code> annotation.</p>
+</li>
+<li>
+<p>On at most one constructor of your test class.  In this case, TestNG will invoke this particular constructor with the parameters initialized to the values specified in <code>testng.xml</code> whenever it needs to instantiate your test class.  This feature can be used to initialize fields inside your classes to values that will then be used by your test methods.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Important:</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The XML parameters are mapped to the Java parameters in the same order as they are found in the annotation, and TestNG will issue an error if the numbers don&#8217;t match.</p>
+</li>
+<li>
+<p>Parameters are scoped. In testng.xml, you can declare them either under:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>&lt;suite&gt;</code> tag or</p>
+</li>
+<li>
+<p><code>&lt;test&gt;</code> tag or</p>
+</li>
+<li>
+<p><code>&lt;class&gt;</code> tag or</p>
+</li>
+<li>
+<p><code>&lt;methods&gt;</code> tag.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The order of precedence (lowest to highest) in terms of resolving values for parameters with same names is</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">&lt;suite&gt; --&gt; &lt;test&gt; --&gt; &lt;class&gt; --&gt; &lt;methods&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>If two parameters have the same name, it&#8217;s the one defined in <code>&lt;methods&gt;</code> that has precedence. This is convenient if you need to specify a parameter applicable to all your tests and override its value only for certain test method.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_parameters_with_dataproviders">Parameters with DataProviders</h4>
+<div class="paragraph">
+<p>Specifying parameters in testng.xml might not be sufficient if you need to pass complex parameters, or parameters that need to be created from Java (complex objects, objects read from a property file or a database, etc&#8230;&#8203;). In this case, you can use a Data Provider to supply the values you need to test.  A Data Provider is a method on your class that returns an array of array of objects.  This method is annotated with <code>@DataProvider</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">//This method will provide data to any test method that declares that its Data Provider
+//is named "test1"
+@DataProvider(name = "test1")
+public Object[][] createData1() {
+ return new Object[][] {
+   { "Cedric", 36 },
+   { "Anne", 37},
+ };
+}
+
+//This test method declares that its data should be supplied by the Data Provider
+//named "test1"
+@Test(dataProvider = "test1")
+public void verifyData1(String n1, Integer n2) {
+ System.out.println(n1 + " " + n2);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will print</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">Cedric 36
+Anne 37</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A <code>@Test</code> method specifies its Data Provider with the <code>dataProvider</code> attribute.  This name must correspond to a method on the same class annotated with <code>@DataProvider(name="&#8230;&#8203;")</code> with a matching name.</p>
+</div>
+<div class="paragraph">
+<p>By default, the data provider will be looked for in the current test class or one of its base classes. If you want to put your data provider in a different class, it needs to be a static method or a class with a non-arg constructor, and you specify the class where it can be found in the <code>dataProviderClass</code> attribute:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class StaticProvider {
+  @DataProvider(name = "create")
+  public static Object[][] createData() {
+    return new Object[][] {
+      new Object[] { 42 }
+    };
+  }
+}
+
+public class MyTest {
+  @Test(dataProvider = "create", dataProviderClass = StaticProvider.class)
+  public void test(Integer n) {
+    // ...
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The data provider supports injection too. TestNG will use the test context for the injection. The Data Provider method can return one of the following types:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of array of objects (<code>Object[][]</code>) where the first dimension&#8217;s size is the number of times the test method will be invoked and the second dimension size contains an array of objects that must be compatible with the parameter types of the test method. This is the case illustrated by the example above.</p>
+</li>
+<li>
+<p>An <code>Iterator&lt;Object[]&gt;</code>. The only difference with <code>Object[][]</code> is that an <code>Iterator</code> lets you create your test data lazily. TestNG will invoke the iterator and then the test method with the parameters returned by this iterator one by one. This is particularly useful if you have a lot of parameter sets to pass to the method and you don&#8217;t want to create all of them upfront.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>An array of objects (<code>Object[]</code>). This is similar to <code>Iterator&lt;Object[]&gt;</code> but causes the test method to be invoked once for each element of the source array.</p>
+</li>
+<li>
+<p>An <code>Iterator&lt;Object&gt;&gt;</code>. Lazy alternative of <code>Object[]</code>. Causes the test method to be invoked once for each element of the iterator.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>It must be said that return type is not limited to Object only thus <code>MyCustomData[][]</code> or <code>Iterator&lt;Supplier&gt;</code> are also possible. The only limitation is that in case of iterator its parameter type can&#8217;t be explicitly parameterized itself. Here is an example of this feature:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DataProvider(name = "test1")
+public Iterator&lt;Object[]&gt; createData() {
+  return new MyIterator(DATA);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Using <code>MyCustomData[]</code> as a return type</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DataProvider(name = "test1")
+public MyCustomData[] createData() {
+  return new MyCustomData[]{ new MyCustomData() };
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or its lazy option with <code>Iterator&lt;MyCustomData&gt;</code></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DataProvider(name = "test1")
+public Iterator&lt;MyCustomData&gt; createData() {
+  return Arrays.asList(new MyCustomData()).iterator();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Parameter type (<code>Stream</code>) of <code>Iterator</code> can&#8217;t be explicitly parametrized</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DataProvider(name = "test1")
+public Iterator&lt;Stream&gt; createData() {
+  return Arrays.asList(Stream.of("a", "b", "c")).iterator();
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you declare your <code>@DataProvider</code> as taking a <code>java.lang.reflect.Method</code> as first parameter, TestNG will pass the current test method for this first parameter. This is particularly useful when several test methods use the same <code>@DataProvider</code> and you want it to return different values depending on which test method it is supplying data for.</p>
+</div>
+<div class="paragraph">
+<p>For example, the following code prints the name of the test method inside its <code>@DataProvider</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DataProvider(name = "dp")
+public Object[][] createData(Method m) {
+  System.out.println(m.getName());  // print test method name
+  return new Object[][] { new Object[] { "Cedric" }};
+}
+
+@Test(dataProvider = "dp")
+public void test1(String s) {
+}
+
+@Test(dataProvider = "dp")
+public void test2(String s) {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and will therefore display:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">test1
+test2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Data providers can run in parallel with the attribute parallel:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DataProvider(parallel = true)
+public Object[][] getTestData() {
+// ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Each of the parallel data providers running from an XML file runs with a thread pool which has a size of <code>10</code> by default. You can modify this value in the <code>&lt;suite&gt;</code> tag of your XML file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="Suite1" data-provider-thread-count="20" &gt;
+&lt;!-- content ignored for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to run a few specific data providers in a different thread pool, you need to run them from a different XML file.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_controlling_threadpool_usage">Controlling ThreadPool Usage</h4>
+<div class="paragraph">
+<p>Starting from TestNG <code>7.9.0</code>, there are some additional ways in which the thread-pools that run the parallel tests can be controlled. For these new features to be consumed, update your suite file to use the <code>testng-1.1.dtd</code> (as seen below) so that your IDE can provide you with autocompletion:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;!DOCTYPE suite SYSTEM "https://testng.org/testng-1.1.dtd" &gt;
+&lt;suite name="sample"&gt;
+&lt;!-- content ignored for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>share-thread-pool-for-data-providers</code> - When this attribute is set to true at the suite level, TestNG will start using a shared thread pool for all the data driven tests in a given <code>&lt;suite&gt;</code>. The size of the thread pool is determined using the attribute <code>data-provider-thread-count</code>. This attribute has a default value of <code>false</code>.</p>
+</li>
+<li>
+<p><code>use-global-thread-pool</code> - When this attribute is set to true at the suite level, TestNG will start using a common thread pool for running both your regular test methods and data driven test methods. The size of the thread pool is determined using the attribute thread-count. This attribute has a default value of <code>false</code>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_parameters_from_system_properties">Parameters from System Properties</h4>
+<div class="paragraph">
+<p>TestNG can be passed parameters on the command line of the Java Virtual Machine using system properties (<code>-D</code>). Parameters passed in this way are not required to be pre-defined in <code>testng.xml</code>, but will override any parameters defined there.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java -Dfirst-name=Cedrick -Dlast-name="von Braun" org.testng.TestNG testng.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Java system property variable is a string with no spaces that represents the name of the property. The value variable is a string that represents the value of the property. If the value is a string with spaces, then enclose it in quotation marks.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+In TestNG 6.x parameters defined in testng.xml could not be overwritten by system properties
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_parameters_in_reports">Parameters in reports</h5>
+<div class="paragraph">
+<p>Parameters used to invoke your test methods are shown in the HTML reports generated by TestNG. Here is an example:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="pics/parameters.png" alt="parameters">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependencies">Dependencies</h3>
+<div class="paragraph">
+<p>Sometimes, you need your test methods to be invoked in a certain order.  Here are a few examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To make sure a certain number of test methods have completed and succeeded before running more test methods.</p>
+</li>
+<li>
+<p>To initialize your tests while wanting this initialization methods to be test methods as well (methods tagged with <code>@Before</code>/<code>@After</code> will not be part of the final report).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>TestNG allows you to specify dependencies either with annotations or in XML.</p>
+</div>
+<div class="sect3">
+<h4 id="_dependencies_with_annotations">Dependencies with annotations</h4>
+<div class="paragraph">
+<p>You can use the attributes <code>dependsOnMethods</code> or <code>dependsOnGroups</code>, found on the <code>@Test</code> annotation.
+There are two kinds of dependencies:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Hard dependencies</strong>. All the methods you depend on must have run and succeeded for you to run. If at least one failure occurred in your dependencies, you will not be invoked and marked as a SKIP in the report.</p>
+</li>
+<li>
+<p><strong>Soft dependencies</strong>. You will always be run after the methods you depend on, even if some of them have failed. This is useful when you just want to make sure that your test methods are run in a certain order but their success doesn&#8217;t really depend on the success of others. A soft dependency is obtained by adding <code>"alwaysRun=true"</code> in your <code>@Test</code> annotation.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is an example of a hard dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test
+public void serverStartedOk() {}
+
+@Test(dependsOnMethods = { "serverStartedOk" })
+public void method1() {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, <code>method1()</code> is declared as depending on method <code>serverStartedOk()</code>, which guarantees that <code>serverStartedOk()</code> will always be invoked first.</p>
+</div>
+<div class="paragraph">
+<p>You can also have methods that depend on entire groups:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(groups = { "init" })
+public void serverStartedOk() {}
+
+@Test(groups = { "init" })
+public void initEnvironment() {}
+
+@Test(dependsOnGroups = { "init.*" })
+public void method1() {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, <code>method1()</code> is declared as depending on any group matching the regular expression <code>"init.*"</code>, which guarantees that the methods <code>serverStartedOk()</code> and <code>initEnvironment()</code> will always be invoked before <code>method1()</code>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+as stated before, the order of invocation for methods that belong in the same group is not guaranteed to be the same across test runs.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If a method depended upon fails and you have a hard dependency on it (<code>alwaysRun=false</code>, which is the default), the methods that depend on it are not marked as FAIL but as SKIP.  Skipped methods will be reported as such in the final report (in a color that is neither red nor green in HTML), which is important since skipped methods are not necessarily failures.</p>
+</div>
+<div class="paragraph">
+<p>Both <code>dependsOnGroups</code> and <code>dependsOnMethods</code> accept regular expressions as parameters.  For <code>dependsOnMethods</code>, if you are depending on a method which happens to have several overloaded versions, all the overloaded methods will be invoked.  If you only want to invoke one of the overloaded methods, you should use <code>dependsOnGroups</code>.</p>
+</div>
+<div class="paragraph">
+<p>For a more advanced example of dependent methods, please refer to <a href="https://beust.com/weblog2/archives/000171.html">this article</a>, which uses inheritance to provide an elegant solution to the problem of multiple dependencies.</p>
+</div>
+<div class="paragraph">
+<p>By default, dependent methods are grouped by class.</p>
+</div>
+<div class="paragraph">
+<p>For example, if method <code>b()</code> depends on method <code>a()</code> and you have several instances of the class that contains these methods (because of a factory of a data provider), then the invocation order will be as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">a(1)
+a(2)
+b(2)
+b(2)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TestNG will not run <code>b()</code> until all the instances have invoked their <code>a()</code> method.</p>
+</div>
+<div class="paragraph">
+<p>This behavior might not be desirable in certain scenarios, such as for example testing a sign in and sign out of a web browser for various countries. In such a case, you would like the following ordering:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">signIn("us")
+signOut("us")
+signIn("uk")
+signOut("uk")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For this ordering, you can use the XML attribute <code>group-by-instances</code>. This attribute is valid either on <code>&lt;suite&gt;</code> or <code>&lt;test&gt;</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="Factory" group-by-instances="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>or</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Factory" group-by-instances="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dependencies_in_xml">Dependencies in XML</h4>
+<div class="paragraph">
+<p>Alternatively, you can specify your group dependencies in the <code>testng.xml</code> file. You use the <code>&lt;dependencies&gt;</code> tag to achieve this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="My suite"&gt;
+  &lt;groups&gt;
+    &lt;dependencies&gt;
+      &lt;group name="c" depends-on="a  b" /&gt;
+      &lt;group name="z" depends-on="c" /&gt;
+    &lt;/dependencies&gt;
+  &lt;/groups&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;depends-on&gt;</code> attribute contains a space-separated list of groups.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_factories">Factories</h3>
+<div class="paragraph">
+<p>Factories allow you to create tests dynamically. For example, imagine you want to create a test method that will access a page on a website several times, and you want to invoke it with different values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class TestWebServer {
+  @Test(parameters = { "number-of-times" })
+  public void accessPage(int numberOfTimes) {
+    while (numberOfTimes-- &gt; 0) {
+     // access the web page
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="T1"&gt;
+  &lt;parameter name="number-of-times" value="10"/&gt;
+  &lt;classes&gt;
+    &lt;class name= "TestWebServer" /&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;
+
+&lt;test name="T2"&gt;
+  &lt;parameter name="number-of-times" value="20"/&gt;
+  &lt;classes&gt;
+    &lt;class name= "TestWebServer"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;
+
+&lt;test name="T3"&gt;
+  &lt;parameter name="number-of-times" value="30"/&gt;
+  &lt;classes&gt;
+    &lt;class name= "TestWebServer"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This can become quickly impossible to manage, so instead, you should use a factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class WebTestFactory {
+  @Factory
+  public Object[] createInstances() {
+   Object[] result = new Object[10];
+   for (int i = 0; i &lt; 10; i++) {
+      result[i] = new WebTest(i * 10);
+    }
+    return result;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and the new test class is now:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class WebTest {
+  private int m_numberOfTimes;
+  public WebTest(int numberOfTimes) {
+    m_numberOfTimes = numberOfTimes;
+  }
+
+  @Test
+  public void testServer() {
+   for (int i = 0; i &lt; m_numberOfTimes; i++) {
+     // access the web page
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your <code>testng.xml</code> only needs to reference the class that contains the factory method, since the test instances themselves will be created at runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;class name="WebTestFactory" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or, if building a test suite instance programmatically, you can add the factory in the same manner as for tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">TestNG testNG = new TestNG();
+testNG.setTestClasses(WebTestFactory.class);
+testNG.run();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The factory method can receive parameters just like <code>@Test</code> and <code>@Before</code>/<code>@After</code> and it must return <code>Object[]</code>.  The objects returned can be of any class (not necessarily the same class as the factory class) and they don&#8217;t even need to contain TestNG annotations (in which case they will be ignored by TestNG).</p>
+</div>
+<div class="paragraph">
+<p>Factories can also be used with data providers, and you can leverage this functionality by putting the <code>@Factory</code> annotation either on a regular method or on a constructor. Here is an example of a constructor factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Factory(dataProvider = "dp")
+public FactoryDataProviderSampleTest(int n) {
+  super(n);
+}
+
+@DataProvider
+static public Object[][] dp() {
+  return new Object[][] {
+    new Object[] { 41 },
+    new Object[] { 42 },
+  };
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example will make TestNG create two test classes, on with the constructor invoked with the value <code>41</code> and the other with <code>42</code>.</p>
+</div>
+<div class="paragraph">
+<p>Optionally, you can specify indices for the data provider when using it with <code>@Factory</code> annotation.
+When indices are specified, only the elements at the specified indices are passed as parameters for the factory annotated constructor.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Factory(dataProvider = "dp", indices = {1, 3})
+public ExampleTestCase(String text) {
+  this.i = i;
+}
+
+@DataProvider(name = "dp")
+public static Object[] getData() {
+  return new Object[]{
+      "Java", "Kotlin", "Golang", "Rust"
+  };
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above example, the values Kotlin (2nd element) and Rust (4th element) are passed as parameters to the <code>@Factory</code> annotated constructor and totally 2 <code>ExampleTestCase</code> instances are created.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_class_level_annotations">Class level annotations</h3>
+<div class="paragraph">
+<p>The <code>@Test</code> annotation can be put on a class instead of a test method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test
+public class Test1 {
+  public void test1() {
+  }
+
+  public void test2() {
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The effect of a class level @Test annotation is to make all the public methods of this class to become test methods even if they are not annotated. You can still repeat the <code>@Test</code> annotation on a method if you want to add certain attributes.</p>
+</div>
+<div class="paragraph">
+<p><strong>For example:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test
+public class Test1 {
+  public void test1() {
+  }
+
+  @Test(groups = "g1")
+  public void test2() {
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will make both <code>test1()</code> and <code>test2()</code> test methods but on top of that, <code>test2()</code> now belongs to the group "g1".</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_ignoring_tests">Ignoring tests</h3>
+<div class="paragraph">
+<p>TestNG lets you ignore all the @Test methods :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In a class (or)</p>
+</li>
+<li>
+<p>In a particular package (or)</p>
+</li>
+<li>
+<p>In a package and all of its child packages</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>using the new annotation <code>@Ignore</code>.</p>
+</div>
+<div class="paragraph">
+<p>When used at the method level <code>@Ignore</code> annotation is functionally equivalent to <code>@Test(enabled=false)</code>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample that shows how to ignore all tests within a class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
+
+@Ignore
+public class TestcaseSample {
+
+    @Test
+    public void testMethod1() {
+    }
+
+    @Test
+    public void testMethod2() {
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@Ignore</code> annotation has a higher priority than individual <code>@Test</code> method annotations. When <code>@Ignore</code> is placed on a class, all the tests in that class will be disabled.</p>
+</div>
+<div class="paragraph">
+<p>To ignore all tests in a particular package, you just need to create <code>package-info.java</code> and add the <code>@Ignore</code> annotation to it. Here&#8217;s a sample :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Ignore
+package com.testng.master;
+
+import org.testng.annotations.Ignore;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This causes all the <code>@Test</code> methods to be ignored in the package <code>com.testng.master</code> and all of its sub-packages.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_parallelism_and_time_outs">Parallelism and time-outs</h3>
+<div class="paragraph">
+<p>You can instruct TestNG to run your tests in separate threads in various ways.</p>
+</div>
+<div class="sect3">
+<h4 id="_parallel_suites">Parallel suites</h4>
+<div class="paragraph">
+<p>This is useful if you are running several suite files (e.g. <code>java org.testng.TestNG testng1.xml testng2.xml</code>) and you want each of these suites to be run in a separate thread. You can use the following command line flag to specify the size of a thread pool:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java org.testng.TestNG -suitethreadpoolsize 3 testng1.xml testng2.xml testng3.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The corresponding ant task name is <code>suitethreadpoolsize</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_parallel_tests_classes_and_methods">Parallel tests, classes and methods</h4>
+<div class="paragraph">
+<p>The parallel attribute on the <code>&lt;suite&gt;</code> tag can take one of following values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="methods" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="tests" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="classes" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="instances" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>parallel="methods"</code>: TestNG will run all your test methods in separate threads. Dependent methods will also run in separate threads but they will respect the order that you specified.</p>
+</li>
+<li>
+<p><code>parallel="tests"</code>: TestNG will run all the methods in the same <code>&lt;test&gt;</code> tag in the same thread, but each <code>&lt;test&gt;</code> tag will be in a separate thread. This allows you to group all your classes that are not thread safe in the same <code>&lt;test&gt;</code> and guarantee they will all run in the same thread while taking advantage of TestNG using as many threads as possible to run your tests.</p>
+</li>
+<li>
+<p><code>parallel="classes"</code>: TestNG will run all the methods in the same class in the same thread, but each class will be run in a separate thread.</p>
+</li>
+<li>
+<p><code>parallel="instances"</code>: TestNG will run all the methods in the same instance in the same thread, but two methods on two different instances will be running in different threads.</p>
+<div class="literalblock">
+<div class="content">
+<pre>Additionally, the attribute `thread-count` allows you to specify how many threads should be allocated for this execution.</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+the <code>@Test</code> attribute <code>timeOut</code> works in both parallel and non-parallel mode.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can also specify that a <code>@Test</code> method should be invoked from different threads. You can use the attribute <code>threadPoolSize</code> to achieve this result:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(threadPoolSize = 3, invocationCount = 10,  timeOut = 10000)
+public void testServer() {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, the function <code>testServer()</code> will be invoked ten times from three different threads. Additionally, a <code>time-out</code> of ten seconds guarantees that none of the threads will block on this thread forever.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_rerunning_failed_tests">Rerunning failed tests</h3>
+<div class="paragraph">
+<p>Every time tests fail in a suite, TestNG creates a file called <code>testng-failed.xml</code> in the output directory. This XML file contains the necessary information to rerun only these methods that failed, allowing you to quickly reproduce the failures without having to run the entirety of your tests.  Therefore, a typical session would look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs testng.xml
+java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs test-outputs\testng-failed.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that <code>testng-failed.xml</code> will contain all the necessary dependent methods so that you are guaranteed to run the methods that failed without any SKIP failures.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes, you might want TestNG to automatically retry a test whenever it fails. In those situations, you can use a retry analyzer.</p>
+</div>
+<div class="paragraph">
+<p>When you bind a retry analyzer to a test, TestNG automatically invokes the retry analyzer to determine if TestNG can retry a test case again in an attempt to see if the test that just fails now passes. Here is how you use a retry analyzer:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an implementation of the interface <code>org.testng.IRetryAnalyzer</code></p>
+</li>
+<li>
+<p>Bind this implementation to the <code>@Test</code> annotation for e.g., <code>@Test(retryAnalyzer = LocalRetry.class)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Following is a sample implementation of the retry analyzer that retries a test for a maximum of three times.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
+public class MyRetry implements IRetryAnalyzer {
+
+  private int retryCount = 0;
+  private static final int maxRetryCount = 3;
+
+  @Override
+  public boolean retry(ITestResult result) {
+    if (retryCount &lt; maxRetryCount) {
+      retryCount++;
+      return true;
+    }
+    return false;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class TestclassSample {
+
+  @Test(retryAnalyzer = MyRetry.class)
+  public void test2() {
+    Assert.fail();
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_junit_tests">JUnit tests</h3>
+<div class="paragraph">
+<p>TestNG can run JUnit 3 and JUnit 4 tests.  All you need to do is put the JUnit jar file on the classpath, specify your JUnit test classes in the <code>testng.classNames</code> property and set the <code>testng.junit</code> property to true:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Test1" junit="true"&gt;
+  &lt;classes&gt;
+    &lt;!-- ... --&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The behavior of TestNG in this case is similar to JUnit depending on the JUnit version found on the class path:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>JUnit 3:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>All methods starting with test* in your classes will be run</p>
+</li>
+<li>
+<p>If there is a method <code>setUp()</code> on your test class, it will be invoked before every test method</p>
+</li>
+<li>
+<p>If there is a method <code>tearDown()</code> on your test class, it will be invoked before after every test method</p>
+</li>
+<li>
+<p>If your test class contains a method <code>suite()</code>, all the tests returned by this method will be invoked</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>JUnit 4:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>TestNG will use the <code>org.junit.runner.JUnitCore</code> runner to run your tests</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_running_testng_programmatically">Running TestNG programmatically</h3>
+<div class="paragraph">
+<p>You can invoke TestNG from your own programs very easily:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">TestListenerAdapter tla = new TestListenerAdapter();
+TestNG testng = new TestNG();
+testng.setTestClasses(new Class[] { Run2.class });
+testng.addListener(tla);
+testng.run();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example creates a {javadocs-base-url}/org/testng/TestNG.html[TestNG] object and runs the test class Run2. It also adds a <code>TestListener</code>. You can either use the adapter class {javadocs-base-url}/org/testng/TestListenerAdapter.html[org.testng.TestListenerAdapter] or implement {javadocs-base-url}/org/testng/ITestListener.html[org.testng.ITestListener] yourself. This interface contains various callback methods that let you keep track of when a test starts, succeeds, fails, etc&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>Similarly, you can invoke TestNG on a testng.xml file or you can create a virtual testng.xml file yourself. In order to do this, you can use the classes found the package {javadocs-base-url}/org/testng/xml/package-frame.html[org.testng.xml]: {javadocs-base-url}/org/testng/xml/XmlClass.html[XmlClass], {javadocs-base-url}/org/testng/xml/XmlTest.html[XmlTest], etc&#8230;&#8203; Each of these classes correspond to their XML tag counterpart.</p>
+</div>
+<div class="paragraph">
+<p>For example, suppose you want to create the following virtual file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="TmpSuite" &gt;
+  &lt;test name="TmpTest" &gt;
+    &lt;classes&gt;
+      &lt;class name="test.failures.Child"/&gt;
+    &lt;/classes&gt;
+    &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You would use the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">XmlSuite suite = new XmlSuite();
+suite.setName("TmpSuite");
+
+XmlTest test = new XmlTest(suite);
+test.setName("TmpTest");
+List&lt;XmlClass&gt; classes = new ArrayList&lt;XmlClass&gt;();
+classes.add(new XmlClass("test.failures.Child"));
+test.setXmlClasses(classes) ;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then you can pass this <code>XmlSuite</code> to <code>TestNG</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">List&lt;XmlSuite&gt; suites = new ArrayList&lt;XmlSuite&gt;();
+suites.add(suite);
+TestNG tng = new TestNG();
+tng.setXmlSuites(suites);
+tng.run();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please see the {javadocs-base-url}/org/testng/package-summary.html[JavaDocs] for the entire API.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_beanshell_and_advanced_group_selection">BeanShell and advanced group selection</h3>
+<div class="paragraph">
+<p>If the <code>&lt;include&gt;</code> and <code>&lt;exclude&gt;</code> tags in <code>testng.xml</code> are not enough for your needs, you can use a <a href="https://beanshell.org/">BeanShell</a> expression to decide whether a certain test method should be included in a test run or not. You specify this expression just under the <code>&lt;test&gt;</code> tag:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="BeanShell test"&gt;
+   &lt;method-selectors&gt;
+     &lt;method-selector&gt;
+       &lt;script language="beanshell"&gt;
+            &lt;![CDATA[
+                    groups.containsKey("test1")
+            ]]&gt;
+        &lt;/script&gt;
+     &lt;/method-selector&gt;
+   &lt;/method-selectors&gt;
+  &lt;!-- ... --&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When a <code>&lt;script&gt;</code> tag is found in testng.xml, TestNG will ignore subsequent <code>&lt;include&gt;</code> and <code>&lt;exclude&gt;</code> of groups and methods in the current <code>&lt;test&gt;</code> tag:  your BeanShell expression will be the only way to decide whether a test method is included or not.</p>
+</div>
+<div class="paragraph">
+<p>Here are additional information on the BeanShell script:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>It must return a boolean value.  Except for this constraint, any valid BeanShell code is allowed (for example, you might want to return <code>true</code> during week days and <code>false</code> during weekends, which would allow you to run tests differently depending on the date).</p>
+</li>
+<li>
+<p>TestNG defines the following variables for your convenience:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>java.lang.reflect.Method method</code>: the current test method.</p>
+</li>
+<li>
+<p><code>org.testng.ITestNGMethod testngMethod</code>: the description of the current test method.</p>
+</li>
+<li>
+<p><code>java.util.Map&lt;String, String&gt; groups</code>: a map of the groups the current test method belongs to.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>You might want to surround your expression with a CDATA declaration (as shown above) to avoid tedious quoting of reserved XML characters).</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Starting from version <code>7.5</code> TestNG does not bring in any dependency on BeanShell implementations by default.
+So in order to leverage BeanShell based method selectors, please remember to add an explicit dependency on BeanShell.
+For example <a href="https://mvnrepository.com/artifact/org.apache-extras.beanshell/bsh">org.apache-extras.beanshell</a>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_annotation_transformers">Annotation Transformers</h4>
+<div class="paragraph">
+<p>TestNG allows you to modify the content of all the annotations at runtime. This is especially useful if the annotations in the source code are right most of the time, but there are a few situations where you&#8217;d like to override their value.</p>
+</div>
+<div class="paragraph">
+<p>In order to achieve this, you need to use an Annotation Transformer.</p>
+</div>
+<div class="paragraph">
+<p>An Annotation Transformer is a class that implements {javadocs-base-url}/org/testng/IAnnotationTransformer.html[IAnnotationTransformer]</p>
+</div>
+<div class="paragraph">
+<p>Like all the other TestNG listeners, you can specify this class either on the command line or with ant:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java org.testng.TestNG -listener MyTransformer testng.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or programmatically:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">TestNG tng = new TestNG();
+tng.setAnnotationTransformer(new MyTransformer());
+// ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>When the method <code>transform()</code> is invoked, you can call any of the setters on the <code>ITestAnnotation</code> test parameter to alter its value before TestNG proceeds further.</p>
+</div>
+<div class="paragraph">
+<p>For example, here is how you would override the attribute invocationCount but only on the test method invoke() of one of your test classes:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class MyTransformer implements IAnnotationTransformer {
+  public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
+    if ("invoke".equals(testMethod.getName())) {
+      annotation.setInvocationCount(5);
+    }
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_method_interceptors">Method Interceptors</h3>
+<div class="paragraph">
+<p>Once TestNG has calculated in what order the test methods will be invoked, these methods are split in two groups:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Methods run sequentially</strong>. These are all the test methods that have dependencies or dependents. These methods will be run in a specific order.</p>
+</li>
+<li>
+<p><strong>Methods run in no particular order</strong>. These are all the methods that don&#8217;t belong in the first category. The order in which these test methods are run is random and can vary from one run to the next (although by default, TestNG will try to group test methods by class).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In order to give you more control on the methods that belong to the second category, TestNG provides {javadocs-base-url}/org/testng/IMethodInterceptor.html[org.testng.IMethodInterceptor]</p>
+</div>
+<div class="paragraph">
+<p>The list of methods passed in parameters are all the methods that can be run in any order. Your intercept method is expected to return a similar list of <code>IMethodInstance</code>, which can be either of the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The same list you received in parameter but in a different order.</p>
+</li>
+<li>
+<p>A smaller list of <code>IMethodInstance</code> objects.</p>
+</li>
+<li>
+<p>A bigger list of <code>IMethodInstance</code> objects.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Once you have defined your interceptor, you pass it to TestNG as a listener. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java -classpath "testng-jdk15.jar:test/build" org.testng.TestNG -listener test.methodinterceptors.NullMethodInterceptor
+   -testclass test.methodinterceptors.FooTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the equivalent ant syntax, see the listeners attribute in the <a href="https://testng.org/doc/ant.html">ant documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>For example, here is a Method Interceptor that will reorder the methods so that test methods that belong to the group "fast" are always run first:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public List&lt;IMethodInstance&gt; intercept(List&lt;IMethodInstance&gt; methods, ITestContext context) {
+  List&lt;IMethodInstance&gt; result = new ArrayList&lt;IMethodInstance&gt;();
+  for (IMethodInstance m : methods) {
+    Test test = m.getMethod().getConstructorOrMethod().getAnnotation(Test.class);
+    Set&lt;String&gt; groups = new HashSet&lt;String&gt;();
+    for (String group : test.groups()) {
+      groups.add(group);
+    }
+    if (groups.contains("fast")) {
+      result.add(0, m);
+    }
+    else {
+      result.add(m);
+    }
+  }
+  return result;
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_testng_listeners">TestNG Listeners</h3>
+<div class="paragraph">
+<p>There are several interfaces that allow you to modify TestNG&#8217;s behavior. These interfaces are broadly called "TestNG Listeners". Here are a few listeners:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IAlterSuiteListener (<a href="altering_suites.html">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IAlterSuiteListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IAnnotationTransformer (<a href="annotation_transformers.html">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IAnnotationTransformer.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IConfigurationListener(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurationListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IDataProviderInterceptor(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderInterceptor.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IDataProviderListener(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IExecutionListener(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IExecutionVisualiser(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionVisualiser.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IHookable (<a href="ihookable.html">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IHookable.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IConfigurable(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurable.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IInvokedMethodListener (doc, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])</p>
+</li>
+<li>
+<p>IMethodInterceptor (<a href="method_interceptors.html">doc</a>, {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])</p>
+</li>
+<li>
+<p>IReporter (<a href="../test_results/logging_and_results.html#_logging_reporters">doc</a>, {javadocs-base-url}/org/testng/IReporter.html[javadoc])</p>
+</li>
+<li>
+<p>ISuiteListener (doc, {javadocs-base-url}/org/testng/ISuiteListener.html[javadoc])</p>
+</li>
+<li>
+<p>ITestListener (<a href="../test_results/logging_and_results.html#_logging_listeners">doc</a>, {javadocs-base-url}/org/testng/ITestListener.html[javadoc])</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_specifying_listeners_with_testng_xml_or_in_java">Specifying listeners with testng.xml or in Java</h4>
+<div class="paragraph">
+<p>Here is how you can define listeners in your <code>testng.xml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite&gt;
+  &lt;listeners&gt;
+    &lt;listener class-name="com.example.MyListener" /&gt;
+    &lt;listener class-name="com.example.MyMethodInterceptor" /&gt;
+  &lt;/listeners&gt;
+&lt;!-- rest of the contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if you prefer to define these listeners in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Listeners({ com.example.MyListener.class, com.example.MyMethodInterceptor.class })
+public class MyTest {
+  // ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@Listeners</code> annotation can contain any class that extends <code>org.testng.ITestNGListener</code> except <code>IAnnotationTransformer</code>. The reason is that these listeners need to be known very early in the process so that TestNG can use them to rewrite your annotations, therefore you need to specify these listeners in your <code>testng.xml</code> file.</p>
+</div>
+<div class="paragraph">
+<p>Note that the <code>@Listeners</code> annotation will apply to your entire suite file, just as if you had specified it in a testng.xml file. If you want to restrict its scope (for example, only running on the current class), the code in your listener could first check the test method that&#8217;s about to run and decide what to do then. Here&#8217;s how it can be done.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First define a new custom annotation that can be used to specify this restriction:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Retention(RetentionPolicy.RUNTIME)
+@Target ({ElementType.TYPE})
+public @interface DisableListener {}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add an edit check as below within your regular listeners:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public void beforeInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
+  ConstructorOrMethod consOrMethod =iInvokedMethod.getTestMethod().getConstructorOrMethod();
+  DisableListener disable = consOrMethod.getMethod().getDeclaringClass().getAnnotation(DisableListener.class);
+  if (disable != null) {
+    return;
+  }
+  // else resume your normal operations
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Annotate test classes wherein the listener is not to be invoked:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DisableListener
+@Listeners({ com.example.MyListener.class, com.example.MyMethodInterceptor.class })
+public class MyTest {
+  // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_specifying_listeners_with_serviceloader">Specifying listeners with ServiceLoader</h4>
+<div class="paragraph">
+<p>Finally, the JDK offers a very elegant mechanism to specify implementations of interfaces on the class path via the <a href="https://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html">ServiceLoader</a> class.</p>
+</div>
+<div class="paragraph">
+<p>With ServiceLoader, all you need to do is create a jar file that contains your listener(s) and a few configuration files, put that jar file on the classpath when you run TestNG and TestNG will automatically find them.</p>
+</div>
+<div class="paragraph">
+<p>Here is a concrete example of how it works.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start by creating a listener (any TestNG listener should work):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">package test.tmp;
+
+public class TmpSuiteListener implements ISuiteListener {
+  @Override
+  public void onFinish(ISuite suite) {
+    System.out.println("Finishing");
+  }
+
+  @Override
+  public void onStart(ISuite suite) {
+    System.out.println("Starting");
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Compile this file, then create a file at the location <code>META-INF/services/org.testng.ITestNGListener</code>, which will name the implementation(s) you want for this interface.</p>
+</div>
+<div class="paragraph">
+<p>You should end up with the following directory structure, with only two files:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">$ tree
+|____META-INF
+| |____services
+| | |____org.testng.ITestNGListener
+|____test
+| |____tmp
+| | |____TmpSuiteListener.class
+
+$ cat META-INF/services/org.testng.ITestNGListener
+test.tmp.TmpSuiteListener</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a jar of this directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">$ jar cvf ../sl.jar .
+added manifest
+ignoring entry META-INF/
+adding: META-INF/services/(in = 0) (out= 0)(stored 0%)
+adding: META-INF/services/org.testng.ITestNGListener(in = 26) (out= 28)(deflated -7%)
+adding: test/(in = 0) (out= 0)(stored 0%)
+adding: test/tmp/(in = 0) (out= 0)(stored 0%)
+adding: test/tmp/TmpSuiteListener.class(in = 849) (out= 470)(deflated 44%)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, put this jar file on your classpath when you invoke TestNG:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">$ java -classpath sl.jar:testng.jar org.testng.TestNG testng-single.yaml
+Starting
+f2 11 2
+PASSED: f2("2")
+Finishing</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This mechanism allows you to apply the same set of listeners to an entire organization just by adding a jar file to the classpath, instead of asking every single developer to remember to specify these listeners in their <code>testng.xml</code> file.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependency_injection">Dependency injection</h3>
+<div class="paragraph">
+<p>TestNG supports two different kinds of dependency injection: native (performed by TestNG itself) and external (performed by a dependency injection framework such as Guice).</p>
+</div>
+<div class="sect3">
+<h4 id="_native_dependency_injection">Native dependency injection</h4>
+<div class="paragraph">
+<p>TestNG lets you declare additional parameters in your methods. When this happens, TestNG will automatically fill these parameters with the right value. Dependency injection can be used in the following places:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Any <code>@Before</code> method or <code>@Test</code> method can declare a parameter of type <code>ITestContext</code>.</p>
+</li>
+<li>
+<p>Any <code>@AfterMethod</code> method can declare a parameter of type <code>ITestResult</code>, which will reflect the result of the test method that was just run.</p>
+</li>
+<li>
+<p>Any <code>@Before</code> and <code>@After</code> methods (except <code>@BeforeSuite</code> and <code>@AfterSuite</code>) can declare a parameter of type <code>XmlTest</code>, which contain the current <code>&lt;test&gt;</code> tag.</p>
+</li>
+<li>
+<p>Any <code>@BeforeMethod</code> (and <code>@AfterMethod</code>) can declare a parameter of type <code>java.lang.reflect.Method</code>. This parameter will receive the test method that will be called once this <code>@BeforeMethod</code> finishes (or after the method as run for <code>@AfterMethod</code>).</p>
+</li>
+<li>
+<p>Any <code>@BeforeMethod</code> can declare a parameter of type <code>Object[]</code>. This parameter will receive the list of parameters that are about to be fed to the upcoming test method, which could be either injected by TestNG, such as <code>java.lang.reflect.Method</code> or come from a <code>@DataProvider</code>.</p>
+</li>
+<li>
+<p>Any <code>@DataProvider</code> can declare a parameter of type <code>ITestContext</code> or <code>java.lang.reflect.Method</code>. The latter parameter will receive the test method that is about to be invoked.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can turn off injection with the <code>@NoInjection</code> annotation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class NoInjectionTest {
+
+  @DataProvider(name = "provider")
+  public Object[][] provide() throws Exception {
+      return new Object[][] { { CC.class.getMethod("f") } };
+  }
+
+  @Test(dataProvider = "provider")
+  public void withoutInjection(@NoInjection Method m) {
+      Assert.assertEquals(m.getName(), "f");
+  }
+
+  @Test(dataProvider = "provider")
+  public void withInjection(Method m) {
+      Assert.assertEquals(m.getName(), "withInjection");
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The below table summarises the parameter types that can be natively injected for the various TestNG annotations:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2857%;">
+<col style="width: 14.2858%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Annotation</th>
+<th class="tableblock halign-left valign-top">ITestContext</th>
+<th class="tableblock halign-left valign-top">XmlTest</th>
+<th class="tableblock halign-left valign-top">Method</th>
+<th class="tableblock halign-left valign-top">Object[]</th>
+<th class="tableblock halign-left valign-top">ITestResult</th>
+<th class="tableblock halign-left valign-top">ConstructorOrMethod</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeforeSuite</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeforeTest</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeforeGroups</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeforeClass</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BeforeMethod</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Test</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DataProvider</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AfterMethod</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AfterClass</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AfterGroups</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AfterTest</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>AfterSuite</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Factory</code></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_guice_dependency_injection">Guice dependency injection</h4>
+<div class="paragraph">
+<p>If you use <a href="https://github.com/google/guice/wiki/Motivation">Guice</a>, TestNG gives you an easy way to inject your test objects with a Guice module:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Guice(modules = GuiceExampleModule.class)
+public class GuiceTest extends SimpleBaseTest {
+
+  @Inject
+  ISingleton m_singleton;
+
+  @Test
+  public void singletonShouldWork() {
+    m_singleton.doSomething();
+  }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, <code>GuiceExampleModule</code> is expected to bind the interface <code>ISingleton</code> to some concrete class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class GuiceExampleModule implements Module {
+
+  @Override
+  public void configure(Binder binder) {
+    binder.bind(ISingleton.class).to(ExampleSingleton.class).in(Singleton.class);
+  }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you need more flexibility in specifying which modules should be used to instantiate your test classes, you can specify a module factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Guice(moduleFactory = ModuleFactory.class)
+public class GuiceModuleFactoryTest {
+
+  @Inject
+  ISingleton m_singleton;
+
+  @Test
+  public void singletonShouldWork() {
+    m_singleton.doSomething();
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The module factory needs to implement the interface {javadocs-base-url}/org/testng/IModuleFactory.html[org.testng.IModuleFactory]</p>
+</div>
+<div class="paragraph">
+<p>Your factory will be passed an instance of the test context and the test class that TestNG needs to instantiate. Your <code>createModule()</code> method should return a Guice Module that will know how to instantiate this test class. You can use the test context to find out more information about your environment, such as parameters specified in testng.xml, etc&#8230;&#8203; You will get even more flexibility and Guice power with <code>parent-module</code> and <code>guice-stage</code> suite parameters.</p>
+</div>
+<div class="paragraph">
+<p><code>guice-stage</code> allow you to chose the <a href="https://github.com/google/guice/wiki/Bootstrap">Stage</a> used to create the parent injector. The default one is <code>DEVELOPMENT</code>. Other allowed values are <code>PRODUCTION</code> and <code>TOOL</code>. Here is how you can define <code>parent-module</code> in your <code>test.xml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite parent-module="com.example.SuiteParenModule" guice-stage="PRODUCTION"&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TestNG will create this module only once for given suite. Will also use this module for obtaining instances of test specific Guice modules and module factories, then will create child injector for each test class. With such approach you can declare all common bindings in parent-module also you can inject binding declared in parent-module in module and module factory. Here is an example of this functionality:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">package com.example;
+
+public class ParentModule extends AbstractModule {
+  @Override
+  protected void conigure() {
+    bind(MyService.class).toProvider(MyServiceProvider.class);
+    bind(MyContext.class).to(MyContextImpl.class).in(Singleton.class);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">package com.example;
+
+public class TestModule extends AbstractModule {
+  private final MyContext myContext;
+
+  @Inject
+  TestModule(MyContext myContext) {
+    this.myContext = myContext
+  }
+
+  @Override
+  protected void configure() {
+    bind(MySession.class).toInstance(myContext.getSession());
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite parent-module="com.example.ParentModule"&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">package com.example;
+
+@Test
+@Guice(modules = TestModule.class)
+public class TestClass {
+  @Inject
+  MyService myService;
+  @Inject
+  MySession mySession;
+
+  public void testServiceWithSession() {
+    myService.serve(mySession);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>As you see <code>ParentModule</code> declares binding for <code>MyService</code> and <code>MyContext</code> classes. Then <code>MyContext</code> is injected using constructor injection into <code>TestModule</code> class, which also declare binding for <code>MySession</code>. Then <code>parent-module</code> in test XML file is set to <code>ParentModule</code> class, this enables injection in <code>TestModule</code>. Later in <code>TestClass</code> you see two injections:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>MyService - binding taken from ParentModule</p>
+</li>
+<li>
+<p>MySession - binding taken from TestModule</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This configuration ensures you that all tests in this suite will be run with same session instance, the <code>MyContextImpl</code> object is only created once per suite, this give you possibility to configure common environment state for all tests in suite.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listening_to_method_invocations">Listening to method invocations</h3>
+<div class="paragraph">
+<p>The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with <code>@Test</code>) or configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_overriding_test_methods">Overriding test methods</h3>
+<div class="paragraph">
+<p>TestNG allows you to override and possibly skip the invocation of test methods. One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by providing a listener that implements {javadocs-base-url}/org/testng/IHookable.html[IHookable].</p>
+</div>
+<div class="paragraph">
+<p>Here is an example with JAAS:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class MyHook implements IHookable {
+  public void run(final IHookCallBack icb, ITestResult testResult) {
+    // Preferably initialized in a @Configuration method
+    mySubject = authenticateWithJAAs();
+
+    Subject.doAs(mySubject, new PrivilegedExceptionAction() {
+      public Object run() {
+        icb.callback(testResult);
+      }
+    };
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_altering_suites_or_tests">Altering suites (or) tests</h3>
+<div class="paragraph">
+<p>Sometimes you may need to just want to alter a suite (or) a test tag in a suite xml in runtime without having to change the contents of a suite file.</p>
+</div>
+<div class="paragraph">
+<p>A classic example for this would be to try and leverage your existing suite file and try using it for simulating a load test on your "Application under test". At the minimum you would end up duplicating the contents of your &lt;test&gt; tag multiple times and create a new suite xml file and work with. But this doesn&#8217;t seem to scale a lot.</p>
+</div>
+<div class="paragraph">
+<p>TestNG allows you to alter a suite (or) a test tag in your suite xml file at runtime via listeners. You achieve this by providing a listener that implements {javadocs-base-url}/org/testng/IAlterSuiteListener.html[IAlterSuiteListener]. Please refer to <a href="testng_listeners.html">Listeners section</a> to learn about listeners.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example that shows how the suite name is getting altered in runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class AlterSuiteNameListener implements IAlterSuiteListener {
+
+    @Override
+    public void alter(List&lt;XmlSuite&gt; suites) {
+        XmlSuite suite = suites.get(0);
+        suite.setName(getClass().getSimpleName());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This listener can only be added with either of the following ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Through the <code>&lt;listeners&gt;</code> tag in the suite xml file.</p>
+</li>
+<li>
+<p>Through a <a href="testng_listeners.html#_specifying_listeners_with_serviceloader">Service Loader</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This listener cannot be added to execution using the <code>@Listeners</code> annotation.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_test_results">Test results</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_success_failure_and_assert">Success, failure and assert</h3>
+<div class="paragraph">
+<p>A test is considered successful if it completed without throwing any exception or if  it threw an exception that was expected (see the documentation for the expectedExceptions attribute found on the <code>@Test</code> annotation).</p>
+</div>
+<div class="paragraph">
+<p>Your test methods will typically be made of calls that can throw an exception, or of various assertions (using the Java <code>assert</code> keyword).
+An <code>assert</code> failing will trigger an <code>AssertionError</code>, which in turn will mark the method as failed (remember to use <code>-ea</code> on the JVM if you are not seeing the assertion errors).</p>
+</div>
+<div class="paragraph">
+<p>Here is an example test method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test
+public void verifyLastName() {
+  assert "Beust".equals(m_lastName) : "Expected name Beust, for" + m_lastName;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TestNG also include JUnit&#8217;s Assert class, which lets you perform assertions on complex objects:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import static org.testng.AssertJUnit.*;
+//...
+@Test
+public void verify() {
+  assertEquals("Beust", m_lastName);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that the above code use a static import in order to be able to use the <code>assertEquals</code> method without having to prefix it by its class.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_and_results">Logging and results</h3>
+<div class="paragraph">
+<p>The results of the test run are created in a file called index.html in the directory specified when launching SuiteRunner.This file points to various other HTML and text files that contain the result of the entire test run.</p>
+</div>
+<div class="paragraph">
+<p>It&#8217;s very easy to generate your own reports with TestNG with Listeners and Reporters:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Listeners</code> implement the interface {javadocs-base-url}/org/testng/ITestListener.html[org.testng.ITestListener] and are notified in real time of when a test starts, passes, fails, etc&#8230;&#8203;</p>
+</li>
+<li>
+<p><code>Reporters</code> implement the interface {javadocs-base-url}/org/testng/IReporter.html[org.testng.IReporter] and are notified when all the suites have been run by TestNG.The <code>IReporter</code> instance receives a list of objects that describe the entire test run.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For example, if you want to generate a PDF report of your test run, you don&#8217;t need to be notified in real time of the test run so you should probably use an <code>IReporter</code>.If you&#8217;d like to write a real-time reporting of your tests, such as a GUI with a progress bar or a text reporter displaying dots (".") as each test is invoked (as is explained below), <code>ITestListener</code> is your best choice.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_listeners">Logging Listeners</h3>
+<div class="paragraph">
+<p>Here is a listener that displays a <code>"."</code> for each passed test, a <code>"F"</code> for each failure and a <code>"S"</code> for each skip:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class DotTestListener extends TestListenerAdapter {
+  private int m_count = 0;
+
+  @Override
+  public void onTestFailure(ITestResult tr) {
+    log("F");
+  }
+
+  @Override
+  public void onTestSkipped(ITestResult tr) {
+    log("S");
+  }
+
+  @Override
+  public void onTestSuccess(ITestResult tr) {
+    log(".");
+  }
+
+  private void log(String string) {
+    System.out.print(string);
+    if (++m_count % 40 == 0) {
+      System.out.println(" ");
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, I chose to extend {javadocs-base-url}/org/testng/TestListenerAdapter.html[TestListenerAdapter], which implements {javadocs-base-url}/org/testng/ITestListener.html[ITestListener] with empty methods, so I don&#8217;t have to override other methods from the interface that I have no interest in. You can implement the interface directly if you prefer.</p>
+</div>
+<div class="paragraph">
+<p>Here is how I invoke TestNG to use this new listener:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -listener org.testng.reporters.DotTestListener test\testng.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and the output:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">........................................
+........................................
+........................................
+........................................
+........................................
+.........................
+===============================================
+Total tests run: 226, Failures: 0, Skips: 0
+===============================================</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+When you use <code>-listener</code>, TestNG will automatically determine the type of listener you want to use.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_logging_reporters">Logging Reporters</h3>
+<div class="paragraph">
+<p>The <code>org.testng.IReporter</code> interface only has one method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public void generateReport(List&lt;ISuite&gt; suites, String outputDirectory);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This method will be invoked by TestNG when all the suites have been run and you can inspect its parameters to access all the information on the run that was just completed.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_junit_reports">JUnit Reports</h3>
+<div class="paragraph">
+<p>TestNG contains a listener that takes the TestNG results and outputs an XML file that can then be fed to JUnitReport (below is an example of the <code>junitreport</code> ant task.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;target name="reports"&gt;
+  &lt;junitreport todir="test-report"&gt;
+    &lt;fileset dir="test-output"&gt;
+      &lt;include name="*/*.xml"/&gt;
+    &lt;/fileset&gt;
+
+    &lt;report format="noframes"  todir="test-report"/&gt;
+  &lt;/junitreport&gt;
+&lt;/target&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_reporter_api">Reporter API</h3>
+<div class="paragraph">
+<p>If you need to log messages that should appear in the generated HTML reports, you can use the class {javadocs-base-url}/org/testng/Reporter.html[org.testng.Reporter] :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">Reporter.log("M3 WAS CALLED");</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="pics/show-output1.png" alt="show output1">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="pics/show-output2.png" alt="show output2">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_xml_reports">XML Reports</h3>
+<div class="paragraph">
+<p>TestNG offers an XML reporter capturing TestNG specific information that is not available in JUnit reports. This is particularly useful when the user&#8217;s test environment needs to consume XML results with TestNG-specific data that the JUnit format can&#8217;t provide. This reporter can be injected into TestNG via the command line with -reporter.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample usage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">-reporter org.testng.reporters.XMLReporter:generateTestResultAttributes=true,generateGroupsAttribute=true</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The full set of options that can be passed is detailed in the below table. Make sure to use :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>:</code> - to separate the reporter name from its properties</p>
+</li>
+<li>
+<p><code>=</code> - to separate key/value pairs for properties</p>
+</li>
+<li>
+<p><code>,</code> - to separate multiple key/value pairs</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Below is a sample of the output of such a reporter:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;testng-results&gt;
+    &lt;suite name="Suite1"&gt;
+        &lt;groups&gt;
+            &lt;group name="group1"&gt;
+                &lt;method signature="com.test.TestOne.test2()" name="test2" class="com.test.TestOne"/&gt;
+                &lt;method signature="com.test.TestOne.test1()" name="test1" class="com.test.TestOne"/&gt;
+            &lt;/group&gt;
+            &lt;group name="group2"&gt;
+                &lt;method signature="com.test.TestOne.test2()" name="test2" class="com.test.TestOne"/&gt;
+            &lt;/group&gt;
+        &lt;/groups&gt;
+        &lt;test name="test1"&gt;
+            &lt;class name="com.test.TestOne"&gt;
+                &lt;test-method status="FAIL" signature="test1()" name="test1" duration-ms="0"
+                             started-at="2007-05-28T12:14:37Z" description="someDescription2"
+                             finished-at="2007-05-28T12:14:37Z"&gt;
+                    &lt;exception class="java.lang.AssertionError"&gt;
+                        &lt;short-stacktrace&gt;
+                            &lt;![CDATA[
+                java.lang.AssertionError
+                ... Removed 22 stack frames
+              ]]&gt;
+                        &lt;/short-stacktrace&gt;
+                    &lt;/exception&gt;
+                &lt;/test-method&gt;
+                &lt;test-method status="PASS" signature="test2()" name="test2" duration-ms="0"
+                             started-at="2007-05-28T12:14:37Z" description="someDescription1"
+                             finished-at="2007-05-28T12:14:37Z"&gt;
+                &lt;/test-method&gt;
+                &lt;test-method status="PASS" signature="setUp()" name="setUp" is-config="true" duration-ms="15"
+                             started-at="2007-05-28T12:14:37Z" finished-at="2007-05-28T12:14:37Z"&gt;
+                &lt;/test-method&gt;
+            &lt;/class&gt;
+        &lt;/test&gt;
+    &lt;/suite&gt;
+&lt;/testng-results&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This reporter is injected along with the other default listeners so you can get this type of output by default. The listener provides some properties that can tweak the reporter to fit your needs. The following table contains a list of these properties with a short explanation:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Comment</th>
+<th class="tableblock halign-left valign-top">Default Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>outputDirectory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A String indicating the directory where should the XML files be output.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The TestNG output directory</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timestampFormat</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies the format of date fields that are generated by this reporter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">yyyy-MM-dd&#8217;T&#8217;HH:mm:ss&#8217;Z'</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fileFragmentationLevel</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>An integer having the values <code>1</code>, <code>2</code> or <code>3</code>, indicating the way that the XML files are generated:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>1</code> - will generate all the results in one file.</p>
+</li>
+<li>
+<p><code>2</code> - each suite is generated in a separate XML file that is linked to the main file.</p>
+</li>
+<li>
+<p><code>3</code> - same as 2 plus separate files for test-cases that are referenced from the suite files.</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>splitClassAndPackageNames</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>This boolean specifies the way that class names are generated for the <code>&lt;class&gt;</code> element. For example,
+* you will get <code>&lt;class class="com.test.MyTest"&gt;</code> for` <code>false</code> and
+* <code>&lt;class class="MyTest" package="com.test"&gt;</code> for <code>true</code>.</p>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>generateGroupsAttribute</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A boolean indicating if a groups attribute should be generated for the <code>&lt;test-method&gt;</code> element. This feature aims at providing a straight-forward method of retrieving the groups that include a test method without having to surf through the &lt;group&gt; elements.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>generateTestResultAttributes</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A boolean indicating if an <code>&lt;attributes&gt;</code> tag should be generated for each <code>&lt;test-method&gt;</code> element, containing the test result attributes (See <code>ITestResult.setAttribute()</code> about setting test result attributes). Each attribute <code>toString()</code> representation will be written in a <code>&lt;attribute name="[attribute name]"&gt;</code> tag.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stackTraceOutputMethod</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Specifies the type of stack trace that is to be generated for exceptions and has the following values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>0</code> - no stacktrace (just Exception class and message).</p>
+</li>
+<li>
+<p><code>1</code> - a short version of the stack trace keeping just a few lines from the top</p>
+</li>
+<li>
+<p><code>2</code> - the complete stacktrace with all the inner exceptions</p>
+</li>
+<li>
+<p><code>3</code> - both short and long stacktrace</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>generateDependsOnMethods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use this attribute to enable/disable the generation of a depends-on-methods attribute for the <code>&lt;test-method&gt;</code> element.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>generateDependsOnGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Enable/disable the generation of a depends-on-groups attribute for the <code>&lt;test-method&gt;</code> element.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>In order to configure this reporter you can use the <code>-reporter</code> option in the command line or the Ant task with the nested <code>&lt;reporter&gt;</code> element. For each of these you must specify the class <code>org.testng.reporters.XMLReporter</code>. Please note that you cannot configure the built-in reporter because this one will only use default settings. If you need just the XML report with custom settings you will have to add it manually with one of the two methods and disable the default listeners.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_testng_exit_codes">TestNG Exit Codes</h3>
+<div class="paragraph">
+<p>When TestNG completes execution, it exits with a return code.
+This return code can be inspected to get an idea on the nature of failures (if there were any).
+The following table summarises the different exit codes that TestNG currently uses.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 20%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">FailedWithinSuccess</th>
+<th class="tableblock halign-left valign-top">Skipped</th>
+<th class="tableblock halign-left valign-top">Failed</th>
+<th class="tableblock halign-left valign-top">Status Code</th>
+<th class="tableblock halign-left valign-top">Remarks</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 1, row 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 2, row 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 3, row 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 4, row 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Column 5, row 1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Passed tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Failed tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Skipped tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Skipped/Failed tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">FailedWithinSuccess tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">FailedWithinSuccess/Failed tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">No</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">FailedWithinSuccess/Skipped tests</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Yes</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">FailedWithinSuccess/Skipped/Failed tests</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_yaml">YAML</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TestNG supports <a href="https://www.yaml.org/">YAML</a> as an alternate way of specifying your suite file. For example, the following XML file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="SingleSuite" verbose="2" thread-count="4"&gt;
+
+  &lt;parameter name="n" value="42" /&gt;
+
+  &lt;test name="Regression2"&gt;
+    &lt;groups&gt;
+      &lt;run&gt;
+        &lt;exclude name="broken" /&gt;
+      &lt;/run&gt;
+    &lt;/groups&gt;
+
+    &lt;classes&gt;
+      &lt;class name="test.listeners.ResultEndMillisTest" /&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and here is its YAML version:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="yaml">name: SingleSuite
+threadCount: 4
+parameters: { n: 42 }
+
+tests:
+  - name: Regression2
+    parameters: { count: 10 }
+    excludedGroups: [ broken ]
+    classes:
+      - test.listeners.ResultEndMillisTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is TestNG&#8217;s own <a href="https://github.com/testng-team/testng/blob/master/testng-core/src/test/resources/testng.xml">suite file</a>, and its <a href="https://github.com/testng-team/testng/blob/master/testng-core/src/test/resources/testng.yaml">YAML counterpart</a>.</p>
+</div>
+<div class="paragraph">
+<p>You might find the YAML file format easier to read and to maintain. YAML files are also recognized by the TestNG Eclipse plug-in. You can find more information about YAML and TestNG in <a href="https://beust.com/weblog/2010/08/15/yaml-the-forgotten-victim-of-the-format-wars/">this blog post</a>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+TestNG by default does not bring in the YAML related library into your classpath. So depending upon your build system (Gradle/Maven) you need to add an explicit reference to YAML library in your build file.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For e.g, If you were using Maven, you would need to add a dependency as below into your pom.xml file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;dependency&gt;
+  &lt;groupid&gt;org.yaml&lt;/groupid&gt;
+  &lt;artifactid&gt;snakeyaml&lt;/artifactid&gt;
+  &lt;version&gt;1.23&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if you were using Gradle, you would add a dependency as below into your build.gradle file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_dry_run_for_your_tests">Dry Run for your tests</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When launched in dry run mode, TestNG will display a list of the test methods that would be invoked but without actually calling them.</p>
+</div>
+<div class="paragraph">
+<p>You can enable dry run mode for TestNG by passing the JVM argument <code>-Dtestng.mode.dryrun=true</code></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_jvm_arguments_in_testng">JVM Arguments in TestNG</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">JVM Argument</th>
+<th class="tableblock halign-left valign-top">Comment</th>
+<th class="tableblock halign-left valign-top">Default value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.favor.custom.thread-pool.executor</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should resort to going back to using the custom implementation for managing Thread pools. If this flag is enabled, then thread pool sharing between data driven tests and thread pool sharing between regular and data driven tests WILL NOT work properly.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.thread.affinity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should resort to running dependent methods on the same thread as the upstream methods.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.mode.dryrun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should simulate a real execution. In this mode the test methods are not actually executed.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.test.classpath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A String that represents a list of zip files or jars that need to be added to the TestNG classpath for it to retrieve test classes for execution.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>""</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skip.caller.clsLoader</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should skip using the current ClassLoader for loading classes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.dtd.http</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should load DTDs from http endpoints.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.show.stack.frames</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should show detailed stack traces in reports.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.memory.friendly</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should be memory cognizant and use lightweight test method representations.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.strict.parallel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating that TestNG should attempt to start all test methods simultaneously when there are more than one test tags and parallelism has been set to methods.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emailable.report2.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A String indicating the file name into which the emailable reports are to be written into.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>emailable-report.html</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>oldTestngEmailableReporter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should use the old emailable report listener for building simple html emailable report.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>noEmailableReporter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should use the NEW emailable report listener for building simple html emailable report.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.report.xml.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A String indicating the file name into which the xml reports are to be written into.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng-results.xml</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>fileStringBuffer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should output verbose logs when working with very large text data.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>stacktrace.success.output.level</code></p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>A String indicating the log levels to be included in the XML Reports (Valid values include :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>NONE</code> (no stacktraces),</p>
+</li>
+<li>
+<p><code>SHORT</code> (short stacktrace),</p>
+</li>
+<li>
+<p><code>FULL</code> (full stacktrace),</p>
+</li>
+<li>
+<p><code>BOTH</code> (both short and full stacktrace).</p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">FULL</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logging_framework_integration_in_testng">Logging framework integration in TestNG</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Starting from TestNG version <code>7.5</code> TestNG makes use of the logging facade provided by Slf4j.
+TestNG by default does not bring in any explicit Slf4j facade implementation.</p>
+</div>
+<div class="paragraph">
+<p>To control the logs being output by TestNG internals, please add a dependency on any suitable Slf4j implementation (Native Or Wrapped implementation) from <a href="https://www.slf4j.org/docs.html">here</a></p>
+</div>
+<div class="paragraph">
+<p>Prior to TestNG version 7.5, TestNG supports logging via a custom logging framework similar to <code>Log4j</code>. To control logging, add a resource named <code>log4testng.properties</code> to your classpath.</p>
+</div>
+<div class="paragraph">
+<p>The logging levels are:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>TRACE</code></p>
+</li>
+<li>
+<p><code>DEBUG</code></p>
+</li>
+<li>
+<p><code>INFO</code></p>
+</li>
+<li>
+<p><code>WARN</code></p>
+</li>
+<li>
+<p><code>ERROR</code> and</p>
+</li>
+<li>
+<p><code>FATAL</code>.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The Logging framework has the following characteristics:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>All logging is done using System.out (for levels &lt; ERROR) or System.err. There is no way to specify Appenders.</p>
+</li>
+<li>
+<p>There is no way to control logging programmatically.</p>
+</li>
+<li>
+<p>The <code>log4testng.properties</code> resource is searched in the classpath on the first call to the logging API. If it is not present, logging defaults to the <code>WARN</code> level.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The property file contains lines in the following format:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="properties"># log4testng will log its own behavior (generally used for debugging this package only).
+log4testng.debug=true
+
+# Specifies the root Loggers logging level. Will log DEBUG level and above
+log4testng.rootLogger=DEBUG
+
+# The org.testng.reporters.EmailableReporter Logger will log TRACE level and above
+log4testng.logger.org.testng.reporters.EmailableReporter=TRACE
+
+# All Logger in packages below org.testng will log WARN level and above
+log4testng.logger.org.testng=WARN</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In your source files you will typically instantiate and use loggers this ways:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.log4testng.Logger;
+
+class ThisClass {
+  private static final Logger LOGGER = Logger.getLogger(ThisClass.class);
+
+  ...
+  LOGGER.debug("entering myMethod()");
+  ...
+  LOGGER.warn("unknown file: " + filename);
+  ...
+  LOGGER.error("Unexpected error", exception);</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

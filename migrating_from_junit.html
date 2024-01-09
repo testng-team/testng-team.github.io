@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Migrating from JUnit</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_migrating_from_junit">Migrating from JUnit</a>
+<ul class="sectlevel2">
+<li><a href="#_using_eclipse">Using Eclipse</a></li>
+<li><a href="#_asserts">Asserts</a></li>
+<li><a href="#_running_junit_tests">Running JUnit Tests</a></li>
+<li><a href="#_related_reading">Related reading</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_migrating_from_junit">Migrating from JUnit</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_using_eclipse">Using Eclipse</h3>
+<div class="paragraph">
+<p>The easiest way to convert your JUnit tests to TestNG is to use the Eclipse TestNG plug-in refactoring support. You will find a full description of its features in the <a href="https://testng.org/doc/eclipse.html#eclipse-quickfix">Eclipse section</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_asserts">Asserts</h3>
+<div class="paragraph">
+<p>Note that the class <code>org.testng.Assert</code> uses a different argument ordering than the ones used by JUnit. If you are porting code that uses JUnit&#8217;s asserts, you might want to us a static import of that class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import static org.testng.AssertJUnit.*;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_running_junit_tests">Running JUnit Tests</h3>
+<div class="paragraph">
+<p>TestNG can automatically recognize and run JUnit tests, so you can use TestNG as a runner for all your existing tests and write new tests using TestNG.</p>
+</div>
+<div class="paragraph">
+<p>All you have to do is to put JUnit library on the TestNG classpath, so it can find and use JUnit classes, change your test runner from JUnit to TestNG in Ant and then run TestNG in "mixed" mode. This way you can have all your tests in the same project, even in the same package, and start using TestNG. This approach also allows you to convert your existing JUnit tests to TestNG incrementally.</p>
+</div>
+<div class="paragraph">
+<p><strong>Example - replacing JUnit Ant task with TestNG one</strong></p>
+</div>
+<div class="paragraph">
+<p>JUnit version:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;junit dir="${work.dir}" errorproperty="tests.failed" failureproperty="tests.failed" fork="true"&gt;
+	&lt;batchtest todir="${build.test.results.dir}"&gt;
+		&lt;fileset dir="${test.src.dir}"&gt;
+			&lt;include name="**/*Test.*"/&gt;
+		&lt;/batchtest&gt;
+		&lt;classpath&gt;
+			&lt;path path="${run.test.classpath}"/&gt;
+		&lt;/classpath&gt;
+		&lt;syspropertyset&gt;
+			&lt;propertyref prefix="test-sys-prop."/&gt;
+			&lt;mapper from="test-sys-prop.*" to="*" type="glob"/&gt;
+		&lt;/syspropertyset&gt;
+		&lt;formatter type="xml"/&gt;
+		&lt;jvmarg value="-ea"/&gt;
+		&lt;jvmarg line="${run.jvmargs}"/&gt;
+&lt;/junit&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TestNG version:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;taskdef name="testng" classname="org.testng.TestNGAntTask" classpath="${run.test.classpath}"/&gt;
+&lt;fileset id="mixed.tests" dir="${test.src.dir}"&gt;
+	&lt;include name="**/*Test.*"/&gt;
+&lt;/fileset&gt;
+&lt;testng mode="mixed" classfilesetref="mixed.tests" workingDir="${work.dir}" failureProperty="tests.failed" outputdir="${build.test.results.dir}"&gt;
+	&lt;classpath&gt;
+		&lt;pathelement path="${build.test.classes.dir}"/&gt;
+		&lt;pathelement path="${run.test.classpath}"/&gt;
+		&lt;pathelement path="${junit.lib}"/&gt;
+	&lt;/classpath&gt;
+	&lt;propertyset&gt;
+		&lt;propertyref prefix="test-sys-prop."/&gt;
+		&lt;mapper from="test-sys-prop.*" to="*" type="glob"/&gt;
+	&lt;/propertyset&gt;
+	&lt;jvmarg line="${run.jvmargs}"/&gt;
+&lt;/testng&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_related_reading">Related reading</h3>
+<div class="paragraph">
+<p><a href="https://web.archive.org/web/20150214034607/http://developers.opengamma.com/blog/2011/04/04/converting-opengamma-junit-testng">Here</a> is the detailed report of a company that successfully converted a large codebase of JUnit 4 tests over to TestNG.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

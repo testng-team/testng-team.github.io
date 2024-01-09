@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Running TestNG</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_running_testng">Running TestNG</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_running_testng">Running TestNG</h3>
+<div class="paragraph">
+<p>TestNG can be invoked in different ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Command line</p>
+</li>
+<li>
+<p><a href="../ant.html">ant</a></p>
+</li>
+<li>
+<p><a href="../eclipse.html">Eclipse</a></p>
+</li>
+<li>
+<p><a href="../idea.html">IntelliJ&#8217;s IDEA</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This section only explains how to invoke TestNG from the command line.
+Please click on one of the links above if you are interested in one of the other ways.</p>
+</div>
+<div class="paragraph">
+<p>Assuming that you have TestNG in your class path, the simplest way to invoke TestNG is as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">java org.testng.TestNG testng1.xml [testng2.xml testng3.xml ...]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You need to specify at least one XML file describing the TestNG suite you are trying to run.
+Additionally, the following command-line switches are available:</p>
+</div>
+<div class="sect3">
+<h4 id="_command_line_parameters">Command Line Parameters</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Option</th>
+<th class="tableblock halign-left valign-top">Argument</th>
+<th class="tableblock halign-left valign-top">Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-configfailurepolicy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skip</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>continue</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether TestNG should continue to execute the remaining tests in the suite or skip them if an @Before* method fails. Default behavior is <code>skip</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-d</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A directory</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where the reports will be generated (defaults to <code>test-output</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-dataproviderthreadcount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default number of threads to use for data providers when running tests in parallel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This sets the default maximum number of threads to use for data providers when running tests in parallel. It will only take effect if the parallel mode has been selected (for example, with the <code>-parallel</code> option). This can be overridden in the suite definition.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-excludegroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of groups.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups you want to be excluded from this run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of groups.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups you want to run (e.g. "windows,linux,regression").</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-listener</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of Java classes that can be found on your classpath.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify your own test listeners. The classes need to implement <code>org.testng.ITestListener</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-usedefaultlisteners</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to use the default listeners</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-methods</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of fully qualified class name and method. For example <code>com.example.Foo.f1,com.example.Bar.f2</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify individual methods to run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-methodselectors</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of Java classes and method priorities that define method selectors.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify method selectors on the command line. For example: <code>com.example.Selector1:3,com.example.Selector2:2</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-parallel</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">`methods</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">tests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">classes`</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If specified, sets the default mechanism used to determine how to use parallel threads when running tests. If not set, default mechanism is not to use parallel threads at all. This can be overridden in the suite definition.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-reporter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The extended configuration for a custom report listener.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Similar to the <code>-listener</code> option, except that it allows the configuration of JavaBeans-style properties on the reporter instance.
+Example: <code>-reporter com.test.MyReporter:methodFilter=<strong>insert</strong>,enableFiltering=true</code>
+You can have as many occurrences of this option, one for each reporter that needs to be added.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-sourcedir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A semicolon separated list of directories.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directories where your javadoc annotated test sources are. This option is only necessary if you are using javadoc type annotations. (e.g. <code>src/test</code> or <code>src/test/org/testng/eclipse-plugin;src/test/org/testng/testng</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-suitename</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default name to use for a test suite.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This specifies the suite name for a test suite defined on the command line. This option is ignored if the <code>suite.xml</code> file or the source code specifies a different suite name. It is possible to create a suite name with spaces in it if you surround it with double-quotes <code>"like this"</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testclass</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma-separated list of classes that can be found in your classpath.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A list of class files separated by commas (e.g. <code>org.foo.Test1,org.foo.test2</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testjar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A jar file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specifies a jar file that contains test classes. If a <code>testng.xml</code> file is found at the root of that jar file, it will be used, otherwise, all the test classes found in this jar file will be considered test classes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default name to use for a test.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This specifies the name for a test defined on the command line. This option is ignored if the suite.xml file or the source code specifies a different test name. It is possible to create a test name with spaces in it if you surround it with double-quotes <code>"like this"</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testnames</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of test names.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only tests defined in a &lt;test&gt; tag matching one of these names will be run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testrunfactory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A Java classes that can be found on your classpath.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Lets you specify your own test runners. The class needs to implement <code>org.testng.ITestRunnerFactory</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-threadcount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The default number of threads to use when running tests in parallel.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This sets the default maximum number of threads to use for running tests in parallel. It will only take effect if the parallel mode has been selected (for example, with the -parallel option). This can be overridden in the suite definition.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-xmlpathinjar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path of the XML file inside the jar file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">This attribute should contain the path to a valid XML file inside the test jar (e.g. <code>resources/testng.xml</code>). The default is <code>testng.xml</code>, which means a file called <code>testng.xml</code> at the root of the jar file. This option will be ignored unless <code>-testjar</code> is specified.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-shareThreadPoolForDataProviders</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates if TestNG should use a global shared thread-pool (at suite level) for running data driven tests. TestNG will consider the value set for the configuration parameter <code>-dataproviderthreadcount</code> as the size of the thread pool.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-useGlobalThreadPool</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indicates if TestNG should use a global shared thread-pool (at suite level) for running regular and data driven tests. TestNG will consider the value set for the configuration parameter <code>-threadcount</code> as the size of the thread pool.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-log</code> (or) <code>-verbose</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">a valid log level</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Level of verbosity to be used when logging messages.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-junit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG run in JUnit mode.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-mixed</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mixed mode - autodetect the type of current test and run it with appropriate runner.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-objectfactory</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string that represents a fully qualified class name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fully qualified class name that implements <code>org.testng.ITestObjectFactory</code> which can be used to create test class and listener instances.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-ignoreMissedTestNames</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ignore missed test names given by <code>-testnames</code> and continue to run existing tests, if any.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-skipfailedinvocationcounts</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG skip failed invocation counts for data driven tests and tests driven by invocation counts.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-testRunFactory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string that represents a fully qualified class name.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fully qualified class name that implements <code>org.testng.ITestRunnerFactory</code> which can be used to create custom test runners for running tests.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-suitethreadpoolsize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An integer value that represents the thread pool size. When not specified, defaults to <code>1</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Size of the thread pool to use to run suites.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-randomizesuites</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether to run suites in same order as specified in XML or not.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-alwaysrunlisteners</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should method invocation listeners be run even for skipped methods.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-dependencyinjectorfactory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A string that represents a fully qualified class name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fully qualified class name that implements org.testng.IInjectorFactory which can be used to handle with dependency injection.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">`-failwheneverythingskipped'</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG fail execution if all tests were skipped and nothing was run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-spilistenerstoskip</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma seperated string that represents a fully qualified class name(s).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Comma separated fully qualified class names of listeners that should be skipped from being wired in via Service Loaders.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-overrideincludedmethods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG exclude explicitly included test methods if they belong to any excluded groups as defined in the suite xml file.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-includeAllDataDrivenTestsWhenSkipping</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG report all iterations of a data driven test as individual skips, in-case of upstream failures.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-propagateDataProviderFailureAsTestFailure</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG consider failures in Data Providers as test failures.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-generateResultsPerSuite</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG generate results on a per suite basis by creating a sub directory for each suite and dumping results into it.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-shareThreadPoolForDataProviders</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should TestNG use a global Shared ThreadPool (At suite level) for running data providers.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>-useGlobalThreadPool</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This documentation can be obtained by invoking TestNG without any arguments.</p>
+</div>
+<div class="paragraph">
+<p>You can also put the command line switches in a text file, say <code>c:\command.txt</code>, and tell TestNG to use that file to retrieve its parameters:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">C:&gt; more c:\command.txt
+-d test-output testng.xml
+C:&gt; java org.testng.TestNG @c:\command.txt</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Additionally, TestNG can be passed properties on the command line of the Java Virtual Machine, for example</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">java -Dtestng.test.classpath="c:/build;c:/java/classes;" org.testng.TestNG testng.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here are the properties that TestNG understands:</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_system_properties">System properties</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Property</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.test.classpath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A semicolon separated series of directories that contain your test classes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this property is set, TestNG will use it to look for your test classes instead of the class path. This is convenient if you are using the package tag in your XML file and you have a lot of classes in your classpath, most of them not being test classes.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Example:</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">java org.testng.TestNG -groups windows,linux -testclass org.test.MyTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The ant task and <code>testng.xml</code> allow you to launch TestNG with more parameters (methods to include, specifying parameters, etc&#8230;&#8203;), so you should consider using the command line only when you are trying to learn about TestNG and you want to get up and running quickly.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+The command line flags that specify what tests should be run will be ignored if you also specify a testng.xml file, with the exception of <code>-includedgroups</code> and <code>-excludedgroups</code>, which will override all the group inclusions/exclusions found in <code>testng.xml</code>.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

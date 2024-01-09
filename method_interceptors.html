@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Method Interceptors</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_method_interceptors">Method Interceptors</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_method_interceptors">Method Interceptors</h3>
+<div class="paragraph">
+<p>Once TestNG has calculated in what order the test methods will be invoked, these methods are split in two groups:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Methods run sequentially</strong>. These are all the test methods that have dependencies or dependents. These methods will be run in a specific order.</p>
+</li>
+<li>
+<p><strong>Methods run in no particular order</strong>. These are all the methods that don&#8217;t belong in the first category. The order in which these test methods are run is random and can vary from one run to the next (although by default, TestNG will try to group test methods by class).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In order to give you more control on the methods that belong to the second category, TestNG provides {javadocs-base-url}/org/testng/IMethodInterceptor.html[org.testng.IMethodInterceptor]</p>
+</div>
+<div class="paragraph">
+<p>The list of methods passed in parameters are all the methods that can be run in any order. Your intercept method is expected to return a similar list of <code>IMethodInstance</code>, which can be either of the following:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>The same list you received in parameter but in a different order.</p>
+</li>
+<li>
+<p>A smaller list of <code>IMethodInstance</code> objects.</p>
+</li>
+<li>
+<p>A bigger list of <code>IMethodInstance</code> objects.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Once you have defined your interceptor, you pass it to TestNG as a listener. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java -classpath "testng-jdk15.jar:test/build" org.testng.TestNG -listener test.methodinterceptors.NullMethodInterceptor
+   -testclass test.methodinterceptors.FooTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For the equivalent ant syntax, see the listeners attribute in the <a href="https://testng.org/doc/ant.html">ant documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>For example, here is a Method Interceptor that will reorder the methods so that test methods that belong to the group "fast" are always run first:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public List&lt;IMethodInstance&gt; intercept(List&lt;IMethodInstance&gt; methods, ITestContext context) {
+  List&lt;IMethodInstance&gt; result = new ArrayList&lt;IMethodInstance&gt;();
+  for (IMethodInstance m : methods) {
+    Test test = m.getMethod().getConstructorOrMethod().getAnnotation(Test.class);
+    Set&lt;String&gt; groups = new HashSet&lt;String&gt;();
+    for (String group : test.groups()) {
+      groups.add(group);
+    }
+    if (groups.contains("fast")) {
+      result.add(0, m);
+    }
+    else {
+      result.add(m);
+    }
+  }
+  return result;
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

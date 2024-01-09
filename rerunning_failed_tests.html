@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Rerunning failed tests</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_rerunning_failed_tests">Rerunning failed tests</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_rerunning_failed_tests">Rerunning failed tests</h3>
+<div class="paragraph">
+<p>Every time tests fail in a suite, TestNG creates a file called <code>testng-failed.xml</code> in the output directory. This XML file contains the necessary information to rerun only these methods that failed, allowing you to quickly reproduce the failures without having to run the entirety of your tests.  Therefore, a typical session would look like this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs testng.xml
+java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs test-outputs\testng-failed.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Note that <code>testng-failed.xml</code> will contain all the necessary dependent methods so that you are guaranteed to run the methods that failed without any SKIP failures.</p>
+</div>
+<div class="paragraph">
+<p>Sometimes, you might want TestNG to automatically retry a test whenever it fails. In those situations, you can use a retry analyzer.</p>
+</div>
+<div class="paragraph">
+<p>When you bind a retry analyzer to a test, TestNG automatically invokes the retry analyzer to determine if TestNG can retry a test case again in an attempt to see if the test that just fails now passes. Here is how you use a retry analyzer:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Build an implementation of the interface <code>org.testng.IRetryAnalyzer</code></p>
+</li>
+<li>
+<p>Bind this implementation to the <code>@Test</code> annotation for e.g., <code>@Test(retryAnalyzer = LocalRetry.class)</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Following is a sample implementation of the retry analyzer that retries a test for a maximum of three times.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
+public class MyRetry implements IRetryAnalyzer {
+
+  private int retryCount = 0;
+  private static final int maxRetryCount = 3;
+
+  @Override
+  public boolean retry(ITestResult result) {
+    if (retryCount &lt; maxRetryCount) {
+      retryCount++;
+      return true;
+    }
+    return false;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class TestclassSample {
+
+  @Test(retryAnalyzer = MyRetry.class)
+  public void test2() {
+    Assert.fail();
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

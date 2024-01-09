@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Factories</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_factories">Factories</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_factories">Factories</h3>
+<div class="paragraph">
+<p>Factories allow you to create tests dynamically. For example, imagine you want to create a test method that will access a page on a website several times, and you want to invoke it with different values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class TestWebServer {
+  @Test(parameters = { "number-of-times" })
+  public void accessPage(int numberOfTimes) {
+    while (numberOfTimes-- &gt; 0) {
+     // access the web page
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="T1"&gt;
+  &lt;parameter name="number-of-times" value="10"/&gt;
+  &lt;classes&gt;
+    &lt;class name= "TestWebServer" /&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;
+
+&lt;test name="T2"&gt;
+  &lt;parameter name="number-of-times" value="20"/&gt;
+  &lt;classes&gt;
+    &lt;class name= "TestWebServer"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;
+
+&lt;test name="T3"&gt;
+  &lt;parameter name="number-of-times" value="30"/&gt;
+  &lt;classes&gt;
+    &lt;class name= "TestWebServer"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This can become quickly impossible to manage, so instead, you should use a factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class WebTestFactory {
+  @Factory
+  public Object[] createInstances() {
+   Object[] result = new Object[10];
+   for (int i = 0; i &lt; 10; i++) {
+      result[i] = new WebTest(i * 10);
+    }
+    return result;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and the new test class is now:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class WebTest {
+  private int m_numberOfTimes;
+  public WebTest(int numberOfTimes) {
+    m_numberOfTimes = numberOfTimes;
+  }
+
+  @Test
+  public void testServer() {
+   for (int i = 0; i &lt; m_numberOfTimes; i++) {
+     // access the web page
+    }
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Your <code>testng.xml</code> only needs to reference the class that contains the factory method, since the test instances themselves will be created at runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;class name="WebTestFactory" /&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or, if building a test suite instance programmatically, you can add the factory in the same manner as for tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">TestNG testNG = new TestNG();
+testNG.setTestClasses(WebTestFactory.class);
+testNG.run();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The factory method can receive parameters just like <code>@Test</code> and <code>@Before</code>/<code>@After</code> and it must return <code>Object[]</code>.  The objects returned can be of any class (not necessarily the same class as the factory class) and they don&#8217;t even need to contain TestNG annotations (in which case they will be ignored by TestNG).</p>
+</div>
+<div class="paragraph">
+<p>Factories can also be used with data providers, and you can leverage this functionality by putting the <code>@Factory</code> annotation either on a regular method or on a constructor. Here is an example of a constructor factory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Factory(dataProvider = "dp")
+public FactoryDataProviderSampleTest(int n) {
+  super(n);
+}
+
+@DataProvider
+static public Object[][] dp() {
+  return new Object[][] {
+    new Object[] { 41 },
+    new Object[] { 42 },
+  };
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The example will make TestNG create two test classes, on with the constructor invoked with the value <code>41</code> and the other with <code>42</code>.</p>
+</div>
+<div class="paragraph">
+<p>Optionally, you can specify indices for the data provider when using it with <code>@Factory</code> annotation.
+When indices are specified, only the elements at the specified indices are passed as parameters for the factory annotated constructor.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Factory(dataProvider = "dp", indices = {1, 3})
+public ExampleTestCase(String text) {
+  this.i = i;
+}
+
+@DataProvider(name = "dp")
+public static Object[] getData() {
+  return new Object[]{
+      "Java", "Kotlin", "Golang", "Rust"
+  };
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In the above example, the values Kotlin (2nd element) and Rust (4th element) are passed as parameters to the <code>@Factory</code> annotated constructor and totally 2 <code>ExampleTestCase</code> instances are created.</p>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Running TestNG programmatically</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_running_testng_programmatically">Running TestNG programmatically</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_running_testng_programmatically">Running TestNG programmatically</h3>
+<div class="paragraph">
+<p>You can invoke TestNG from your own programs very easily:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">TestListenerAdapter tla = new TestListenerAdapter();
+TestNG testng = new TestNG();
+testng.setTestClasses(new Class[] { Run2.class });
+testng.addListener(tla);
+testng.run();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This example creates a {javadocs-base-url}/org/testng/TestNG.html[TestNG] object and runs the test class Run2. It also adds a <code>TestListener</code>. You can either use the adapter class {javadocs-base-url}/org/testng/TestListenerAdapter.html[org.testng.TestListenerAdapter] or implement {javadocs-base-url}/org/testng/ITestListener.html[org.testng.ITestListener] yourself. This interface contains various callback methods that let you keep track of when a test starts, succeeds, fails, etc&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>Similarly, you can invoke TestNG on a testng.xml file or you can create a virtual testng.xml file yourself. In order to do this, you can use the classes found the package {javadocs-base-url}/org/testng/xml/package-frame.html[org.testng.xml]: {javadocs-base-url}/org/testng/xml/XmlClass.html[XmlClass], {javadocs-base-url}/org/testng/xml/XmlTest.html[XmlTest], etc&#8230;&#8203; Each of these classes correspond to their XML tag counterpart.</p>
+</div>
+<div class="paragraph">
+<p>For example, suppose you want to create the following virtual file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="TmpSuite" &gt;
+  &lt;test name="TmpTest" &gt;
+    &lt;classes&gt;
+      &lt;class name="test.failures.Child"/&gt;
+    &lt;/classes&gt;
+    &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You would use the following code:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">XmlSuite suite = new XmlSuite();
+suite.setName("TmpSuite");
+
+XmlTest test = new XmlTest(suite);
+test.setName("TmpTest");
+List&lt;XmlClass&gt; classes = new ArrayList&lt;XmlClass&gt;();
+classes.add(new XmlClass("test.failures.Child"));
+test.setXmlClasses(classes) ;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And then you can pass this <code>XmlSuite</code> to <code>TestNG</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">List&lt;XmlSuite&gt; suites = new ArrayList&lt;XmlSuite&gt;();
+suites.add(suite);
+TestNG tng = new TestNG();
+tng.setXmlSuites(suites);
+tng.run();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Please see the {javadocs-base-url}/org/testng/package-summary.html[JavaDocs] for the entire API.</p>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

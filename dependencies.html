@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Dependencies</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_dependencies">Dependencies</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_dependencies">Dependencies</h3>
+<div class="paragraph">
+<p>Sometimes, you need your test methods to be invoked in a certain order.  Here are a few examples:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To make sure a certain number of test methods have completed and succeeded before running more test methods.</p>
+</li>
+<li>
+<p>To initialize your tests while wanting this initialization methods to be test methods as well (methods tagged with <code>@Before</code>/<code>@After</code> will not be part of the final report).</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>TestNG allows you to specify dependencies either with annotations or in XML.</p>
+</div>
+<div class="sect3">
+<h4 id="_dependencies_with_annotations">Dependencies with annotations</h4>
+<div class="paragraph">
+<p>You can use the attributes <code>dependsOnMethods</code> or <code>dependsOnGroups</code>, found on the <code>@Test</code> annotation.
+There are two kinds of dependencies:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Hard dependencies</strong>. All the methods you depend on must have run and succeeded for you to run. If at least one failure occurred in your dependencies, you will not be invoked and marked as a SKIP in the report.</p>
+</li>
+<li>
+<p><strong>Soft dependencies</strong>. You will always be run after the methods you depend on, even if some of them have failed. This is useful when you just want to make sure that your test methods are run in a certain order but their success doesn&#8217;t really depend on the success of others. A soft dependency is obtained by adding <code>"alwaysRun=true"</code> in your <code>@Test</code> annotation.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here is an example of a hard dependency:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test
+public void serverStartedOk() {}
+
+@Test(dependsOnMethods = { "serverStartedOk" })
+public void method1() {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, <code>method1()</code> is declared as depending on method <code>serverStartedOk()</code>, which guarantees that <code>serverStartedOk()</code> will always be invoked first.</p>
+</div>
+<div class="paragraph">
+<p>You can also have methods that depend on entire groups:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(groups = { "init" })
+public void serverStartedOk() {}
+
+@Test(groups = { "init" })
+public void initEnvironment() {}
+
+@Test(dependsOnGroups = { "init.*" })
+public void method1() {}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, <code>method1()</code> is declared as depending on any group matching the regular expression <code>"init.*"</code>, which guarantees that the methods <code>serverStartedOk()</code> and <code>initEnvironment()</code> will always be invoked before <code>method1()</code>.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+as stated before, the order of invocation for methods that belong in the same group is not guaranteed to be the same across test runs.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>If a method depended upon fails and you have a hard dependency on it (<code>alwaysRun=false</code>, which is the default), the methods that depend on it are not marked as FAIL but as SKIP.  Skipped methods will be reported as such in the final report (in a color that is neither red nor green in HTML), which is important since skipped methods are not necessarily failures.</p>
+</div>
+<div class="paragraph">
+<p>Both <code>dependsOnGroups</code> and <code>dependsOnMethods</code> accept regular expressions as parameters.  For <code>dependsOnMethods</code>, if you are depending on a method which happens to have several overloaded versions, all the overloaded methods will be invoked.  If you only want to invoke one of the overloaded methods, you should use <code>dependsOnGroups</code>.</p>
+</div>
+<div class="paragraph">
+<p>For a more advanced example of dependent methods, please refer to <a href="https://beust.com/weblog2/archives/000171.html">this article</a>, which uses inheritance to provide an elegant solution to the problem of multiple dependencies.</p>
+</div>
+<div class="paragraph">
+<p>By default, dependent methods are grouped by class.</p>
+</div>
+<div class="paragraph">
+<p>For example, if method <code>b()</code> depends on method <code>a()</code> and you have several instances of the class that contains these methods (because of a factory of a data provider), then the invocation order will be as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">a(1)
+a(2)
+b(2)
+b(2)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>TestNG will not run <code>b()</code> until all the instances have invoked their <code>a()</code> method.</p>
+</div>
+<div class="paragraph">
+<p>This behavior might not be desirable in certain scenarios, such as for example testing a sign in and sign out of a web browser for various countries. In such a case, you would like the following ordering:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">signIn("us")
+signOut("us")
+signIn("uk")
+signOut("uk")</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For this ordering, you can use the XML attribute <code>group-by-instances</code>. This attribute is valid either on <code>&lt;suite&gt;</code> or <code>&lt;test&gt;</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="Factory" group-by-instances="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>or</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Factory" group-by-instances="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_dependencies_in_xml">Dependencies in XML</h4>
+<div class="paragraph">
+<p>Alternatively, you can specify your group dependencies in the <code>testng.xml</code> file. You use the <code>&lt;dependencies&gt;</code> tag to achieve this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="My suite"&gt;
+  &lt;groups&gt;
+    &lt;dependencies&gt;
+      &lt;group name="c" depends-on="a  b" /&gt;
+      &lt;group name="z" depends-on="c" /&gt;
+    &lt;/dependencies&gt;
+  &lt;/groups&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>&lt;depends-on&gt;</code> attribute contains a space-separated list of groups.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

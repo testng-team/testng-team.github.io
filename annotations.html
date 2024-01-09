@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Annotations</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_annotations">Annotations</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_annotations">Annotations</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotations</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Description</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="ulist">
+<ul>
+<li>
+<p><code>@BeforeSuite</code></p>
+</li>
+<li>
+<p><code>@AfterSuite</code></p>
+</li>
+<li>
+<p><code>@BeforeTest</code></p>
+</li>
+<li>
+<p><code>@AfterTest</code></p>
+</li>
+<li>
+<p><code>@BeforeGroups</code></p>
+</li>
+<li>
+<p><code>@AfterGroups</code></p>
+</li>
+<li>
+<p><code>@BeforeClass</code></p>
+</li>
+<li>
+<p><code>@AfterClass</code></p>
+</li>
+<li>
+<p><code>@BeforeMethod</code></p>
+</li>
+<li>
+<p><code>@AfterMethod</code></p>
+</li>
+</ul>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<p>Configuration information for a TestNG class:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@BeforeSuite</code>: The annotated method will be run before all tests in this suite have run.</p>
+</li>
+<li>
+<p><code>@AfterSuite</code>: The annotated method will be run after all tests in this suite have run.</p>
+</li>
+<li>
+<p><code>@BeforeTest</code>: The annotated method will be run before any test method belonging to the classes inside the &lt;test&gt; tag is run.</p>
+</li>
+<li>
+<p><code>@AfterTest</code>: The annotated method will be run after all the test methods belonging to the classes inside the &lt;test&gt; tag have run.</p>
+</li>
+<li>
+<p><code>@BeforeGroups</code>: The list of groups that this configuration method will run before. This method is guaranteed to run shortly before the first test method that belongs to any of these groups is invoked.</p>
+</li>
+<li>
+<p><code>@AfterGroups</code>: The list of groups that this configuration method will run after. This method is guaranteed to run shortly after the last test method that belongs to any of these groups is invoked.</p>
+</li>
+<li>
+<p><code>@BeforeClass</code>: The annotated method will be run before the first test method in the current class is invoked.</p>
+</li>
+<li>
+<p><code>@AfterClass</code>: The annotated method will be run after all the test methods in the current class have been run.</p>
+</li>
+<li>
+<p><code>@BeforeMethod</code>: The annotated method will be run before each test method.</p>
+</li>
+<li>
+<p><code>@AfterMethod</code>: The annotated method will be run after each test method.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p><strong>Behaviour of annotations in superclass of a TestNG class</strong></p>
+</div>
+<div class="paragraph">
+<p>The annotations above will also be honored (inherited) when placed on a superclass of a TestNG class. This is useful for example to centralize test setup for multiple test classes in a common superclass.</p>
+</div>
+<div class="paragraph">
+<p>In that case, TestNG guarantees that the "@Before" methods are executed in inheritance order (highest superclass first, then going down the inheritance chain), and the "@After" methods in reverse order (going up the inheritance chain).</p>
+</div></div></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="7"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>alwaysRun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">For before methods (beforeSuite, beforeTest, beforeTestClass and beforeTestMethod, but not beforeGroups): If set to true, this configuration method will be run regardless of what groups it belongs to.
+For after methods (afterSuite, afterClass, &#8230;&#8203;): If set to true, this configuration method will be run even if one or more methods invoked previously failed or was skipped.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnMethods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of methods this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether methods on this class/method are enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this class/method belongs to.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inheritGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If true, this method will belong to groups specified in the @Test annotation at the class level.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>onlyForGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Only for @BeforeMethod and @AfterMethod. If specified, then this setup/teardown method will only be invoked if the corresponding test method belongs to one of the listed groups.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@DataProvider</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marks a method as supplying data for a test method. The annotated method must return an <code>Object[][]</code> where each <code>Object[]</code> can be assigned the parameter list of the test method. The @Test method that wants to receive data from this <code>DataProvider</code> needs to use a dataProvider name equals to the name of this annotation.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of this data provider. If it&#8217;s not supplied, the name of this data provider will automatically be set to the name of the method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>parallel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If set to true, tests generated using this data provider are run in parallel. Default value is false.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Factory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marks a method as a factory that returns objects that will be used by TestNG as Test classes. The method must return <code>Object[]</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Listeners</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defines listeners on a test class.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">An array of classes that extend org.testng.ITestNGListener.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Parameters</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Describes how to pass parameters to a @Test method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>value</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of variables used to fill the parameters of this method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Annotation</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>@Test</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Marks a class or a method as part of the test.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="16"><p class="tableblock">Annotation Attributes</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>alwaysRun</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If set to true, this test method will always be run even if it depends on a method that failed.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dataProvider</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of the data provider for this test method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dataProviderClass</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The class where to look for the data provider. If not specified, the data provider will be looked on the class of the current test method or one of its base classes. If this attribute is specified, the data provider method needs to be static on the specified class.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnGroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dependsOnMethods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of methods this method depends on.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The description for this method.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>enabled</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether methods on this class/method are enabled.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>expectedExceptions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of exceptions that a test method is expected to throw. If no exception or a different than one on this list is thrown, this test will be marked a failure.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups this class/method belongs to.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>invocationCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The number of times this method should be invoked.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>invocationTimeOut</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of milliseconds this test should take for the cumulated time of all the invocationcounts. This attribute will be ignored if invocationCount is not specified.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>priority</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The priority for this test method. Lower priorities will be scheduled first.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>successPercentage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The percentage of success expected from this method</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>singleThreaded</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If set to true, all the methods on this test class are guaranteed to run in the same thread, even if the tests are currently being run with <code>parallel="methods"</code>. This attribute can only be used at the class level and it will be ignored if used at the method level. Note: this attribute used to be called sequential (now deprecated).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeOut</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum number of milliseconds this test should take.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>threadPoolSize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The size of the thread pool for this method. The method will be invoked from multiple threads as specified by invocationCount.
+NOTE: this attribute is ignored if invocationCount is not specified</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Ignoring tests</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_ignoring_tests">Ignoring tests</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_ignoring_tests">Ignoring tests</h3>
+<div class="paragraph">
+<p>TestNG lets you ignore all the @Test methods :</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>In a class (or)</p>
+</li>
+<li>
+<p>In a particular package (or)</p>
+</li>
+<li>
+<p>In a package and all of its child packages</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>using the new annotation <code>@Ignore</code>.</p>
+</div>
+<div class="paragraph">
+<p>When used at the method level <code>@Ignore</code> annotation is functionally equivalent to <code>@Test(enabled=false)</code>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample that shows how to ignore all tests within a class.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
+
+@Ignore
+public class TestcaseSample {
+
+    @Test
+    public void testMethod1() {
+    }
+
+    @Test
+    public void testMethod2() {
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@Ignore</code> annotation has a higher priority than individual <code>@Test</code> method annotations. When <code>@Ignore</code> is placed on a class, all the tests in that class will be disabled.</p>
+</div>
+<div class="paragraph">
+<p>To ignore all tests in a particular package, you just need to create <code>package-info.java</code> and add the <code>@Ignore</code> annotation to it. Here&#8217;s a sample :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Ignore
+package com.testng.master;
+
+import org.testng.annotations.Ignore;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This causes all the <code>@Test</code> methods to be ignored in the package <code>com.testng.master</code> and all of its sub-packages.</p>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

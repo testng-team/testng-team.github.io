@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>TestNG Ant Task</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_testng_ant_task">TestNG Ant Task</a>
+<ul class="sectlevel2">
+<li><a href="#_testng_modes">TestNG modes</a></li>
+<li><a href="#_nested_elements">Nested Elements</a></li>
+<li><a href="#_examples">Examples</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_testng_ant_task">TestNG Ant Task</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>You define the TestNG ant task as follows:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;taskdef resource="testngtasks" classpath="testng.jar"/&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This task runs TestNG tests and is always run in a forked JVM.  It accepts the following attributes:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Attribute</th>
+<th class="tableblock halign-left valign-top">Description</th>
+<th class="tableblock halign-left valign-top">Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>classfilesetref</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A reference to a <a href="https://ant.apache.org/manual/Types/resources.html#collection">ResourceCollection</a> containing the test classes to be run. Only File based <a href="https://ant.apache.org/manual/Types/resources.html#collection">ResourceCollections</a> are supported (ie. <a href="https://ant.apache.org/manual/Types/fileset.html">FileSet</a>).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>classpath</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A PATH-like structure for the tests to be run.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>classpathref</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A reference to a PATH-like structure for the tests to be run.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>configFailurePolicy</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether TestNG should continue to execute the remaining tests in the suite or skip them if an <code>@Before*</code> method fails.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to <code>skip</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dataProviderThreadCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The number of threads to use for data providers for this run. Ignored unless the parallel mode is also specified.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>delegateCommandSystemProperties</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pass the command line properties as system properties.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to <code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>dumpCommand</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Print the TestNG launcher command.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to <code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>failureProperty</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of a property to set in the event of a failure. It is used only if the <code>haltonfailure</code> is not set.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>haltonfailure</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stop the build process if a failure has occurred during the test run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to <code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>haltonskipped</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Stop the build process if there is at least on skipped test.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to <code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>groups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups to run, separated by spaces or commas.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>excludedgroups</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The list of groups to exclude, separated by spaces or commas</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>jvm</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The JVM to use, which will be run by <code>Runtime.exec()</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">java</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>listeners</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma or space-separated list of fully qualified classes that are TestNG listeners (for e.g., {javadocs-base-url}/org/testng/ITestListener.html[org.testng.ITestListener] or {javadocs-base-url}/org/testng/IReporter.html[org.testng.IReporter] )</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>methods</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of fully qualified class name and method. For e.g., <code>com.example.Foo.f1,com.example.Bar.f2</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Either "testng", "junit" or "mixed". Whether TestNG should run only TestNG tests, JUnit tests or both.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to <code>testng</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>outputdir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Directory for reports output.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to <code>test-output</code>.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>skippedProperty</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The name of a property to set in the event of a skipped test. It is used only if the haltonskipped is not set.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>suiteRunnerClass</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A fully qualified name of a TestNG starter.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No.  Defaults to <code>org.testng.TestNG</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>suiteThreadPoolSize</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The size of a thread pool to run suites.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No.  Defaults to 1.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>parallel</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The parallel mode to use for running the tests - either methods or tests</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No - if not present, parallel mode will not be selected</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>suitename</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the default name of the test suite, if one is not specified in a suite xml file or in the source code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. Defaults to "Ant suite"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testJar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Path to a jar containing tests and a suite definition.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sets the default name of the test, if one is not specified in a suite xml file or in the source code</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. defaults to "Ant test"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testnames</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of test names, as defined in the &lt;test&gt; tag. Only these tests will be run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">No. defaults to "Ant test"</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>threadCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The number of threads to use for this run. Ignored unless the parallel mode is also specified.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>timeOut</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The maximum time out in milliseconds that all the tests should run under.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>useDefaultListeners</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether the default listeners and reporters should be used.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defaults to true.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>workingDir</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The directory where the ant task should change to before running TestNG.</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>xmlfilesetref</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A reference to a <a href="https://ant.apache.org/manual/Types/resources.html#collection">ResourceCollection</a> containing the suite definitions to be run. Only File based <a href="https://ant.apache.org/manual/Types/resources.html#collection">ResourceCollections</a> are supported (i.e., <a href="https://ant.apache.org/manual/Types/fileset.html">FileSet</a>).</p></td>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>xmlPathInJar</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The path of the XML file inside the jar file, only applicable if testJar was specified</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">testng.xml</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+One of attributes <code>classpath</code>, <code>classpathref</code> or nested <code>&lt;classpath&gt;</code> must be used for providing the tests classpath.
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+One of the attributes <code>xmlfilesetref</code>, <code>classfilesetref</code> or nested <code>&lt;xmlfileset&gt;</code>, respectively <code>&lt;classfileset&gt;</code> must be used for providing the tests.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_testng_modes">TestNG modes</h3>
+<div class="paragraph">
+<p>The TestNG mode gets applied when tests are passed to TestNG using classfilesetref, methods or nested &lt;classfileset&gt; and tells TestNG what kind of tests it should look for and run:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>testng</code>: find and run TestNG tests.</p>
+</li>
+<li>
+<p><code>junit</code>: find and run JUnit tests.</p>
+</li>
+<li>
+<p><code>mixed</code>: run both TestNG and JUnit tests.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<code>junit</code> and <code>mixed</code> modes require the JUnit jar file on the classpath.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nested_elements">Nested Elements</h3>
+<div class="sect3">
+<h4 id="_classpath">classpath</h4>
+<div class="paragraph">
+<p>The <code>&lt;testng&gt;</code> task supports a nested &lt;classpath&gt; element that represents a PATH-like structure.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_bootclasspath">bootclasspath</h4>
+<div class="paragraph">
+<p>The location of bootstrap class files can be specified using this PATH-like structure - will be ignored if fork is not set.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_xmlfileset">xmlfileset</h4>
+<div class="paragraph">
+<p>The suite definitions (<code>testng.xml</code>) can be passed to the task with a FileSet structure.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_classfileset">classfileset</h4>
+<div class="paragraph">
+<p>TestNG can also run directly on classes, also supplied with a FileSet structure.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_jvmarg">jvmarg</h4>
+<div class="paragraph">
+<p>Additional parameters may be passed to the new VM via nested &lt;jvmarg&gt; elements. For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;testng&gt;
+    &lt;jvmarg value="-Djava.compiler=NONE" /&gt;
+    &lt;!-- ... --&gt;
+&lt;/testng&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_sysproperty">sysproperty</h4>
+<div class="paragraph">
+<p>Use nested <code>&lt;sysproperty&gt;</code> elements to specify system properties required by the class. These properties will be made available to the virtual machine during the execution of the test. The attributes for this element are the same as for environment variables:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;testng&gt;
+    &lt;sysproperty key="basedir" value="${basedir}"/&gt;
+    &lt;!-- ... --&gt;
+&lt;/testng&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will run the test and make the basedir property available to the test.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_propertyset">propertyset</h4>
+<div class="paragraph">
+<p>You may also use a nested &lt;propertyset&gt; element to specify a set of system properties that are defined outside of the TestNG ant task. This allows for more flexible definitions of system properties, for instance selecting all properties with a specific prefix or matching a regex. See the <a href="https://ant.apache.org/manual/Types/propertyset.html">PropertySet</a> page in the <a href="https://ant.apache.org/manual/">Ant manual</a> for full details. Here&#8217;s a simple example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;project name="Hello World Project"&gt;
+    &lt;property name="myprop1" value="value 1"/&gt;
+    &lt;property name="myprop2" value="value 2"/&gt;
+
+    &lt;propertyset id="propset1"&gt;
+        &lt;propertyref name="myprop1"/&gt;
+        &lt;propertyref name="myprop2"/&gt;
+    &lt;/propertyset&gt;
+
+    &lt;testng outputdir="${testng.report.dir}" classpathref="run.cp"&gt;
+        &lt;xmlfileset dir="${test15.dir}" includes="testng-single3.xml"/&gt;
+        &lt;propertyset refid="propset1"/&gt;
+    &lt;/testng&gt;
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this case, the system properties named "myprop1" and "myprop2" are passed along to the TestNG process.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_reporter">reporter</h4>
+<div class="paragraph">
+<p>An inner <code>&lt;reporter&gt;</code> element is an alternative way to inject a custom report listener allowing the user to set custom properties in order to fine-tune the behavior of the reporter at run-time.
+The element has one classname attribute which is mandatory, indicating the class of the custom listener. In order to set the properties of the reporter, the <code>&lt;reporter&gt;</code> element can contain several nested &lt;property&gt; elements which will provide the name and value attributes as seen below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;testng&gt;
+    &lt;!--... --&gt;
+    &lt;reporter classname="com.test.MyReporter"&gt;
+    &lt;property name="methodFilter" value="*insert*"/&gt;
+    &lt;property name="enableFiltering" value="true"/&gt;
+&lt;/reporter&gt;
+&lt;!--... --&gt;
+&lt;/testng&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class MyReporter {
+
+  public String getMethodFilter() { /* code */ }
+  public void setMethodFilter(String methodFilter) { /* code */ }
+  public boolean isEnableFiltering() { /* code */ }
+  public void setEnableFiltering(boolean enableFiltering) { /* code */ }
+  // code
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You have to consider though that for the moment only a limited set of property types are supported:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>String</code></p>
+</li>
+<li>
+<p><code>int</code></p>
+</li>
+<li>
+<p><code>boolean</code></p>
+</li>
+<li>
+<p><code>byte</code></p>
+</li>
+<li>
+<p><code>char</code></p>
+</li>
+<li>
+<p><code>double</code></p>
+</li>
+<li>
+<p><code>float</code></p>
+</li>
+<li>
+<p><code>long</code></p>
+</li>
+<li>
+<p><code>short</code></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_env">env</h4>
+<div class="paragraph">
+<p>It is possible to specify environment variables to pass to the TestNG forked virtual machine via nested <code>&lt;env&gt;</code> elements. For a description of the <code>&lt;env&gt;</code> element&#8217;s attributes, see the description in the <a href="https://ant.apache.org/manual/CoreTasks/exec.html">exec</a> task.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_examples">Examples</h3>
+<div class="paragraph">
+<p><strong>Suite xml</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;testng classpathref="run.cp"  outputDir="${testng.report.dir}"  sourcedir="${test.src.dir}"  haltOnfailure="true"&gt;
+   &lt;xmlfileset dir="${test14.dir}" includes="testng.xml"/&gt;
+&lt;/testng&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Class FileSet</strong></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;testng classpathref="run.cp" outputDir="${testng.report.dir}" haltOnFailure="true" verbose="2"&gt;
+    &lt;classfileset dir="${test.build.dir}" includes="**/*.class" /&gt;
+&lt;/testng&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

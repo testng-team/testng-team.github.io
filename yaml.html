@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>YAML</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_yaml">YAML</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_yaml">YAML</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TestNG supports <a href="https://www.yaml.org/">YAML</a> as an alternate way of specifying your suite file. For example, the following XML file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="SingleSuite" verbose="2" thread-count="4"&gt;
+
+  &lt;parameter name="n" value="42" /&gt;
+
+  &lt;test name="Regression2"&gt;
+    &lt;groups&gt;
+      &lt;run&gt;
+        &lt;exclude name="broken" /&gt;
+      &lt;/run&gt;
+    &lt;/groups&gt;
+
+    &lt;classes&gt;
+      &lt;class name="test.listeners.ResultEndMillisTest" /&gt;
+    &lt;/classes&gt;
+  &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>and here is its YAML version:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="yaml">name: SingleSuite
+threadCount: 4
+parameters: { n: 42 }
+
+tests:
+  - name: Regression2
+    parameters: { count: 10 }
+    excludedGroups: [ broken ]
+    classes:
+      - test.listeners.ResultEndMillisTest</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here is TestNG&#8217;s own <a href="https://github.com/testng-team/testng/blob/master/testng-core/src/test/resources/testng.xml">suite file</a>, and its <a href="https://github.com/testng-team/testng/blob/master/testng-core/src/test/resources/testng.yaml">YAML counterpart</a>.</p>
+</div>
+<div class="paragraph">
+<p>You might find the YAML file format easier to read and to maintain. YAML files are also recognized by the TestNG Eclipse plug-in. You can find more information about YAML and TestNG in <a href="https://beust.com/weblog/2010/08/15/yaml-the-forgotten-victim-of-the-format-wars/">this blog post</a>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+TestNG by default does not bring in the YAML related library into your classpath. So depending upon your build system (Gradle/Maven) you need to add an explicit reference to YAML library in your build file.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>For e.g, If you were using Maven, you would need to add a dependency as below into your pom.xml file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;dependency&gt;
+  &lt;groupid&gt;org.yaml&lt;/groupid&gt;
+  &lt;artifactid&gt;snakeyaml&lt;/artifactid&gt;
+  &lt;version&gt;1.23&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if you were using Gradle, you would add a dependency as below into your build.gradle file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

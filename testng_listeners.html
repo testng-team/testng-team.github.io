@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>TestNG Listeners</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_testng_listeners">TestNG Listeners</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_testng_listeners">TestNG Listeners</h3>
+<div class="paragraph">
+<p>There are several interfaces that allow you to modify TestNG&#8217;s behavior. These interfaces are broadly called "TestNG Listeners". Here are a few listeners:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>IAlterSuiteListener (<a href="altering_suites.html">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IAlterSuiteListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IAnnotationTransformer (<a href="annotation_transformers.html">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IAnnotationTransformer.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IConfigurationListener(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurationListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IDataProviderInterceptor(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderInterceptor.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IDataProviderListener(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IExecutionListener(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionListener.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IExecutionVisualiser(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionVisualiser.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IHookable (<a href="ihookable.html">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IHookable.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IConfigurable(doc, <a href="https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurable.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IInvokedMethodListener (doc, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])</p>
+</li>
+<li>
+<p>IMethodInterceptor (<a href="method_interceptors.html">doc</a>, {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])</p>
+</li>
+<li>
+<p>IReporter (<a href="../test_results/logging_and_results.html#_logging_reporters">doc</a>, {javadocs-base-url}/org/testng/IReporter.html[javadoc])</p>
+</li>
+<li>
+<p>ISuiteListener (doc, {javadocs-base-url}/org/testng/ISuiteListener.html[javadoc])</p>
+</li>
+<li>
+<p>ITestListener (<a href="../test_results/logging_and_results.html#_logging_listeners">doc</a>, {javadocs-base-url}/org/testng/ITestListener.html[javadoc])</p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="_specifying_listeners_with_testng_xml_or_in_java">Specifying listeners with testng.xml or in Java</h4>
+<div class="paragraph">
+<p>Here is how you can define listeners in your <code>testng.xml</code> file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite&gt;
+  &lt;listeners&gt;
+    &lt;listener class-name="com.example.MyListener" /&gt;
+    &lt;listener class-name="com.example.MyMethodInterceptor" /&gt;
+  &lt;/listeners&gt;
+&lt;!-- rest of the contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Or if you prefer to define these listeners in Java:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Listeners({ com.example.MyListener.class, com.example.MyMethodInterceptor.class })
+public class MyTest {
+  // ...
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>@Listeners</code> annotation can contain any class that extends <code>org.testng.ITestNGListener</code> except <code>IAnnotationTransformer</code>. The reason is that these listeners need to be known very early in the process so that TestNG can use them to rewrite your annotations, therefore you need to specify these listeners in your <code>testng.xml</code> file.</p>
+</div>
+<div class="paragraph">
+<p>Note that the <code>@Listeners</code> annotation will apply to your entire suite file, just as if you had specified it in a testng.xml file. If you want to restrict its scope (for example, only running on the current class), the code in your listener could first check the test method that&#8217;s about to run and decide what to do then. Here&#8217;s how it can be done.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First define a new custom annotation that can be used to specify this restriction:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Retention(RetentionPolicy.RUNTIME)
+@Target ({ElementType.TYPE})
+public @interface DisableListener {}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Add an edit check as below within your regular listeners:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public void beforeInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
+  ConstructorOrMethod consOrMethod =iInvokedMethod.getTestMethod().getConstructorOrMethod();
+  DisableListener disable = consOrMethod.getMethod().getDeclaringClass().getAnnotation(DisableListener.class);
+  if (disable != null) {
+    return;
+  }
+  // else resume your normal operations
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Annotate test classes wherein the listener is not to be invoked:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@DisableListener
+@Listeners({ com.example.MyListener.class, com.example.MyMethodInterceptor.class })
+public class MyTest {
+  // ...
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_specifying_listeners_with_serviceloader">Specifying listeners with ServiceLoader</h4>
+<div class="paragraph">
+<p>Finally, the JDK offers a very elegant mechanism to specify implementations of interfaces on the class path via the <a href="https://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html">ServiceLoader</a> class.</p>
+</div>
+<div class="paragraph">
+<p>With ServiceLoader, all you need to do is create a jar file that contains your listener(s) and a few configuration files, put that jar file on the classpath when you run TestNG and TestNG will automatically find them.</p>
+</div>
+<div class="paragraph">
+<p>Here is a concrete example of how it works.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s start by creating a listener (any TestNG listener should work):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">package test.tmp;
+
+public class TmpSuiteListener implements ISuiteListener {
+  @Override
+  public void onFinish(ISuite suite) {
+    System.out.println("Finishing");
+  }
+
+  @Override
+  public void onStart(ISuite suite) {
+    System.out.println("Starting");
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Compile this file, then create a file at the location <code>META-INF/services/org.testng.ITestNGListener</code>, which will name the implementation(s) you want for this interface.</p>
+</div>
+<div class="paragraph">
+<p>You should end up with the following directory structure, with only two files:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">$ tree
+|____META-INF
+| |____services
+| | |____org.testng.ITestNGListener
+|____test
+| |____tmp
+| | |____TmpSuiteListener.class
+
+$ cat META-INF/services/org.testng.ITestNGListener
+test.tmp.TmpSuiteListener</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Create a jar of this directory:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">$ jar cvf ../sl.jar .
+added manifest
+ignoring entry META-INF/
+adding: META-INF/services/(in = 0) (out= 0)(stored 0%)
+adding: META-INF/services/org.testng.ITestNGListener(in = 26) (out= 28)(deflated -7%)
+adding: test/(in = 0) (out= 0)(stored 0%)
+adding: test/tmp/(in = 0) (out= 0)(stored 0%)
+adding: test/tmp/TmpSuiteListener.class(in = 849) (out= 470)(deflated 44%)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, put this jar file on your classpath when you invoke TestNG:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">$ java -classpath sl.jar:testng.jar org.testng.TestNG testng-single.yaml
+Starting
+f2 11 2
+PASSED: f2("2")
+Finishing</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This mechanism allows you to apply the same set of listeners to an entire organization just by adding a jar file to the classpath, instead of asking every single developer to remember to specify these listeners in their <code>testng.xml</code> file.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

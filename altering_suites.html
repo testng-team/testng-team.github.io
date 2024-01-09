@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Altering suites (or) tests</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_altering_suites_or_tests">Altering suites (or) tests</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_altering_suites_or_tests">Altering suites (or) tests</h3>
+<div class="paragraph">
+<p>Sometimes you may need to just want to alter a suite (or) a test tag in a suite xml in runtime without having to change the contents of a suite file.</p>
+</div>
+<div class="paragraph">
+<p>A classic example for this would be to try and leverage your existing suite file and try using it for simulating a load test on your "Application under test". At the minimum you would end up duplicating the contents of your &lt;test&gt; tag multiple times and create a new suite xml file and work with. But this doesn&#8217;t seem to scale a lot.</p>
+</div>
+<div class="paragraph">
+<p>TestNG allows you to alter a suite (or) a test tag in your suite xml file at runtime via listeners. You achieve this by providing a listener that implements {javadocs-base-url}/org/testng/IAlterSuiteListener.html[IAlterSuiteListener]. Please refer to <a href="testng_listeners.html">Listeners section</a> to learn about listeners.</p>
+</div>
+<div class="paragraph">
+<p>Here is an example that shows how the suite name is getting altered in runtime:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class AlterSuiteNameListener implements IAlterSuiteListener {
+
+    @Override
+    public void alter(List&lt;XmlSuite&gt; suites) {
+        XmlSuite suite = suites.get(0);
+        suite.setName(getClass().getSimpleName());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This listener can only be added with either of the following ways:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Through the <code>&lt;listeners&gt;</code> tag in the suite xml file.</p>
+</li>
+<li>
+<p>Through a <a href="testng_listeners.html#_specifying_listeners_with_serviceloader">Service Loader</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This listener cannot be added to execution using the <code>@Listeners</code> annotation.</p>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Download</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_download">Download</a>
+<ul class="sectlevel2">
+<li><a href="#_current_release_version">Current Release Version</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_download">Download</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_current_release_version">Current Release Version</h3>
+<div class="sect3">
+<h4 id="_maven">Maven</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.testng&lt;/groupId&gt;
+    &lt;artifactId&gt;testng&lt;/artifactId&gt;
+    &lt;version&gt;7.9.0&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_gradle">Gradle</h4>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">dependencies {
+    testCompile 'org.testng:testng:7.9.0'
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_snapshots">Snapshots</h4>
+<div class="paragraph">
+<p>TestNG automatically uploads <a href="https://oss.sonatype.org/content/repositories/snapshots/org/testng/testng/">snapshots to Sonatype</a> which you can access by adding the following repository:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="groovy">repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_eclipse_plug_in">Eclipse plug-in</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Java 8+ is required</strong> for running the TestNG for Eclipse plugin.</p>
+</li>
+<li>
+<p><strong>Eclipse 4.2 and above is required</strong>. Eclipse 3.x is NOT supported any more, please update your Eclipse to 4.2 or above.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can use either the <a href="https://marketplace.eclipse.org/content/testng-eclipse">Eclipse Marketplace</a> or the update site.</p>
+</div>
+<div class="sect4">
+<h5 id="_install_via_eclipse_marketplace">Install via Eclipse Marketplace</h5>
+<div class="paragraph">
+<p>Go to the TestNG page on the Eclipse Market Place and drag the icon called "Install" onto your workspace.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_install_from_update_site">Install from update site</h5>
+<div class="ulist">
+<ul>
+<li>
+<p>Select Help / Install New Software&#8230;&#8203;</p>
+</li>
+<li>
+<p>Enter the update site URL in "Work with:" field:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Update site for release: <code><a href="https://testng.org/testng-eclipse-update-site" class="bare">https://testng.org/testng-eclipse-update-site</a></code>.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Make sure the check box next to URL is checked and click Next.</p>
+</li>
+<li>
+<p>Eclipse will then guide you through the process.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You can also install older versions of the plug-ins <a href="https://beust.com/eclipse-old">here</a>. Note that the URL&#8217;s on this page are update sites as well, not direct download links.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_build_testng_from_source_code">Build TestNG from source code</h4>
+<div class="paragraph">
+<p>TestNG is also hosted on GitHub, where you can download the source and build the distribution yourself:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">$ git clone git://github.com/testng-team/testng.git
+$ cd testng
+$ ./gradlew build</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will then find the jar file in the <code>testng/build/libs</code> directory</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_build_the_testng_eclipse_plugin_from_source_code">Build the TestNG Eclipse Plugin from source code</h4>
+<div class="paragraph">
+<p>TestNG Eclipse Plugin is <a href="https://github.com/testng-team/testng-eclipse">hosted on GitHub</a>, you can download the source code and <a href="https://github.com/testng-team/testng-eclipse/blob/master/README.md#building">build by ourselves</a>.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

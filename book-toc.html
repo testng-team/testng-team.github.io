@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Chapter 1 - Getting Started</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel3">
+<li><a href="#_chapter_1_getting_started">Chapter 1 - Getting Started</a></li>
+<li><a href="#_chapter_2_testing_design_patterns">Chapter 2 - Testing Design Patterns</a></li>
+<li><a href="#_chapter_3_enterprise_testing">Chapter 3 Enterprise Testing</a></li>
+<li><a href="#_chapter_4_java_ee_testing">Chapter 4 Java EE Testing</a></li>
+<li><a href="#_chapter_5_integration">Chapter 5 Integration</a></li>
+<li><a href="#_chapter_6_extending_testng">Chapter 6 Extending TestNG</a></li>
+<li><a href="#_chapter_7_digressions">Chapter 7 Digressions</a></li>
+<li><a href="#_appendix_a_ide_integration">Appendix A IDE Integration</a></li>
+<li><a href="#_appendix_b_testng_javadocs">Appendix B TestNG Javadocs</a></li>
+<li><a href="#_appendix_c_testng_xml">Appendix C testng.xml</a></li>
+<li><a href="#_appendix_d_migrating_from_junit">Appendix D Migrating from JUnit</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect3">
+<h4 id="_chapter_1_getting_started">Chapter 1 - Getting Started</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Beyond JUnit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Stateful Classes</p>
+</li>
+<li>
+<p>Parameters</p>
+</li>
+<li>
+<p>Base Classes</p>
+</li>
+<li>
+<p>Exceptions Are Not That Exceptional</p>
+</li>
+<li>
+<p>Running Tests</p>
+</li>
+<li>
+<p>Real-World Testing</p>
+</li>
+<li>
+<p>Configuration Methods</p>
+</li>
+<li>
+<p>Dependencies</p>
+</li>
+<li>
+<p>Epiphanies</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>JUnit 4</p>
+</li>
+<li>
+<p>Designing for Testability</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Object-Oriented Programming and Encapsulation</p>
+</li>
+<li>
+<p>The Design Patterns Revolution</p>
+</li>
+<li>
+<p>Identifying the Enemy</p>
+</li>
+<li>
+<p>Recommendations</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>TestNG</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Annotations</p>
+</li>
+<li>
+<p>Tests, Suites, and Configuration Annotations</p>
+</li>
+<li>
+<p>Groups</p>
+</li>
+<li>
+<p>testng.xml</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Conclusion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_chapter_2_testing_design_patterns">Chapter 2 - Testing Design Patterns</h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Testing for Failures</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Reporting Errors</p>
+</li>
+<li>
+<p>Runtime and Checked Exceptions</p>
+</li>
+<li>
+<p>Testing Whether Your Code Handles Failures Gracefully</p>
+</li>
+<li>
+<p>When Not to Use expectedExceptions</p>
+</li>
+<li>
+<p>testng-failed.xml</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Factories</p>
+<div class="ulist">
+<ul>
+<li>
+<p>@Factory</p>
+</li>
+<li>
+<p>org.testng.ITest</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Data-Driven Testing</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Parameters and Test Methods</p>
+</li>
+<li>
+<p>Passing Parameters with testng.xml</p>
+</li>
+<li>
+<p>Passing Parameters with @DataProvider</p>
+</li>
+<li>
+<p>Parameters for Data Providers</p>
+</li>
+<li>
+<p>The Method Parameter</p>
+</li>
+<li>
+<p>The ITestContext Parameter</p>
+</li>
+<li>
+<p>Lazy Data Providers</p>
+</li>
+<li>
+<p>Pros and Cons of Both Approaches</p>
+</li>
+<li>
+<p>Supplying the Data</p>
+</li>
+<li>
+<p>Data Provider or Factory?</p>
+</li>
+<li>
+<p>Tying It All Together</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Asynchronous Testing</p>
+</li>
+<li>
+<p>Testing Multithreaded Code</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Concurrent Testing</p>
+</li>
+<li>
+<p>threadPoolSize, invocationCount, and timeOut</p>
+</li>
+<li>
+<p>Concurrent Running</p>
+</li>
+<li>
+<p>Turning on the Parallel Bit</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Performance Testing</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Algorithm Complexity</p>
+</li>
+<li>
+<p>Testing Complexity</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Mocks and Stubs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Mocks versus Stubs</p>
+</li>
+<li>
+<p>Designing for Mockability</p>
+</li>
+<li>
+<p>Mock Libraries</p>
+</li>
+<li>
+<p>Selecting the Right Strategy</p>
+</li>
+<li>
+<p>Mock Pitfalls</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Dependent Testing</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Dependent Code</p>
+</li>
+<li>
+<p>Dependent Testing with TestNG</p>
+</li>
+<li>
+<p>Deciding Whether to Depend on Groups or on Methods</p>
+</li>
+<li>
+<p>Dependent Testing and Threads</p>
+</li>
+<li>
+<p>Failures of Configuration Methods</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Inheritance and Annotation Scopes</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The Problem</p>
+</li>
+<li>
+<p>Pitfalls of Inheritance</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Test Groups</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Syntax</p>
+</li>
+<li>
+<p>Groups and Runtime</p>
+</li>
+<li>
+<p>Running Groups</p>
+</li>
+<li>
+<p>Using Groups Effectively</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Code Coverage</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A Coverage Example</p>
+</li>
+<li>
+<p>Coverage Metrics</p>
+</li>
+<li>
+<p>Coverage Tools</p>
+</li>
+<li>
+<p>Implementation</p>
+</li>
+<li>
+<p>Beware!</p>
+</li>
+<li>
+<p>A Guide to Successful Coverage</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Conclusion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chapter_3_enterprise_testing">Chapter 3 Enterprise Testing</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A Typical Enterprise Scenario</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Participants</p>
+</li>
+<li>
+<p>Testing Methodology</p>
+</li>
+<li>
+<p>Issues with the Current Approach</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>A Concrete Example</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Goals</p>
+</li>
+<li>
+<p>Nongoals</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Test Implementation</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Testing for Success</p>
+</li>
+<li>
+<p>Building Test Data</p>
+</li>
+<li>
+<p>Test Setup Issues</p>
+</li>
+<li>
+<p>Error Handling</p>
+</li>
+<li>
+<p>Emerging Unit Tests</p>
+</li>
+<li>
+<p>Coping with In-Container Components</p>
+</li>
+<li>
+<p>Putting It All Together</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Exploring the Competing Consumers Pattern</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The Pattern</p>
+</li>
+<li>
+<p>The Test</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The Role of Refactoring</p>
+<div class="ulist">
+<ul>
+<li>
+<p>A Concrete Example</p>
+</li>
+<li>
+<p>An In-Container Approach</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Conclusion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chapter_4_java_ee_testing">Chapter 4 Java EE Testing</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>In-Container versus Out-of-Container Testing</p>
+</li>
+<li>
+<p>In-Container Testing</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Creating a Test Environment</p>
+</li>
+<li>
+<p>Identifying Tests</p>
+</li>
+<li>
+<p>Registering Tests</p>
+</li>
+<li>
+<p>Registering a Results Listener</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Java Naming and Directory Interface (JNDI)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Understanding JNDI’s Bootstrapping</p>
+</li>
+<li>
+<p>Spring’s SimpleNamingContextBuilder</p>
+</li>
+<li>
+<p>Avoiding JNDI</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Java Database Connectivity (JDBC)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>c3p0</p>
+</li>
+<li>
+<p>Commons DBCP</p>
+</li>
+<li>
+<p>Spring</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Java Transaction API (JTA)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Java Open Transaction Manager (JOTM)</p>
+</li>
+<li>
+<p>Atomikos TransactionEssentials</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Java Messaging Service (JMS)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Creating a Sender/Receiver Test</p>
+</li>
+<li>
+<p>Using ActiveMQ for Tests</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Java Persistence API (JPA)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Configuring the Database</p>
+</li>
+<li>
+<p>Configuring the JPA Provider</p>
+</li>
+<li>
+<p>Writing the Test</p>
+</li>
+<li>
+<p>Simulating a Container</p>
+</li>
+<li>
+<p>Using Spring as the Container</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Enterprise Java Beans 3.0 (EJB3)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Message-Driven Beans</p>
+</li>
+<li>
+<p>Session Beans</p>
+</li>
+<li>
+<p>Another Spring Container</p>
+</li>
+<li>
+<p>Disadvantages of a Full Container</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Java API for XML Web Services (JAX-WS)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Recording Requests</p>
+</li>
+<li>
+<p>Setting Up the Test Environment</p>
+</li>
+<li>
+<p>Creating the Service Test</p>
+</li>
+<li>
+<p>XPath Testing</p>
+</li>
+<li>
+<p>Testing Remote Services</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Servlets</p>
+<div class="ulist">
+<ul>
+<li>
+<p>In-Container Testing</p>
+</li>
+<li>
+<p>Mock/Stub Objects</p>
+</li>
+<li>
+<p>Refactoring</p>
+</li>
+<li>
+<p>Embedded Container</p>
+</li>
+<li>
+<p>In-Memory Invocation</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>XML</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Using dom4j</p>
+</li>
+<li>
+<p>Using XMLUnit</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Conclusion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chapter_5_integration">Chapter 5 Integration</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Spring</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Spring’s Test Package Features</p>
+</li>
+<li>
+<p>Test Class Hierarchy</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Guice</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The Issue with Spring</p>
+</li>
+<li>
+<p>Enter Guice</p>
+</li>
+<li>
+<p>A Typical Dependency Scenario</p>
+</li>
+<li>
+<p>The Object Factory</p>
+</li>
+<li>
+<p>Guice Configuration</p>
+</li>
+<li>
+<p>Guice-Based Test</p>
+</li>
+<li>
+<p>Grouping Test Dependencies</p>
+</li>
+<li>
+<p>Injecting Configuration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>DbUnit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Configuration</p>
+</li>
+<li>
+<p>Usage</p>
+</li>
+<li>
+<p>Verifying Results</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>HtmlUnit</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Configuration</p>
+</li>
+<li>
+<p>Usage</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Selenium</p>
+</li>
+<li>
+<p>Swing UI Testing</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Testing Approach</p>
+</li>
+<li>
+<p>Configuration</p>
+</li>
+<li>
+<p>Usage</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Tests for Painting Code</p>
+</li>
+<li>
+<p>Continuous Integration</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Why Bother?</p>
+</li>
+<li>
+<p>CI Server Features</p>
+</li>
+<li>
+<p>TestNG Integration</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Conclusion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chapter_6_extending_testng">Chapter 6 Extending TestNG</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>The TestNG API</p>
+<div class="ulist">
+<ul>
+<li>
+<p>org.testng.TestNG, ITestResult, ITestListener, ITestNGMethod</p>
+</li>
+<li>
+<p>A Concrete Example</p>
+</li>
+<li>
+<p>The XML API</p>
+</li>
+<li>
+<p>Synthetic XML Files</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>BeanShell</p>
+<div class="ulist">
+<ul>
+<li>
+<p>BeanShell Overview</p>
+</li>
+<li>
+<p>TestNG and BeanShell</p>
+</li>
+<li>
+<p>Interactive Execution</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Method Selectors</p>
+</li>
+<li>
+<p>Annotation Transformers</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Annotation History</p>
+</li>
+<li>
+<p>Pros and Cons</p>
+</li>
+<li>
+<p>Using TestNG Annotation Transformers</p>
+</li>
+<li>
+<p>Possible Uses of Annotation Transformers</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Reports</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Default Reports</p>
+</li>
+<li>
+<p>The Reporter API</p>
+</li>
+<li>
+<p>The Report Plug-in API</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Writing Custom Annotations</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Implementation</p>
+</li>
+<li>
+<p>Testing</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Conclusion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_chapter_7_digressions">Chapter 7 Digressions</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Motivation</p>
+</li>
+<li>
+<p>The TestNG Philosophy</p>
+</li>
+<li>
+<p>The Care and Feeding of Exceptions</p>
+</li>
+<li>
+<p>Stateful Tests</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Immutable State</p>
+</li>
+<li>
+<p>Mutable State</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The Pitfalls of Test-Driven Development</p>
+<div class="ulist">
+<ul>
+<li>
+<p>TDD Promotes Microdesign over Macrodesign</p>
+</li>
+<li>
+<p>TDD Is Hard to Apply</p>
+</li>
+<li>
+<p>Extracting the Good from Test-Driven Development</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Testing Private Methods</p>
+</li>
+<li>
+<p>Testing versus Encapsulation</p>
+</li>
+<li>
+<p>The Power of Debuggers</p>
+</li>
+<li>
+<p>Logging Best Practices</p>
+</li>
+<li>
+<p>The Value of Time</p>
+</li>
+<li>
+<p>Conclusion</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_appendix_a_ide_integration">Appendix A IDE Integration</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Eclipse</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Installing the Plug-in</p>
+</li>
+<li>
+<p>Verifying the Installation</p>
+</li>
+<li>
+<p>Creating a Launch Configuration</p>
+</li>
+<li>
+<p>Configuring Preferences</p>
+</li>
+<li>
+<p>Converting JUnit Tests</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>IntelliJ IDEA</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Installing the Plug-in</p>
+</li>
+<li>
+<p>Running Tests</p>
+</li>
+<li>
+<p>Running Shortcuts</p>
+</li>
+<li>
+<p>Viewing Test Results</p>
+</li>
+<li>
+<p>Running Plug-in Refactorings</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_appendix_b_testng_javadocs">Appendix B TestNG Javadocs</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>JDK 1.4 and JDK 5</p>
+</li>
+<li>
+<p>Shortcut Syntax for JDK 5 Annotations</p>
+</li>
+<li>
+<p>Annotation Javadocs</p>
+<div class="ulist">
+<ul>
+<li>
+<p>@DataProvider/@testng.data-provider</p>
+</li>
+<li>
+<p>@Factory/@testng.factory</p>
+</li>
+<li>
+<p>@Parameters/@testng.parameters</p>
+</li>
+<li>
+<p>@Test/@testng.test</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>The org.testng.TestNG Class</p>
+</li>
+<li>
+<p>The XML API</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_appendix_c_testng_xml">Appendix C testng.xml</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Overview</p>
+</li>
+<li>
+<p>Scopes</p>
+</li>
+<li>
+<p>XML Tags</p>
+<div class="ulist">
+<ul>
+<li>
+<p>&lt;suite&gt;</p>
+</li>
+<li>
+<p>&lt;packages&gt; and &lt;package&gt;</p>
+</li>
+<li>
+<p>&lt;parameter&gt;</p>
+</li>
+<li>
+<p>&lt;suite-files&gt; and &lt;suite-file&gt;</p>
+</li>
+<li>
+<p>&lt;method-selectors&gt;, &lt;method-selector&gt;, &lt;selector-class&gt;, and &lt;script&gt;</p>
+</li>
+<li>
+<p>&lt;test&gt;</p>
+</li>
+<li>
+<p>&lt;groups&gt;, &lt;define&gt;, and &lt;run&gt;</p>
+</li>
+<li>
+<p>&lt;classes&gt; and &lt;class&gt;</p>
+</li>
+<li>
+<p>&lt;methods&gt;</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_appendix_d_migrating_from_junit">Appendix D Migrating from JUnit</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>JUnitConverter</p>
+<div class="ulist">
+<ul>
+<li>
+<p>From the Command Line</p>
+</li>
+<li>
+<p>From ant</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Integrated Development Environments</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Eclipse</p>
+</li>
+<li>
+<p>IDEA</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Incremental Migration and JUnit Mode</p>
+</li>
+<li>
+<p>Converting JUnit Code</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Assertions</p>
+</li>
+<li>
+<p>Running a Single Test</p>
+</li>
+<li>
+<p>Maintaining State between Invocations</p>
+</li>
+<li>
+<p>Suite-wide Initialization</p>
+</li>
+<li>
+<p>Class-wide Initialization</p>
+</li>
+<li>
+<p>The AllTests Pattern</p>
+</li>
+<li>
+<p>Testing Exceptions</p>
+</li>
+<li>
+<p>The Parameterized Test Case Pattern</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

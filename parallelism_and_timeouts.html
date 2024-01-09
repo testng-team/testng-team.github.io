@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Parallelism and time-outs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_parallelism_and_time_outs">Parallelism and time-outs</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_parallelism_and_time_outs">Parallelism and time-outs</h3>
+<div class="paragraph">
+<p>You can instruct TestNG to run your tests in separate threads in various ways.</p>
+</div>
+<div class="sect3">
+<h4 id="_parallel_suites">Parallel suites</h4>
+<div class="paragraph">
+<p>This is useful if you are running several suite files (e.g. <code>java org.testng.TestNG testng1.xml testng2.xml</code>) and you want each of these suites to be run in a separate thread. You can use the following command line flag to specify the size of a thread pool:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">java org.testng.TestNG -suitethreadpoolsize 3 testng1.xml testng2.xml testng3.xml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The corresponding ant task name is <code>suitethreadpoolsize</code>.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_parallel_tests_classes_and_methods">Parallel tests, classes and methods</h4>
+<div class="paragraph">
+<p>The parallel attribute on the <code>&lt;suite&gt;</code> tag can take one of following values:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="methods" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="tests" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="classes" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite name="My suite" parallel="instances" thread-count="5"&gt;
+&lt;!-- contents omitted for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>parallel="methods"</code>: TestNG will run all your test methods in separate threads. Dependent methods will also run in separate threads but they will respect the order that you specified.</p>
+</li>
+<li>
+<p><code>parallel="tests"</code>: TestNG will run all the methods in the same <code>&lt;test&gt;</code> tag in the same thread, but each <code>&lt;test&gt;</code> tag will be in a separate thread. This allows you to group all your classes that are not thread safe in the same <code>&lt;test&gt;</code> and guarantee they will all run in the same thread while taking advantage of TestNG using as many threads as possible to run your tests.</p>
+</li>
+<li>
+<p><code>parallel="classes"</code>: TestNG will run all the methods in the same class in the same thread, but each class will be run in a separate thread.</p>
+</li>
+<li>
+<p><code>parallel="instances"</code>: TestNG will run all the methods in the same instance in the same thread, but two methods on two different instances will be running in different threads.</p>
+<div class="literalblock">
+<div class="content">
+<pre>Additionally, the attribute `thread-count` allows you to specify how many threads should be allocated for this execution.</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+the <code>@Test</code> attribute <code>timeOut</code> works in both parallel and non-parallel mode.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>You can also specify that a <code>@Test</code> method should be invoked from different threads. You can use the attribute <code>threadPoolSize</code> to achieve this result:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(threadPoolSize = 3, invocationCount = 10,  timeOut = 10000)
+public void testServer() {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this example, the function <code>testServer()</code> will be invoked ten times from three different threads. Additionally, a <code>time-out</code> of ten seconds guarantees that none of the threads will block on this thread forever.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

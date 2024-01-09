@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Welcome to TestNG</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_welcome_to_testng">Welcome to TestNG</a>
+<ul class="sectlevel2">
+<li><a href="#_requirements">Requirements</a></li>
+<li><a href="#_mailing_lists">Mailing-lists</a></li>
+<li><a href="#_locations_of_the_projects">Locations of the projects</a></li>
+<li><a href="#_bug_reports">Bug reports</a></li>
+<li><a href="#_license">License</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect1">
+<h2 id="_welcome_to_testng">Welcome to TestNG</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>TestNG is a testing framework inspired from JUnit and NUnit but introducing some new functionalities that make it more powerful and easier to use, such as:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Annotations.</p>
+</li>
+<li>
+<p>Run your tests in arbitrarily big thread pools with various policies available (all methods in their own thread, one thread per test class, etc&#8230;&#8203;).</p>
+</li>
+<li>
+<p>Test that your code is multithread safe.</p>
+</li>
+<li>
+<p>Flexible test configuration.</p>
+</li>
+<li>
+<p>Support for data-driven testing (with @DataProvider).</p>
+</li>
+<li>
+<p>Support for parameters.</p>
+</li>
+<li>
+<p>Powerful execution model (no more TestSuite).</p>
+</li>
+<li>
+<p>Supported by a variety of tools and plug-ins (Eclipse, IDEA, Maven, etc&#8230;&#8203;).</p>
+</li>
+<li>
+<p>Embeds BeanShell for further flexibility.</p>
+</li>
+<li>
+<p>Default JDK functions for runtime and logging (no dependencies).</p>
+</li>
+<li>
+<p>Dependent methods for application server testing.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>TestNG is designed to cover all categories of tests:  unit, functional, end-to-end, integration, etc&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>I started TestNG out of frustration for some JUnit deficiencies which I have documented on my weblog here and here Reading these entries might give you a better idea of the goal I am trying to achieve with TestNG.  You can also check out a quick <a href="https://www.beust.com/weblog/announcing-testng-1-0/">overview of the main features</a> and an <a href="https://www.beust.com/weblog/using-annotation-inheritance-for-testing/">article</a> describing a very concrete example where the combined use of several TestNG&#8217;s features provides for a very intuitive and maintainable testing design.</p>
+</div>
+<div class="paragraph">
+<p>Here is a very simple test:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">package example1;
+
+import org.testng.annotations.*;
+
+public class SimpleTest {
+
+    @BeforeClass
+    public void setUp() {
+        // code that will be invoked when this test is instantiated
+    }
+
+    @Test(groups = {"fast"})
+    public void aFastTest() {
+        System.out.println("Fast test");
+    }
+
+    @Test(groups = {"slow"})
+    public void aSlowTest() {
+        System.out.println("Slow test");
+    }
+
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The method <code>setUp()</code> will be invoked after the test class has been built and before any test method is run.  In this example, we will be running the group fast, so <code>aFastTest()</code> will be invoked while <code>aSlowTest()</code> will be skipped.</p>
+</div>
+<div class="paragraph">
+<p>Things to note:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>No need to extend a class or implement an interface.</p>
+</li>
+<li>
+<p>Even though the example above uses the JUnit conventions, our methods can be called any name you like, it&#8217;s the annotations that tell TestNG what they are.</p>
+</li>
+<li>
+<p>A test method can belong to one or several groups.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Once you have compiled your test class into the build directory, you can invoke your test with the command line, an ant task (shown below) or an XML file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;project default="test"&gt;
+
+    &lt;path id="cp"&gt;
+        &lt;pathelement location="lib/testng-testng-5.13.1.jar"/&gt;
+        &lt;pathelement location="build"/&gt;
+    &lt;/path&gt;
+
+    &lt;taskdef name="testng" classpathref="cp"
+             classname="org.testng.TestNGAntTask"/&gt;
+
+    &lt;target name="test"&gt;
+        &lt;testng classpathref="cp" groups="fast"&gt;
+            &lt;classfileset dir="build" includes="example1/*.class"/&gt;
+        &lt;/testng&gt;
+    &lt;/target&gt;
+
+&lt;/project&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use ant to invoke it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">c:&gt; ant
+Buildfile: build.xml
+
+test:
+[testng] Fast test
+[testng] ===============================================
+[testng] Suite for Command line test
+[testng] Total tests run: 1, Failures: 0, Skips: 0
+[testng] ===============================================
+
+
+BUILD SUCCESSFUL
+Total time: 4 seconds</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Then you can browse the result of your tests:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="shell">start test-output\index.html (on Windows)</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_requirements">Requirements</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>TestNG Upto v7.5: JDK 8.</p>
+</li>
+<li>
+<p>TestNG v7.6.0 and above: JDK 11 or higher.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_mailing_lists">Mailing-lists</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>The users mailing-list can be found on <a href="https://groups.google.com/group/testng-users">Google Groups</a>.</p>
+</li>
+<li>
+<p>If you are interested in working on TestNG itself, join the <a href="https://groups.google.com/group/testng-dev">developer mailing-list</a>.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_locations_of_the_projects">Locations of the projects</h3>
+<div class="paragraph">
+<p>If you are interested in contributing to TestNG or one of the IDE plug-ins, you will find them in the following locations:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/testng-team/testng">TestNG</a></p>
+</li>
+<li>
+<p><a href="https://github.com/testng-team/testng-eclipse/">Eclipse plug-in</a></p>
+</li>
+<li>
+<p><a href="https://github.com/JetBrains/intellij-community/tree/master/plugins/testng">IDEA IntelliJ plug-in</a></p>
+</li>
+<li>
+<p><a href="https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-test">Visual Studio Code plugin-in</a></p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_bug_reports">Bug reports</h3>
+<div class="paragraph">
+<p>If you think you found a bug, here is how to report it:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Create a small project that will allow us to reproduce this bug. In most cases, one or two Java source files and a testng.xml file should be sufficient. Then you can either zip it and email it to the <a href="https://groups.google.com/group/testng-dev">testng-dev mailing-list</a> or make it available on an open source hosting site, such as <a href="https://github.com/">github</a> and email testng-dev so we know about it. Please make sure that this project is self contained so that we can build it right away (remove the dependencies on external or proprietary frameworks, etc&#8230;&#8203;).</p>
+</li>
+<li>
+<p>If the bug you observed is on the Eclipse plug-in, make sure your sample project contains the <code>.project</code> and <code>.classpath</code> files.</p>
+</li>
+<li>
+<p>File a bug.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>For more information, you can either <a href="https://testng.org/doc/download.html">download TestNG</a>, read the manual or browse the links at the top.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_license">License</h3>
+<div class="paragraph">
+<p><a href="https://testng.org/license">Apache 2.0</a></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

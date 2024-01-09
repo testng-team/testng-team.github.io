@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Test methods, Test classes and Test groups</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_test_methods_test_classes_and_test_groups">Test methods, Test classes and Test groups</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_test_methods_test_classes_and_test_groups">Test methods, Test classes and Test groups</h3>
+<div class="sect3">
+<h4 id="_test_methods">Test methods</h4>
+<div class="paragraph">
+<p>Test methods are annotated with @Test. Methods annotated with @Test that happen to return a value will be ignored, unless you set allow-return-values to true in your testng.xml:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;suite allow-return-values="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>or</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test allow-return-values="true"&gt;
+&lt;!-- rest of the contents ignored for brevity --&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_test_groups">Test groups</h4>
+<div class="literalblock">
+<div class="content">
+<pre>TestNG allows you to perform sophisticated groupings of test methods. Not only can you declare that methods belong to groups, but you can also specify groups that contain other groups. Then TestNG can be invoked and asked to include a certain set of groups (or regular expressions) while excluding another set.  This gives you maximum flexibility in how you partition your tests and doesn't require you to recompile anything if you want to run two different sets of tests back to back.</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Groups are specified in your <code>testng.xml</code> file and can be found either under the <code>&lt;test&gt;</code> or <code>&lt;suite&gt;</code> tag. Groups specified in the <code>&lt;suite&gt;</code> tag apply to all the <code>&lt;test&gt;</code> tags underneath. Note that groups are accumulative in these tags: if you specify group "a" in <code>&lt;suite&gt;</code> and "b" in <code>&lt;test&gt;</code>, then both "a" and "b" will be included.</p>
+</div>
+<div class="paragraph">
+<p>For example, it is quite common to have at least two categories of tests:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Check-in tests.</strong>  These tests should be run before you submit new code.  They should typically be fast and just make sure no basic functionality was broken.</p>
+</li>
+<li>
+<p><strong>Functional tests.</strong>  These tests should cover all the functionalities of your software and be run at least once a day, although ideally you would want to run them continuously.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Typically, check-in tests are a subset of functional tests.  TestNG allows you to specify this in a very intuitive way with test groups. For example, you could structure your test by saying that your entire test class belongs to the "functest" group, and additionally that a couple of methods belong to the group "checkintest":</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">public class Test1 {
+  @Test(groups = { "functest", "checkintest" })
+  public void testMethod1() {
+  }
+
+  @Test(groups = {"functest", "checkintest"} )
+  public void testMethod2() {
+  }
+
+  @Test(groups = { "functest" })
+  public void testMethod3() {
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Invoking TestNG with</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Test1"&gt;
+  &lt;groups&gt;
+    &lt;run&gt;
+      &lt;include name="functest"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>will run all the test methods in that classes, while invoking it with <code>checkintest</code> will only run <code>testMethod1()</code> and <code>testMethod2()</code>.
+Here is another example, using regular expressions this time.  Assume that some of your test methods should not be run on Linux, your test would look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test
+public class Test1 {
+  @Test(groups = { "windows.checkintest" })
+  public void testWindowsOnly() {
+  }
+
+  @Test(groups = {"linux.checkintest"} )
+  public void testLinuxOnly() {
+  }
+
+  @Test(groups = { "windows.functest" } )
+  public void testWindowsToo() {
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You could use the following <code>testng.xml</code> to launch only the Windows methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Test1"&gt;
+  &lt;groups&gt;
+    &lt;run&gt;
+      &lt;include name="windows.*"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Note: TestNG uses <a href="https://en.wikipedia.org/wiki/Regular_expression">regular expressions</a>, and not <a href="https://en.wikipedia.org/wiki/Wildmat">wildmats</a>. Be aware of the difference (for example, <code>"anything"</code> is matched by <code>".<strong>"</code>&#8201;&#8212;&#8201;dot star&#8201;&#8212;&#8201;and not <code>"</strong>"</code>).
+</td>
+</tr>
+</table>
+</div>
+<div class="sect4">
+<h5 id="_method_groups">Method groups</h5>
+<div class="paragraph">
+<p>You can also exclude or include individual methods:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Test1"&gt;
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"&gt;
+      &lt;methods&gt;
+        &lt;include name=".*enabledTestMethod.*"/&gt;
+        &lt;exclude name=".*brokenTestMethod.*"/&gt;
+      &lt;/methods&gt;
+     &lt;/class&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This can come in handy to deactivate a single method without having to recompile anything, but I don&#8217;t recommend using this technique too much since it makes your testing framework likely to break if you start refactoring your Java code (the regular expressions used in the tags might not match your methods anymore).</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_groups_of_groups">Groups of groups</h4>
+<div class="paragraph">
+<p>Groups can also include other groups. These groups are called "MetaGroups".  For example, you might want to define a group "all" that includes "checkintest" and "functest".  "functest" itself will contain the groups "windows" and "linux" while "checkintest will only contain "windows".  Here is how you would define this in your property file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Regression1"&gt;
+  &lt;groups&gt;
+    &lt;define name="functest"&gt;
+      &lt;include name="windows"/&gt;
+      &lt;include name="linux"/&gt;
+    &lt;/define&gt;
+
+    &lt;define name="all"&gt;
+      &lt;include name="functest"/&gt;
+      &lt;include name="checkintest"/&gt;
+    &lt;/define&gt;
+
+    &lt;run&gt;
+      &lt;include name="all"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+
+  &lt;classes&gt;
+    &lt;class name="test.sample.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_exclusion_groups">Exclusion groups</h4>
+<div class="paragraph">
+<p>TestNG allows you to include groups as well as exclude them.
+For example, it is quite usual to have tests that temporarily break because of a recent change, and you don&#8217;t have time to fix the breakage yet.  4 However, you do want to have clean runs of your functional tests, so you need to deactivate these tests but keep in mind they will need to be reactivated.</p>
+</div>
+<div class="paragraph">
+<p>A simple way to solve this problem is to create a group called "broken" and make these test methods belong to it.  For example, in the above example, I know that <code>testMethod2()</code> is now broken so I want to disable it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(groups = {"checkintest", "broken"} )
+public void testMethod2() {
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>All I need to do now is to exclude this group from the run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;test name="Simple example"&gt;
+  &lt;groups&gt;
+    &lt;run&gt;
+      &lt;include name="checkintest"/&gt;
+      &lt;exclude name="broken"/&gt;
+    &lt;/run&gt;
+  &lt;/groups&gt;
+
+  &lt;classes&gt;
+    &lt;class name="example1.Test1"/&gt;
+  &lt;/classes&gt;
+&lt;/test&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This way, I will get a clean test run while keeping track of what tests are broken and need to be fixed later.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+you can also disable tests on an individual basis by using the "enabled" property available on both <code>@Test</code> and <code>@Before</code>/<code>@After</code> annotations.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_partial_groups">Partial groups</h4>
+<div class="paragraph">
+<p>You can define groups at the class level and then add groups at the method level:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Test(groups = { "checkin-test" })
+public class All {
+
+  @Test(groups = { "func-test" })
+  public void method1() {
+      //test code goes here
+  }
+
+  public void method2() {
+      //more code goes here
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In this class, <code>method2()</code> is part of the group "checkin-test", which is defined at the class level, while <code>method1()</code> belongs to both "checkin-test" and "func-test".</p>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-09 11:54:59 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>

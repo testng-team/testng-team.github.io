@@ -1,0 +1,11 @@
+Redirect 301 /eclipse-beta https://dl.bintray.com/testng-team/testng-eclipse/
+AddHandler php4-script .php
+
+Redirect 301 /index.html https://testng.org/doc/
+
+AddType application/xml-dtd .dtd
+
+#Redirect temp /dtd https://raw.githubusercontent.com/cbeust/testng/master/src/main/resources/testng-1.0.dtd
+Redirect temp /dtd /testng-1.0.dtd.php
+# XML parsers don't see to follow redirects so commenting this out for now
+#Redirect temp /testng-1.0.dtd https://raw.githubusercontent.com/cbeust/testng/master/src/main/resources/testng-1.0.dtd
