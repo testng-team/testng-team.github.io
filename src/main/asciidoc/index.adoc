@@ -8,9 +8,8 @@
 :keywords: TestNG
 :imagesdir: ./img                                                   
 :docinfodir: ./docinfos
-:docinfo:shared
-:currentVersion: 7.9.0
-:javadocs-base-url: https://javadoc.io/static/org.testng/testng/{currentVersion}
+:javadocs-base-url: https://javadoc.io/static/org.testng/testng/{version-label}
+:revnumber:
 
 
 include::welcome.adoc[]

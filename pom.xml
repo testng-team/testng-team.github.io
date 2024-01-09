@@ -42,6 +42,7 @@
                                 <icons>font</icons>
                                 <linkcss>true</linkcss>
                                 <docinfo>shared</docinfo>
+                                <version-label>7.9.0</version-label>
                             </attributes>
                             <backend>html5</backend>
                         </configuration>
