@@ -84,6 +84,8 @@
                                     <directory>src/main/resources</directory>
                                     <includes>
                                         <include>sample-testng-results.xml</include>
+                                        <include>CNAME</include>
+                                        <include>.htaccess</include>
                                     </includes>
                                 </resource>
                             </resources>
