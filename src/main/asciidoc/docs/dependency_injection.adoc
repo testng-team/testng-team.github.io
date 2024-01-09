@@ -1,0 +1,287 @@
+=== Dependency injection
+
+TestNG supports two different kinds of dependency injection: native (performed by TestNG itself) and external (performed by a dependency injection framework such as Guice).
+
+
+==== Native dependency injection
+
+TestNG lets you declare additional parameters in your methods. When this happens, TestNG will automatically fill these parameters with the right value. Dependency injection can be used in the following places:
+
+* Any `@Before` method or `@Test` method can declare a parameter of type `ITestContext`.
+* Any `@AfterMethod` method can declare a parameter of type `ITestResult`, which will reflect the result of the test method that was just run.
+* Any `@Before` and `@After` methods (except `@BeforeSuite` and `@AfterSuite`) can declare a parameter of type `XmlTest`, which contain the current `<test>` tag.
+* Any `@BeforeMethod` (and `@AfterMethod`) can declare a parameter of type `java.lang.reflect.Method`. This parameter will receive the test method that will be called once this `@BeforeMethod` finishes (or after the method as run for `@AfterMethod`).
+* Any `@BeforeMethod` can declare a parameter of type `Object[]`. This parameter will receive the list of parameters that are about to be fed to the upcoming test method, which could be either injected by TestNG, such as `java.lang.reflect.Method` or come from a `@DataProvider`.
+* Any `@DataProvider` can declare a parameter of type `ITestContext` or `java.lang.reflect.Method`. The latter parameter will receive the test method that is about to be invoked.
+
+You can turn off injection with the `@NoInjection` annotation:
+
+[source, java]
+
+----
+public class NoInjectionTest {
+
+  @DataProvider(name = "provider")
+  public Object[][] provide() throws Exception {
+      return new Object[][] { { CC.class.getMethod("f") } };
+  }
+
+  @Test(dataProvider = "provider")
+  public void withoutInjection(@NoInjection Method m) {
+      Assert.assertEquals(m.getName(), "f");
+  }
+
+  @Test(dataProvider = "provider")
+  public void withInjection(Method m) {
+      Assert.assertEquals(m.getName(), "withInjection");
+  }
+}
+----
+
+The below table summarises the parameter types that can be natively injected for the various TestNG annotations:
+
+|===
+|Annotation |ITestContext |XmlTest |Method |Object[] |ITestResult |ConstructorOrMethod
+
+|`BeforeSuite`
+^|No
+^|No
+^|No
+^|No
+^|No
+^|No
+
+|`BeforeTest`
+^|Yes
+^|Yes
+^|No
+^|No
+^|No
+^|No
+
+|`BeforeGroups`
+^|Yes
+^|Yes
+^|No
+^|No
+^|No
+^|No
+
+|`BeforeClass`
+^|Yes
+^|Yes
+^|No
+^|No
+^|No
+^|No
+
+|`BeforeMethod`
+^|Yes
+^|Yes
+^|Yes
+^|Yes
+^|Yes
+^|No
+
+|`Test`
+^|Yes
+^|No
+^|No
+^|No
+^|No
+^|No
+
+|`DataProvider`
+^|Yes
+^|No
+^|Yes
+^|No
+^|No
+^|Yes
+
+|`AfterMethod`
+^|Yes
+^|Yes
+^|Yes
+^|Yes
+^|Yes
+^|No
+
+|`AfterClass`
+^|Yes
+^|Yes
+^|No
+^|No
+^|No
+^|No
+
+|`AfterGroups`
+^|Yes
+^|Yes
+^|No
+^|No
+^|No
+^|No
+
+|`AfterTest`
+^|Yes
+^|Yes
+^|No
+^|No
+^|No
+^|No
+
+|`AfterSuite`
+^|Yes
+^|No
+^|No
+^|No
+^|No
+^|No
+
+|`Factory`
+^|Yes
+^|Yes
+^|No
+^|No
+^|No
+^|No
+
+|===
+
+
+==== Guice dependency injection
+
+If you use https://github.com/google/guice/wiki/Motivation[Guice], TestNG gives you an easy way to inject your test objects with a Guice module:
+
+[source, java]
+
+----
+@Guice(modules = GuiceExampleModule.class)
+public class GuiceTest extends SimpleBaseTest {
+
+  @Inject
+  ISingleton m_singleton;
+
+  @Test
+  public void singletonShouldWork() {
+    m_singleton.doSomething();
+  }
+
+}
+----
+
+In this example, `GuiceExampleModule` is expected to bind the interface `ISingleton` to some concrete class:
+
+[source, java]
+
+----
+public class GuiceExampleModule implements Module {
+
+  @Override
+  public void configure(Binder binder) {
+    binder.bind(ISingleton.class).to(ExampleSingleton.class).in(Singleton.class);
+  }
+
+}
+----
+
+If you need more flexibility in specifying which modules should be used to instantiate your test classes, you can specify a module factory:
+
+[source, java]
+
+----
+@Guice(moduleFactory = ModuleFactory.class)
+public class GuiceModuleFactoryTest {
+
+  @Inject
+  ISingleton m_singleton;
+
+  @Test
+  public void singletonShouldWork() {
+    m_singleton.doSomething();
+  }
+}
+----
+
+The module factory needs to implement the interface {javadocs-base-url}/org/testng/IModuleFactory.html[org.testng.IModuleFactory]
+
+Your factory will be passed an instance of the test context and the test class that TestNG needs to instantiate. Your `createModule()` method should return a Guice Module that will know how to instantiate this test class. You can use the test context to find out more information about your environment, such as parameters specified in testng.xml, etc... You will get even more flexibility and Guice power with `parent-module` and `guice-stage` suite parameters.
+
+`guice-stage` allow you to chose the https://github.com/google/guice/wiki/Bootstrap[Stage] used to create the parent injector. The default one is `DEVELOPMENT`. Other allowed values are `PRODUCTION` and `TOOL`. Here is how you can define `parent-module` in your `test.xml` file:
+
+[source, xml]
+
+----
+<suite parent-module="com.example.SuiteParenModule" guice-stage="PRODUCTION">
+</suite>
+----
+
+TestNG will create this module only once for given suite. Will also use this module for obtaining instances of test specific Guice modules and module factories, then will create child injector for each test class. With such approach you can declare all common bindings in parent-module also you can inject binding declared in parent-module in module and module factory. Here is an example of this functionality:
+
+[source, java]
+
+----
+package com.example;
+
+public class ParentModule extends AbstractModule {
+  @Override
+  protected void conigure() {
+    bind(MyService.class).toProvider(MyServiceProvider.class);
+    bind(MyContext.class).to(MyContextImpl.class).in(Singleton.class);
+  }
+}
+----
+
+[source, java]
+
+----
+package com.example;
+
+public class TestModule extends AbstractModule {
+  private final MyContext myContext;
+
+  @Inject
+  TestModule(MyContext myContext) {
+    this.myContext = myContext
+  }
+
+  @Override
+  protected void configure() {
+    bind(MySession.class).toInstance(myContext.getSession());
+  }
+}
+----
+
+[source, xml]
+
+----
+<suite parent-module="com.example.ParentModule">
+</suite>
+----
+
+[source, java]
+
+----
+package com.example;
+
+@Test
+@Guice(modules = TestModule.class)
+public class TestClass {
+  @Inject
+  MyService myService;
+  @Inject
+  MySession mySession;
+
+  public void testServiceWithSession() {
+    myService.serve(mySession);
+  }
+}
+----
+
+As you see `ParentModule` declares binding for `MyService` and `MyContext` classes. Then `MyContext` is injected using constructor injection into `TestModule` class, which also declare binding for `MySession`. Then `parent-module` in test XML file is set to `ParentModule` class, this enables injection in `TestModule`. Later in `TestClass` you see two injections:
+
+* MyService - binding taken from ParentModule
+* MySession - binding taken from TestModule
+
+This configuration ensures you that all tests in this suite will be run with same session instance, the `MyContextImpl` object is only created once per suite, this give you possibility to configure common environment state for all tests in suite.

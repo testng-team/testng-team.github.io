@@ -1,0 +1,22 @@
+=== Overriding test methods
+
+TestNG allows you to override and possibly skip the invocation of test methods. One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by providing a listener that implements {javadocs-base-url}/org/testng/IHookable.html[IHookable].
+
+Here is an example with JAAS:
+
+[source, java]
+
+----
+public class MyHook implements IHookable {
+  public void run(final IHookCallBack icb, ITestResult testResult) {
+    // Preferably initialized in a @Configuration method
+    mySubject = authenticateWithJAAs();
+
+    Subject.doAs(mySubject, new PrivilegedExceptionAction() {
+      public Object run() {
+        icb.callback(testResult);
+      }
+    };
+  }
+}
+----

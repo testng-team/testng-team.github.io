@@ -1,0 +1,29 @@
+=== Altering suites (or) tests
+
+Sometimes you may need to just want to alter a suite (or) a test tag in a suite xml in runtime without having to change the contents of a suite file.
+
+A classic example for this would be to try and leverage your existing suite file and try using it for simulating a load test on your "Application under test". At the minimum you would end up duplicating the contents of your <test> tag multiple times and create a new suite xml file and work with. But this doesn't seem to scale a lot.
+
+TestNG allows you to alter a suite (or) a test tag in your suite xml file at runtime via listeners. You achieve this by providing a listener that implements {javadocs-base-url}/org/testng/IAlterSuiteListener.html[IAlterSuiteListener]. Please refer to xref:testng_listeners.adoc[Listeners section] to learn about listeners.
+
+Here is an example that shows how the suite name is getting altered in runtime:
+
+[source, java]
+
+----
+public class AlterSuiteNameListener implements IAlterSuiteListener {
+
+    @Override
+    public void alter(List<XmlSuite> suites) {
+        XmlSuite suite = suites.get(0);
+        suite.setName(getClass().getSimpleName());
+    }
+}
+----
+
+This listener can only be added with either of the following ways:
+
+* Through the `<listeners>` tag in the suite xml file.
+* Through a xref:testng_listeners.adoc#_specifying_listeners_with_serviceloader[Service Loader]
+
+This listener cannot be added to execution using the `@Listeners` annotation.

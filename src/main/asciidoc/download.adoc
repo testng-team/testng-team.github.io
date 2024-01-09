@@ -1,0 +1,78 @@
+== Download
+
+=== Current Release Version
+
+==== Maven
+
+[source,xml]
+----
+<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>7.9.0</version>
+    <scope>test</scope>
+</dependency>
+----
+
+==== Gradle
+
+[source,groovy]
+
+----
+dependencies {
+    testCompile 'org.testng:testng:7.9.0'
+}
+----
+
+==== Snapshots
+
+TestNG automatically uploads https://oss.sonatype.org/content/repositories/snapshots/org/testng/testng/[snapshots to Sonatype] which you can access by adding the following repository:
+
+[source,groovy]
+
+----
+repositories {
+    maven {
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
+}
+----
+
+==== Eclipse plug-in
+
+* *Java 8+ is required* for running the TestNG for Eclipse plugin.
+* *Eclipse 4.2 and above is required*. Eclipse 3.x is NOT supported any more, please update your Eclipse to 4.2 or above.
+
+You can use either the https://marketplace.eclipse.org/content/testng-eclipse[Eclipse Marketplace] or the update site.
+
+===== Install via Eclipse Marketplace
+
+Go to the TestNG page on the Eclipse Market Place and drag the icon called "Install" onto your workspace.
+
+===== Install from update site
+
+* Select Help / Install New Software...
+* Enter the update site URL in "Work with:" field:
+ ** Update site for release: `https://testng.org/testng-eclipse-update-site`.
+* Make sure the check box next to URL is checked and click Next.
+* Eclipse will then guide you through the process.
+
+You can also install older versions of the plug-ins https://beust.com/eclipse-old[here]. Note that the URL's on this page are update sites as well, not direct download links.
+
+==== Build TestNG from source code
+
+TestNG is also hosted on GitHub, where you can download the source and build the distribution yourself:
+
+[source,shell]
+
+----
+$ git clone git://github.com/testng-team/testng.git
+$ cd testng
+$ ./gradlew build
+----
+
+You will then find the jar file in the `testng/build/libs` directory
+
+==== Build the TestNG Eclipse Plugin from source code
+
+TestNG Eclipse Plugin is https://github.com/testng-team/testng-eclipse[hosted on GitHub], you can download the source code and https://github.com/testng-team/testng-eclipse/blob/master/README.md#building[build by ourselves].

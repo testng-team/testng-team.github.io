@@ -1,0 +1,7 @@
+== Test results
+
+include::test_results/success_fail_assert.adoc[]
+
+include::test_results/logging_and_results.adoc[]
+
+

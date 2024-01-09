@@ -1,0 +1,65 @@
+=== Running TestNG programmatically
+
+You can invoke TestNG from your own programs very easily:
+
+[source, java]
+
+----
+TestListenerAdapter tla = new TestListenerAdapter();
+TestNG testng = new TestNG();
+testng.setTestClasses(new Class[] { Run2.class });
+testng.addListener(tla);
+testng.run();
+----
+
+This example creates a {javadocs-base-url}/org/testng/TestNG.html[TestNG] object and runs the test class Run2. It also adds a `TestListener`. You can either use the adapter class {javadocs-base-url}/org/testng/TestListenerAdapter.html[org.testng.TestListenerAdapter] or implement {javadocs-base-url}/org/testng/ITestListener.html[org.testng.ITestListener] yourself. This interface contains various callback methods that let you keep track of when a test starts, succeeds, fails, etc...
+
+Similarly, you can invoke TestNG on a testng.xml file or you can create a virtual testng.xml file yourself. In order to do this, you can use the classes found the package {javadocs-base-url}/org/testng/xml/package-frame.html[org.testng.xml]: {javadocs-base-url}/org/testng/xml/XmlClass.html[XmlClass], {javadocs-base-url}/org/testng/xml/XmlTest.html[XmlTest], etc... Each of these classes correspond to their XML tag counterpart.
+
+For example, suppose you want to create the following virtual file:
+
+[source, xml]
+
+----
+<suite name="TmpSuite" >
+  <test name="TmpTest" >
+    <classes>
+      <class name="test.failures.Child"/>
+    </classes>
+    </test>
+</suite>
+----
+
+You would use the following code:
+
+
+[source, java]
+
+----
+XmlSuite suite = new XmlSuite();
+suite.setName("TmpSuite");
+
+XmlTest test = new XmlTest(suite);
+test.setName("TmpTest");
+List<XmlClass> classes = new ArrayList<XmlClass>();
+classes.add(new XmlClass("test.failures.Child"));
+test.setXmlClasses(classes) ;
+----
+
+And then you can pass this `XmlSuite` to `TestNG`:
+
+[source, java]
+
+----
+List<XmlSuite> suites = new ArrayList<XmlSuite>();
+suites.add(suite);
+TestNG tng = new TestNG();
+tng.setXmlSuites(suites);
+tng.run();
+----
+
+Please see the {javadocs-base-url}/org/testng/package-summary.html[JavaDocs] for the entire API.
+
+
+
+

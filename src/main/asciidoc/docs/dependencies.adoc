@@ -1,0 +1,123 @@
+=== Dependencies
+
+Sometimes, you need your test methods to be invoked in a certain order.  Here are a few examples:
+
+* To make sure a certain number of test methods have completed and succeeded before running more test methods.
+* To initialize your tests while wanting this initialization methods to be test methods as well (methods tagged with `@Before`/`@After` will not be part of the final report).
+
+TestNG allows you to specify dependencies either with annotations or in XML.
+
+==== Dependencies with annotations
+
+You can use the attributes `dependsOnMethods` or `dependsOnGroups`, found on the `@Test` annotation.
+There are two kinds of dependencies:
+
+* *Hard dependencies*. All the methods you depend on must have run and succeeded for you to run. If at least one failure occurred in your dependencies, you will not be invoked and marked as a SKIP in the report.
+* *Soft dependencies*. You will always be run after the methods you depend on, even if some of them have failed. This is useful when you just want to make sure that your test methods are run in a certain order but their success doesn't really depend on the success of others. A soft dependency is obtained by adding `"alwaysRun=true"` in your `@Test` annotation.
+
+Here is an example of a hard dependency:
+
+[source, java]
+
+----
+@Test
+public void serverStartedOk() {}
+
+@Test(dependsOnMethods = { "serverStartedOk" })
+public void method1() {}
+----
+
+In this example, `method1()` is declared as depending on method `serverStartedOk()`, which guarantees that `serverStartedOk()` will always be invoked first.
+
+You can also have methods that depend on entire groups:
+
+[source, java]
+
+----
+@Test(groups = { "init" })
+public void serverStartedOk() {}
+
+@Test(groups = { "init" })
+public void initEnvironment() {}
+
+@Test(dependsOnGroups = { "init.*" })
+public void method1() {}
+----
+
+In this example, `method1()` is declared as depending on any group matching the regular expression `"init.*"`, which guarantees that the methods `serverStartedOk()` and `initEnvironment()` will always be invoked before `method1()`.
+
+TIP: as stated before, the order of invocation for methods that belong in the same group is not guaranteed to be the same across test runs.
+
+If a method depended upon fails and you have a hard dependency on it (`alwaysRun=false`, which is the default), the methods that depend on it are not marked as FAIL but as SKIP.  Skipped methods will be reported as such in the final report (in a color that is neither red nor green in HTML), which is important since skipped methods are not necessarily failures.
+
+Both `dependsOnGroups` and `dependsOnMethods` accept regular expressions as parameters.  For `dependsOnMethods`, if you are depending on a method which happens to have several overloaded versions, all the overloaded methods will be invoked.  If you only want to invoke one of the overloaded methods, you should use `dependsOnGroups`.
+
+For a more advanced example of dependent methods, please refer to https://beust.com/weblog2/archives/000171.html[this article], which uses inheritance to provide an elegant solution to the problem of multiple dependencies.
+
+By default, dependent methods are grouped by class.
+
+For example, if method `b()` depends on method `a()` and you have several instances of the class that contains these methods (because of a factory of a data provider), then the invocation order will be as follows:
+
+[source, bash]
+
+----
+a(1)
+a(2)
+b(2)
+b(2)
+----
+
+TestNG will not run `b()` until all the instances have invoked their `a()` method.
+
+This behavior might not be desirable in certain scenarios, such as for example testing a sign in and sign out of a web browser for various countries. In such a case, you would like the following ordering:
+
+[source, bash]
+
+----
+signIn("us")
+signOut("us")
+signIn("uk")
+signOut("uk")
+----
+
+For this ordering, you can use the XML attribute `group-by-instances`. This attribute is valid either on `<suite>` or `<test>`:
+
+[source, xml]
+
+----
+<suite name="Factory" group-by-instances="true">
+<!-- rest of the contents ignored for brevity -->
+</suite>
+----
+
+**or**
+
+[source, xml]
+
+----
+<test name="Factory" group-by-instances="true">
+<!-- rest of the contents ignored for brevity -->
+</test>
+----
+
+==== Dependencies in XML
+
+Alternatively, you can specify your group dependencies in the `testng.xml` file. You use the `<dependencies>` tag to achieve this:
+
+[source, xml]
+
+----
+<test name="My suite">
+  <groups>
+    <dependencies>
+      <group name="c" depends-on="a  b" />
+      <group name="z" depends-on="c" />
+    </dependencies>
+  </groups>
+</test>
+----
+
+The `<depends-on>` attribute contains a space-separated list of groups.
+
+
+

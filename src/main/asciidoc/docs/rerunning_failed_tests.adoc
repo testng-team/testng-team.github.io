@@ -1,0 +1,58 @@
+=== Rerunning failed tests
+
+Every time tests fail in a suite, TestNG creates a file called `testng-failed.xml` in the output directory. This XML file contains the necessary information to rerun only these methods that failed, allowing you to quickly reproduce the failures without having to run the entirety of your tests.  Therefore, a typical session would look like this:
+
+[source, bash]
+
+----
+java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs testng.xml
+java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs test-outputs\testng-failed.xml
+----
+
+Note that `testng-failed.xml` will contain all the necessary dependent methods so that you are guaranteed to run the methods that failed without any SKIP failures.
+
+Sometimes, you might want TestNG to automatically retry a test whenever it fails. In those situations, you can use a retry analyzer.
+
+When you bind a retry analyzer to a test, TestNG automatically invokes the retry analyzer to determine if TestNG can retry a test case again in an attempt to see if the test that just fails now passes. Here is how you use a retry analyzer:
+
+* Build an implementation of the interface `org.testng.IRetryAnalyzer`
+* Bind this implementation to the `@Test` annotation for e.g., `@Test(retryAnalyzer = LocalRetry.class)`
+
+Following is a sample implementation of the retry analyzer that retries a test for a maximum of three times.
+
+[source, java]
+
+----
+import org.testng.IRetryAnalyzer;
+import org.testng.ITestResult;
+
+public class MyRetry implements IRetryAnalyzer {
+
+  private int retryCount = 0;
+  private static final int maxRetryCount = 3;
+
+  @Override
+  public boolean retry(ITestResult result) {
+    if (retryCount < maxRetryCount) {
+      retryCount++;
+      return true;
+    }
+    return false;
+  }
+}
+----
+
+[source, java]
+
+----
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+public class TestclassSample {
+
+  @Test(retryAnalyzer = MyRetry.class)
+  public void test2() {
+    Assert.fail();
+  }
+}
+----

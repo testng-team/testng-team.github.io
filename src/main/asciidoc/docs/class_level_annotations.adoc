@@ -1,0 +1,38 @@
+=== Class level annotations
+
+The `@Test` annotation can be put on a class instead of a test method:
+
+[source, java]
+
+----
+@Test
+public class Test1 {
+  public void test1() {
+  }
+
+  public void test2() {
+  }
+}
+----
+
+The effect of a class level @Test annotation is to make all the public methods of this class to become test methods even if they are not annotated. You can still repeat the `@Test` annotation on a method if you want to add certain attributes.
+
+**For example:**
+
+[source, java]
+
+----
+@Test
+public class Test1 {
+  public void test1() {
+  }
+
+  @Test(groups = "g1")
+  public void test2() {
+  }
+}
+----
+
+will make both `test1()` and `test2()` test methods but on top of that, `test2()` now belongs to the group "g1".
+
+

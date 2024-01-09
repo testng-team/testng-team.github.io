@@ -1,0 +1,24 @@
+=== JUnit tests
+
+TestNG can run JUnit 3 and JUnit 4 tests.  All you need to do is put the JUnit jar file on the classpath, specify your JUnit test classes in the `testng.classNames` property and set the `testng.junit` property to true:
+
+[source, xml]
+
+----
+<test name="Test1" junit="true">
+  <classes>
+    <!-- ... -->
+  </classes>
+</test>
+----
+
+The behavior of TestNG in this case is similar to JUnit depending on the JUnit version found on the class path:
+
+* JUnit 3:
+** All methods starting with test* in your classes will be run
+** If there is a method `setUp()` on your test class, it will be invoked before every test method
+** If there is a method `tearDown()` on your test class, it will be invoked before after every test method
+** If your test class contains a method `suite()`, all the tests returned by this method will be invoked
+* JUnit 4:
+** TestNG will use the `org.junit.runner.JUnitCore` runner to run your tests
+

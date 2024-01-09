@@ -1,0 +1,96 @@
+=== `testng.xml`
+
+You can invoke TestNG in several different ways:
+
+* With a `testng.xml` file
+* With `ant`
+* From the command line
+
+This section describes the format of `testng.xml` (you will find documentation on ant and the command line below).
+
+The current DTD for testng.xml can be found on the main Web site:  https://testng.org/testng-1.0.dtd[testng-1.0.dtd].
+Here is an example testng.xml file:
+
+[source, xml]
+
+----
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Suite1" verbose="1">
+  <test name="Nopackage">
+    <classes>
+       <class name="NoPackageTest"/>
+    </classes>
+  </test>
+
+  <test name="Regression1">
+    <classes>
+      <class name="test.sample.ParameterSample"/>
+      <class name="test.sample.ParameterTest"/>
+    </classes>
+  </test>
+</suite>
+----
+
+You can specify package names instead of class names:
+
+[source, xml]
+
+----
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+
+<suite name="Suite1" verbose="1">
+  <test name="Regression1">
+    <packages>
+      <package name="test.sample"/>
+   </packages>
+ </test>
+</suite>
+----
+
+In this example, TestNG will look at all the classes in the package `test.sample` and will retain only classes that have TestNG annotations.
+
+You can also specify groups and methods to be included and excluded:
+
+[source, xml]
+
+----
+<test name="Regression1">
+  <groups>
+    <run>
+      <exclude name="brokenTests"/>
+      <include name="checkinTests"/>
+    </run>
+  </groups>
+
+  <classes>
+    <class name="test.IndividualMethodsTest">
+      <methods>
+        <include name="testMethod"/>
+      </methods>
+    </class>
+  </classes>
+</test>
+----
+
+You can also define new groups inside `testng.xml` and specify additional details in attributes, such as whether to run the tests in parallel, how many threads to use, whether you are running JUnit tests, etc...
+
+By default, TestNG will run your tests in the order they are found in the XML file. If you want the classes and methods listed in this file to be run in an unpredictable order, set the `preserve-order` attribute to false.
+
+[source, xml]
+
+----
+<test name="Regression1" preserve-order="false">
+  <classes>
+    <class name="test.Test1">
+      <methods>
+        <include name="m1"/>
+        <include name="m2"/>
+      </methods>
+    </class>
+    <class name="test.Test2"/>
+  </classes>
+</test>
+----
+
+Please see the DTD for a complete list of the features, or read on.

@@ -1,0 +1,36 @@
+=== BeanShell and advanced group selection
+
+If the `<include>` and `<exclude>` tags in `testng.xml` are not enough for your needs, you can use a https://beanshell.org/[BeanShell] expression to decide whether a certain test method should be included in a test run or not. You specify this expression just under the `<test>` tag:
+
+[source, xml]
+
+----
+<test name="BeanShell test">
+   <method-selectors>
+     <method-selector>
+       <script language="beanshell">
+            <![CDATA[
+                    groups.containsKey("test1")
+            ]]>
+        </script>
+     </method-selector>
+   </method-selectors>
+  <!-- ... -->
+</test>
+----
+
+When a `<script>` tag is found in testng.xml, TestNG will ignore subsequent `<include>` and `<exclude>` of groups and methods in the current `<test>` tag:  your BeanShell expression will be the only way to decide whether a test method is included or not.
+
+Here are additional information on the BeanShell script:
+
+* It must return a boolean value.  Except for this constraint, any valid BeanShell code is allowed (for example, you might want to return `true` during week days and `false` during weekends, which would allow you to run tests differently depending on the date).
+* TestNG defines the following variables for your convenience:
+** `java.lang.reflect.Method method`: the current test method.
+** `org.testng.ITestNGMethod testngMethod`: the description of the current test method.
+** `java.util.Map<String, String> groups`: a map of the groups the current test method belongs to.
+* You might want to surround your expression with a CDATA declaration (as shown above) to avoid tedious quoting of reserved XML characters).
+
+TIP: Starting from version `7.5` TestNG does not bring in any dependency on BeanShell implementations by default.
+So in order to leverage BeanShell based method selectors, please remember to add an explicit dependency on BeanShell.
+For example https://mvnrepository.com/artifact/org.apache-extras.beanshell/bsh[org.apache-extras.beanshell]
+

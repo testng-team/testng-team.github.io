@@ -1,0 +1,15 @@
+[[first-section]]
+== First section
+
+:highlightjs-languages: java, shell
+
+This is a code sample
+
+[source,java]
+----
+public class Hello {
+    public static void main(String[] args) {
+
+    }
+}
+----

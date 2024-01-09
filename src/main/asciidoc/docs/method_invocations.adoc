@@ -1,0 +1,4 @@
+=== Listening to method invocations
+
+The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with `@Test`) or configuration (annotated with any of the `@Before` or `@After` annotation) method and declare it as a listener, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
+

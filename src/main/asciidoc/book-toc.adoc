@@ -1,0 +1,299 @@
+==== Chapter 1 - Getting Started
+
+* Beyond JUnit
+** Stateful Classes
+** Parameters
+** Base Classes
+** Exceptions Are Not That Exceptional
+** Running Tests
+** Real-World Testing
+** Configuration Methods
+** Dependencies
+** Epiphanies
+* JUnit 4
+* Designing for Testability
+** Object-Oriented Programming and Encapsulation
+** The Design Patterns Revolution
+** Identifying the Enemy
+** Recommendations
+* TestNG
+** Annotations
+** Tests, Suites, and Configuration Annotations
+** Groups
+** testng.xml
+* Conclusion
+
+==== Chapter 2 - Testing Design Patterns
+
+* Testing for Failures
+** Reporting Errors
+** Runtime and Checked Exceptions
+** Testing Whether Your Code Handles Failures Gracefully
+** When Not to Use expectedExceptions
+** testng-failed.xml
+* Factories
+** @Factory
+** org.testng.ITest
+* Data-Driven Testing
+** Parameters and Test Methods
+** Passing Parameters with testng.xml
+** Passing Parameters with @DataProvider
+** Parameters for Data Providers
+** The Method Parameter
+** The ITestContext Parameter
+** Lazy Data Providers
+** Pros and Cons of Both Approaches
+** Supplying the Data
+** Data Provider or Factory?
+** Tying It All Together
+* Asynchronous Testing
+* Testing Multithreaded Code
+** Concurrent Testing
+** threadPoolSize, invocationCount, and timeOut
+** Concurrent Running
+** Turning on the Parallel Bit
+* Performance Testing
+** Algorithm Complexity
+** Testing Complexity
+* Mocks and Stubs
+** Mocks versus Stubs
+** Designing for Mockability
+** Mock Libraries
+** Selecting the Right Strategy
+** Mock Pitfalls
+* Dependent Testing
+** Dependent Code
+** Dependent Testing with TestNG
+** Deciding Whether to Depend on Groups or on Methods
+** Dependent Testing and Threads
+** Failures of Configuration Methods
+* Inheritance and Annotation Scopes
+** The Problem
+** Pitfalls of Inheritance
+* Test Groups
+** Syntax
+** Groups and Runtime
+** Running Groups
+** Using Groups Effectively
+* Code Coverage
+** A Coverage Example
+** Coverage Metrics
+** Coverage Tools
+** Implementation
+** Beware!
+** A Guide to Successful Coverage
+* Conclusion
+
+=== Chapter 3 Enterprise Testing
+
+* A Typical Enterprise Scenario
+** Participants
+** Testing Methodology
+** Issues with the Current Approach
+* A Concrete Example
+** Goals
+** Nongoals
+* Test Implementation
+** Testing for Success
+** Building Test Data
+** Test Setup Issues
+** Error Handling
+** Emerging Unit Tests
+** Coping with In-Container Components
+** Putting It All Together
+* Exploring the Competing Consumers Pattern
+** The Pattern
+** The Test
+* The Role of Refactoring
+** A Concrete Example
+** An In-Container Approach
+* Conclusion
+
+=== Chapter 4 Java EE Testing
+
+* In-Container versus Out-of-Container Testing
+* In-Container Testing
+** Creating a Test Environment
+** Identifying Tests
+** Registering Tests
+** Registering a Results Listener
+* Java Naming and Directory Interface (JNDI)
+** Understanding JNDI’s Bootstrapping
+** Spring’s SimpleNamingContextBuilder
+** Avoiding JNDI
+* Java Database Connectivity (JDBC)
+** c3p0
+** Commons DBCP
+** Spring
+* Java Transaction API (JTA)
+** Java Open Transaction Manager (JOTM)
+** Atomikos TransactionEssentials
+* Java Messaging Service (JMS)
+** Creating a Sender/Receiver Test
+** Using ActiveMQ for Tests
+* Java Persistence API (JPA)
+** Configuring the Database
+** Configuring the JPA Provider
+** Writing the Test
+** Simulating a Container
+** Using Spring as the Container
+* Enterprise Java Beans 3.0 (EJB3)
+** Message-Driven Beans
+** Session Beans
+** Another Spring Container
+** Disadvantages of a Full Container
+* Java API for XML Web Services (JAX-WS)
+** Recording Requests
+** Setting Up the Test Environment
+** Creating the Service Test
+** XPath Testing
+** Testing Remote Services
+* Servlets
+** In-Container Testing
+** Mock/Stub Objects
+** Refactoring
+** Embedded Container
+** In-Memory Invocation
+* XML
+** Using dom4j
+** Using XMLUnit
+* Conclusion
+
+=== Chapter 5 Integration
+* Spring
+** Spring’s Test Package Features
+** Test Class Hierarchy
+* Guice
+** The Issue with Spring
+** Enter Guice
+** A Typical Dependency Scenario
+** The Object Factory
+** Guice Configuration
+** Guice-Based Test
+** Grouping Test Dependencies
+** Injecting Configuration
+* DbUnit
+** Configuration
+** Usage
+** Verifying Results
+* HtmlUnit
+** Configuration
+** Usage
+* Selenium
+* Swing UI Testing
+** Testing Approach
+** Configuration
+** Usage
+* Tests for Painting Code
+* Continuous Integration
+** Why Bother?
+** CI Server Features
+** TestNG Integration
+* Conclusion
+
+=== Chapter 6 Extending TestNG
+
+* The TestNG API
+** org.testng.TestNG, ITestResult, ITestListener, ITestNGMethod
+** A Concrete Example
+** The XML API
+** Synthetic XML Files
+* BeanShell
+** BeanShell Overview
+** TestNG and BeanShell
+** Interactive Execution
+* Method Selectors
+* Annotation Transformers
+** Annotation History
+** Pros and Cons
+** Using TestNG Annotation Transformers
+** Possible Uses of Annotation Transformers
+* Reports
+** Default Reports
+** The Reporter API
+** The Report Plug-in API
+* Writing Custom Annotations
+** Implementation
+** Testing
+* Conclusion
+
+=== Chapter 7 Digressions
+
+* Motivation
+* The TestNG Philosophy
+* The Care and Feeding of Exceptions
+* Stateful Tests
+** Immutable State
+** Mutable State
+* The Pitfalls of Test-Driven Development
+** TDD Promotes Microdesign over Macrodesign
+** TDD Is Hard to Apply
+** Extracting the Good from Test-Driven Development
+* Testing Private Methods
+* Testing versus Encapsulation
+* The Power of Debuggers
+* Logging Best Practices
+* The Value of Time
+* Conclusion
+
+
+=== Appendix A IDE Integration
+
+* Eclipse
+** Installing the Plug-in
+** Verifying the Installation
+** Creating a Launch Configuration
+** Configuring Preferences
+** Converting JUnit Tests
+* IntelliJ IDEA
+** Installing the Plug-in
+** Running Tests
+** Running Shortcuts
+** Viewing Test Results
+** Running Plug-in Refactorings
+
+=== Appendix B TestNG Javadocs
+
+* JDK 1.4 and JDK 5
+* Shortcut Syntax for JDK 5 Annotations
+* Annotation Javadocs
+** @DataProvider/@testng.data-provider
+** @Factory/@testng.factory
+** @Parameters/@testng.parameters
+** @Test/@testng.test
+* The org.testng.TestNG Class
+* The XML API
+
+=== Appendix C testng.xml
+
+* Overview
+* Scopes
+* XML Tags
+** <suite>
+** <packages> and <package>
+** <parameter>
+** <suite-files> and <suite-file>
+** <method-selectors>, <method-selector>, <selector-class>, and <script>
+** <test>
+** <groups>, <define>, and <run>
+** <classes> and <class>
+** <methods>
+
+=== Appendix D Migrating from JUnit
+
+* JUnitConverter
+** From the Command Line
+** From ant
+* Integrated Development Environments
+** Eclipse
+** IDEA
+* Incremental Migration and JUnit Mode
+* Converting JUnit Code
+** Assertions
+** Running a Single Test
+** Maintaining State between Invocations
+** Suite-wide Initialization
+** Class-wide Initialization
+** The AllTests Pattern
+** Testing Exceptions
+** The Parameterized Test Case Pattern

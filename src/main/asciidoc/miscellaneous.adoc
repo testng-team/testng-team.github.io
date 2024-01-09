@@ -1,0 +1,126 @@
+== MORE TESTNG READING
+
+=== Articles and presentations
+
+Here are several articles and presentations about TestNG (English, French, German).
+
+==== English
+
+* https://www.slideshare.net/LevonApreyan/testng-framework-72078619[TestNG presentation (Levon Apreyan, February 2017)]
+* https://community.oracle.com/docs/DOC-916315[Use TestNG to create test logs that are structured like Javadocs (Raghunandan Seshadri, August 2015)]
+* https://blogs.atlassian.com/2013/02/testng-plus-junit-bamboo/[How I Learned to Stop Worrying and Love TestNG (March 2013)]
+* https://zeroturnaround.com/labs/using-spock-to-test-groovy-and-java-applications/[Using Spock to test Groovy AND Java applications (March 2013)]
+* https://www.asjava.com/testng/testng-tutorials/[TestNG tutorials (Jammy Chen)]
+* https://kaczanowscy.pl/tomek/2012-04/why-testng-and-not-junit[Why TestNG and not JUnit? (Tomek Kaczanowski)]
+* https://www.randomsync.net/2012/02/excel-testng-driving-testng-tests.html[TestNG and Excel]
+* https://github.com/rackspace/python-proboscis[TestNG in Python]
+* https://www.opengamma.com/blog/2011/04/04/converting-opengamma-junit-testng[Converting a large codebase from JUnit 4 to TestNG]
+* https://seleniumexamples.com/blog/guide/using-soft-assertions-in-testng/[Using soft assertions with TestNG]
+* https://kaczanowscy.pl/tomek/2011-02/visualization-dependent-test-methods[Visualizing live dependencies (Tomek Kaczanowski)]
+* https://www.lysergicjava.com/?p=165[Passing parameters to @DataProviders.]
+* https://barisergun.blogspot.com/2010/09/integrated-mockito-testng-and-emma-on.html[TestNG, Emma and Mockito]
+* https://www.dotneter.org/2010/09/data-driven-testing-using-selenium-testng-part-1-of-4.html[Data-driven testing using Selenium and TestNG (video)]
+* https://blog.meesqa.com/2010/09/11/combine-multiple-testng-resultsxml-files-into-a-single-xml-file/[Combining multiple testng-results.xml file into a single file]
+* https://techo-ecco.com/blog/testng-with-cobertura/[TestNG + Cobertura]
+* https://blog.jayway.com/2009/12/14/powermock-testng-true/[TestNG + PowerMock + Mockito]
+* https://maxheapsize.com/2009/09/23/test-jboss-rules-5-with-testng/[TestNG and Drools]
+* https://functionaltestautomation.blogspot.com/2009/10/dataprovider-data-driven-testing-with.html[Data Driven Testing with Selenium and TestNG]
+* https://margelatu.org/2009/06/25/java-code-coverage-reports-in-eclipse/[Code coverage with Emma and TestNG]
+* https://www.mkyong.com/unittest/junit-4-vs-testng-comparison/[Comparison between JUnit 4 and TestNG]
+* https://www.michaelminella.com/testing/unit-testing-with-testng-and-jmockit.html[Unit testing with TestNG and JMockit (part 1)]
+* https://www.michaelminella.com/testing/unit-testing-with-testng-and-jmockit-part-2.html[Unit testing with TestNG and JMockit (part 2)]
+* https://www.techbookreport.com/tbr0332.html[Review of the book]
+* https://thediscoblog.com/2006/10/05/testng-is-so-groovy/[TestNG and Groovy (Andrew Glover, October 2006)]
+* https://www-128.ibm.com/developerworks/java/library/j-cq08296/[In pursuit of code quality (Andrew Glover, August 2006)]
+* https://membres.lycos.fr/testng/[TestNG Tutorial (Claude Quezel, March 2006)]
+* https://stripes.mc4j.org/confluence/display/stripes/Unit+Testing[TestNG and Stripes (Tim Fennel, April 2006)]
+* https://testearly.com/2006/04/03/rerunning-of-failed-tests/[Rerunning failed tests (Andrew Glover, April 2006)]
+* https://howardlewisship.com/tapestry-javaforge/tapestry-testng/[Tapestry and TestNG (Howard Lewis-Ship, April 2006)]
+* https://thediscoblog.com/2006/03/27/using-junit-extensions-in-testng/[Using JUnit extensions in TestNG (Andrew Glover, March 2006)]
+* https://www-128.ibm.com/developerworks/forums/dw_thread.jsp?forum=812&thread=110765&cat=10[Code coverage of TestNG tests with Cobertura (Andrew Glover, March 2006)]
+* https://beust.com/weblog/archives/000369.html[Statistical Testing (Cédric Beust, February 2006)]
+* https://bill.dudney.net/roller/page/bill?entry=testng_is_a_leap_beyond[TestNG and JUnit (Bill Dudney, February 2006)]
+* https://beust.com/weblog/archives/000362.html[Distributed TestNG (Cédric Beust, January 2006)]
+* https://erik.thauvin.net/blog/news.jsp?date=2006-01-29#418[Testing private methods (Erik Thauvin, January 2006)]
+* https://blog.hibernate.org/cgi-bin/blosxom.cgi/2005/11/24#ejb3withtestng[Testing EJB3 with TestNG (Christian Bauer, November 2005)]
+* https://www.vanwardtechnologies.com/cedricb01.php[Vanward Technologies interview (October 2005)]
+* https://jroller.com/page/tfenne?entry=i_m_starting_to_really[TestNG reaction (Tim Fennell, October 2005)]
+* https://www.realsolve.co.uk/site/tech/blog.php?name=philzoio&mydate=20050826[Using JUnit libraries with TestNG (Phil Zoio, August 2005)]
+* https://jyperion.org/articles/testng/testng.htm[Introducing TestNG (Thierry Janaudy, August 2005)]
+* https://www.theserverside.com/news/thread.tss?thread_id=35737[Migrating to TestNG (TheServerSide, August 2005)]
+* https://forum.springframework.org/viewtopic.php?t=7903[TestNG and Spring (August 2005)]
+* https://groups-beta.google.com/group/comp.lang.ruby/browse_thread/thread/3a0952199bb1bc1d/8a4a6d7931c039ce?lnk=st&q=testng+ruby&rnum=1&hl=en[TestNG and Ruby (August 2005)]
+* https://www.thechanfam.net/wordpress/?p=36[TestNG and Maven (April 2005)]
+* https://kevin.oneill.id.au/2005/04/06/testng[TestNG review (April 2005)]
+* https://www.javaworld.com/javaworld/jw-04-2005/jw-0404-testng_p.html[JavaWorld (April 2005)]
+* https://pcal.net/blog/archives/2005/03/a_great_new_ide.html[Solving the JUnit dependency problem (March 2005)]
+* https://beust.com/weblog/archives/000259.html[Are dependent test methods really evil?  (March 2005)]
+* https://beust.com/weblog/archives/000252.html[The "call super" anti-pattern (March 2005)]
+* https://beust.com/weblog/archives/000236.html[Testing asynchronous code with TestNG (February 2005)]
+* https://www-106.ibm.com/developerworks/java/library/j-testng/[Making Testing a Breeze with TestNG (DeveloperWorks, January 2005) (also in Chinese)]
+* https://www.theserverside.com/news/thread.tss?thread_id=31214[TestNG:  Catch the Testing Fever (TheServerSide, January 2005)]
+* https://www.beust.com/weblog/archives/000230.html[Why use XML to configure tests?  (January 2005)]
+* https://www.javapolis.com/confluence/display/JP04/Beyond+JUnit+,+introducing+TestNG,+the+next+generation+in+testing[TestNG:  Beyond JUnit (Presentation at JavaPolis, Belgium, December 2004)]
+* https://www.theserverside.com/news/thread.tss?thread_id=30394[Announcing TestNG 2.0 (TheServerSide, December 2004)]
+* https://www.javalobby.org/articles/testng/[TestNG:  Catching the TestNG fever (JavaLobby, December 2004)]
+* https://www.beust.com/weblog/archives/000170.html[Using inheritance of annotations for flexible testing (August 2004)]
+* https://www.beust.com/weblog/archives/000175.html[Multiple instantations of tests (August 2004)]
+* https://theserverside.com/blogs/showblog.tss?id=Unitized[Don't get unitized (July 2004)]
+* https://www.google.com/url?sa=X&start=3&q=https://www.theserverside.com/news/thread.tss?thread_id=25568[TestNG:  Testing, the Next Generation (TheServerSide, April 2004)]
+* https://rationaleemotions.com/tags/TestNG[TestNG features explained via use-cases]
+
+==== French
+
+* https://www.spalud.info/testng/[Le framework TestNG] (Sébastien Palud, April 2006)
+
+==== German
+
+* https://www.qaware.de/downloads/to1-adersberger.pdf[Comparison TestNG / JUnit 4] (Josef Adersberger, May 2006, PDF)
+
+=== CONTRIBUTORS
+
+TestNG has received a lot of help from various people throughout its existence.
+
+* With code:
+** mailto:the_mindstorm@evolva.ro[Alexandru Popescu], who ported TestNG to JDK 1.4 and has been tirelessly contributing ever since.
+** mailto:julien@herr.fr[Julien Herr], for all the contributions and for all the active code reviews.
+** Hani Suleiman and Mark Derricutt (IDEA plug-in).
+** Andrew Glover and https://tacos.sourceforge.net/[Jesse Kuhnert]/https://blogs.codehaus.org/people/brett//archives/maven.html[Brett Porter] (Maven 1 and Maven 2 plug-ins respectively).
+** Jolly Chen (JUnitReport plug-in).
+** Thierry Janaudy (PDF report plug-in).
+* And also with ideas, articles and bug reports:
+** Filippo Diotalevi, Matthew Schmidt Robert McIntosh, JR Boyens, Robert Watkins, Aleksi Kallio, Doug Lea, Eron Wright, Guillaume Laforge, Owen Griffiths, Jean-Louis Berliet, Morten Christensen and many others...
+
+=== SPECIAL THANKS
+
+To https://yourkit.com/[YourKit] for helping us profiling TestNG.
+
+=== TESTIMONIES
+
+A great product is nothing without testimonies, so here is what people have to say about TestNG:
+
+[quote, A buddy]
+
+____
+"It's a lot of fun.  Not as fun as Seinfeld, but more fun than Chris Rock on a bad day"
+____
+
+[quote, Someone I met at the cafeteria]
+____
+"Are you going to eat your dessert?"
+____
+
+[quote, A skateboarder]
+____
+"Rock on, dude"
+____
+
+[quote, A scared contractor]
+____
+"Okay, I'll try it.  Can I have my laptop back now"?
+____
+
+[quote, Some random person who should mind their own business]
+____
+"Cedric, stop talking to him, he's sleeping"
+____

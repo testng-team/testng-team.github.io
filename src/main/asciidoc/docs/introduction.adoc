@@ -1,0 +1,26 @@
+=== Introduction
+
+TestNG is a testing framework designed to simplify a broad range of testing needs, from unit testing (testing a class in isolation of the others) to integration testing (testing entire systems made of several classes, several packages and even several external frameworks, such as application servers).
+
+Writing a test is typically a three-step process:
+
+* Write the business logic of your test and insert xref:annotations.adoc[TestNG annotations] in your code.
+* Add the information about your test (e.g. the class name, the groups you wish to run, etc...) in a testng.xml file or in `build.xml`.
+* xref:../ant.adoc[Run TestNG].
+
+You can find a quick example on the xref:../welcome.adoc[Welcome page].
+
+The concepts used in this documentation are as follows:
+
+* A suite is represented by one XML file. It can contain one or more tests and is defined by the `<suite>` tag.
+* A test is represented by <test> and can contain one or more TestNG classes.
+* A TestNG class is a Java class that contains at least one TestNG annotation. It is represented by the <class> tag and can contain one or more test methods.
+* A test method is a Java method annotated by `@Test` in your source.
+
+A TestNG test can be configured by `@BeforeXXX` and `@AfterXXX` annotations which allows to perform some Java logic before and after a certain point, these points being either of the items listed above.
+
+The rest of this manual will explain the following:
+
+* A list of all the annotations with a brief explanation. This will give you an idea of the various functionalities offered by TestNG but you will probably want to consult the section dedicated to each of these annotations to learn the details.
+* A description of the testng.xml file, its syntax and what you can specify in it.
+* A detailed list of the various features and how to use them with a combination of annotations and testng.xml.

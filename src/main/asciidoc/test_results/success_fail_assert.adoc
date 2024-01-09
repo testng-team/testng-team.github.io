@@ -1,0 +1,31 @@
+=== Success, failure and assert
+
+A test is considered successful if it completed without throwing any exception or if  it threw an exception that was expected (see the documentation for the expectedExceptions attribute found on the `@Test` annotation).
+
+Your test methods will typically be made of calls that can throw an exception, or of various assertions (using the Java `assert` keyword).
+An `assert` failing will trigger an `AssertionError`, which in turn will mark the method as failed (remember to use `-ea` on the JVM if you are not seeing the assertion errors).
+
+Here is an example test method:
+
+[source, java]
+
+----
+@Test
+public void verifyLastName() {
+  assert "Beust".equals(m_lastName) : "Expected name Beust, for" + m_lastName;
+}
+----
+
+TestNG also include JUnit's Assert class, which lets you perform assertions on complex objects:
+
+[source, java]
+
+----
+import static org.testng.AssertJUnit.*;
+//...
+@Test
+public void verify() {
+  assertEquals("Beust", m_lastName);
+}
+----
+Note that the above code use a static import in order to be able to use the `assertEquals` method without having to prefix it by its class.

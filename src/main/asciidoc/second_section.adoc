@@ -1,0 +1,25 @@
+[[second-section]]
+== Second section
+
+This is second section
+
+Here's a sample suite xml file
+
+:highlightjs-languages: java, shell, xml
+
+[source,xml]
+----
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<!--<suite name="2980_suite" verbose="2" parent-module="com.rationaleemotions.github.issue2890.MyModuleFactory">-->
+<suite name="2980_suite" verbose="2" parallel="methods">
+    <test name="2980_test">
+        <classes>
+            <class name="com.rationaleemotions.DataDrivenTestCase"/>
+        </classes>
+    </test>
+</suite>
+----
+
+=== inner section
+
+This is a nested section inside the second section

@@ -1,0 +1,38 @@
+== TestNG Maven plug-ins
+
+Maven 2 supports TestNG out of the box without the need to download any additional plugins (other than TestNG itself). It is recommended that you use version 2.4 or above of the Surefire plugin (this is the case in all recent versions of Maven).
+
+You can find the full instructions on the https://maven.apache.org/plugins/maven-surefire-plugin/[Maven Surefire Plugin] website. There are also https://maven.apache.org/plugins/maven-surefire-plugin/examples/testng.html[TestNG-specific instructions].
+
+=== Specifying your pom.xml
+The dependency in your project should look like the following:
+
+TIP: For JDK-8 users
+
+[source, xml]
+
+----
+<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>7.5.1</version>
+    <scope>test</scope>
+</dependency>
+----
+
+TIP: For JDK-11 users
+
+[source, xml]
+
+----
+<dependency>
+    <groupId>org.testng</groupId>
+    <artifactId>testng</artifactId>
+    <version>7.9.0</version>
+    <scope>test</scope>
+</dependency>
+----
+
+=== Sample reports
+
+link:samplereports/index.html[]

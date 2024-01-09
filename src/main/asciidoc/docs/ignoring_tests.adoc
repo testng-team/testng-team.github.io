@@ -1,0 +1,49 @@
+=== Ignoring tests
+
+TestNG lets you ignore all the @Test methods :
+
+* In a class (or)
+* In a particular package (or)
+* In a package and all of its child packages
+
+using the new annotation `@Ignore`.
+
+When used at the method level `@Ignore` annotation is functionally equivalent to `@Test(enabled=false)`.
+
+Here's a sample that shows how to ignore all tests within a class.
+
+[source, java]
+
+----
+import org.testng.annotations.Ignore;
+import org.testng.annotations.Test;
+
+@Ignore
+public class TestcaseSample {
+
+    @Test
+    public void testMethod1() {
+    }
+
+    @Test
+    public void testMethod2() {
+    }
+}
+----
+
+The `@Ignore` annotation has a higher priority than individual `@Test` method annotations. When `@Ignore` is placed on a class, all the tests in that class will be disabled.
+
+To ignore all tests in a particular package, you just need to create `package-info.java` and add the `@Ignore` annotation to it. Here's a sample :
+
+[source, java]
+
+----
+@Ignore
+package com.testng.master;
+
+import org.testng.annotations.Ignore;
+----
+
+This causes all the `@Test` methods to be ignored in the package `com.testng.master` and all of its sub-packages.
+
+

@@ -1,0 +1,292 @@
+=== Parameters
+
+ TestNG allows you to pass an arbitrary number of parameters to each of your tests using the `@Parameters` annotation.
+
+There are three ways to set these parameters
+
+* The testng.xml file
+* Programmatically
+* Java system properties
+
+==== Parameters from testng.xml
+
+If you are using simple values for your parameters, you can specify them in your `testng.xml`:
+
+[source, java]
+
+----
+@Parameters({ "first-name" })
+@Test
+public void testSingleString(String firstName) {
+  System.out.println("Invoked testString " + firstName);
+  assert "Cedric".equals(firstName);
+}
+----
+
+In this code, we specify that the parameter `firstName` of your Java method should receive the value of the XML parameter called `first-name`.  This XML parameter is defined in `testng.xml`:
+
+[source, xml]
+
+----
+<suite name="My suite">
+  <parameter name="first-name"  value="Cedric"/>
+  <test name="Simple example">
+  <!-- ... -->
+  </test>
+</suite>
+----
+
+The same technique can be used for `@Before`/`@After` and `@Factory` annotations:
+
+[source, java]
+
+----
+@Parameters({ "datasource", "jdbc-driver" })
+@BeforeMethod
+public void beforeTest(String ds, String driver) {
+  m_dataSource =  buildDataSource();    // look up the value of datasource
+  m_jdbcDriver = driver;
+}
+----
+
+This time, the two Java parameter `ds` and `driver` will receive the value given to the properties `datasource` and `jdbc-driver` respectively.
+
+Parameters can be declared optional with the {javadocs-base-url}/org/testng/annotations/Optional.html[org.testng.annotations.Optional] annotation:
+
+[source, java]
+
+----
+@Parameters("db")
+@Test
+public void testNonExistentParameter(@Optional("mysql") String db) {
+    //more code
+}
+----
+
+If no parameter named "db" is found in your `testng.xml` file, your test method will receive the default value specified inside the `@Optional` annotation: "mysql".
+
+The `@Parameters` annotation can be placed at the following locations:
+
+* On any method that already has a `@Test`, `@Before`/`@After` or `@Factory` annotation.
+* On at most one constructor of your test class.  In this case, TestNG will invoke this particular constructor with the parameters initialized to the values specified in `testng.xml` whenever it needs to instantiate your test class.  This feature can be used to initialize fields inside your classes to values that will then be used by your test methods.
+
+
+**Important:**
+
+* The XML parameters are mapped to the Java parameters in the same order as they are found in the annotation, and TestNG will issue an error if the numbers don't match.
+
+* Parameters are scoped. In testng.xml, you can declare them either under:
+** `<suite>` tag or
+** `<test>` tag or
+** `<class>` tag or
+** `<methods>` tag.
+* The order of precedence (lowest to highest) in terms of resolving values for parameters with same names is
+
+[source, bash]
+
+----
+<suite> --> <test> --> <class> --> <methods>
+----
+
+* If two parameters have the same name, it's the one defined in `<methods>` that has precedence. This is convenient if you need to specify a parameter applicable to all your tests and override its value only for certain test method.
+
+==== Parameters with DataProviders
+
+Specifying parameters in testng.xml might not be sufficient if you need to pass complex parameters, or parameters that need to be created from Java (complex objects, objects read from a property file or a database, etc...). In this case, you can use a Data Provider to supply the values you need to test.  A Data Provider is a method on your class that returns an array of array of objects.  This method is annotated with `@DataProvider`:
+
+[source, java]
+
+----
+//This method will provide data to any test method that declares that its Data Provider
+//is named "test1"
+@DataProvider(name = "test1")
+public Object[][] createData1() {
+ return new Object[][] {
+   { "Cedric", 36 },
+   { "Anne", 37},
+ };
+}
+
+//This test method declares that its data should be supplied by the Data Provider
+//named "test1"
+@Test(dataProvider = "test1")
+public void verifyData1(String n1, Integer n2) {
+ System.out.println(n1 + " " + n2);
+}
+----
+
+will print
+
+[source, bash]
+
+----
+Cedric 36
+Anne 37
+----
+
+A `@Test` method specifies its Data Provider with the `dataProvider` attribute.  This name must correspond to a method on the same class annotated with `@DataProvider(name="...")` with a matching name.
+
+By default, the data provider will be looked for in the current test class or one of its base classes. If you want to put your data provider in a different class, it needs to be a static method or a class with a non-arg constructor, and you specify the class where it can be found in the `dataProviderClass` attribute:
+
+[source, java]
+
+----
+public class StaticProvider {
+  @DataProvider(name = "create")
+  public static Object[][] createData() {
+    return new Object[][] {
+      new Object[] { 42 }
+    };
+  }
+}
+
+public class MyTest {
+  @Test(dataProvider = "create", dataProviderClass = StaticProvider.class)
+  public void test(Integer n) {
+    // ...
+  }
+}
+----
+
+The data provider supports injection too. TestNG will use the test context for the injection. The Data Provider method can return one of the following types:
+
+* An array of array of objects (`Object[][]`) where the first dimension's size is the number of times the test method will be invoked and the second dimension size contains an array of objects that must be compatible with the parameter types of the test method. This is the case illustrated by the example above.
+* An `Iterator<Object[]>`. The only difference with `Object[][]` is that an `Iterator` lets you create your test data lazily. TestNG will invoke the iterator and then the test method with the parameters returned by this iterator one by one. This is particularly useful if you have a lot of parameter sets to pass to the method and you don't want to create all of them upfront.
+** An array of objects (`Object[]`). This is similar to `Iterator<Object[]>` but causes the test method to be invoked once for each element of the source array.
+** An `Iterator<Object>>`. Lazy alternative of `Object[]`. Causes the test method to be invoked once for each element of the iterator.
+
+It must be said that return type is not limited to Object only thus `MyCustomData[][]` or `Iterator<Supplier>` are also possible. The only limitation is that in case of iterator its parameter type can't be explicitly parameterized itself. Here is an example of this feature:
+
+[source, java]
+
+----
+@DataProvider(name = "test1")
+public Iterator<Object[]> createData() {
+  return new MyIterator(DATA);
+}
+----
+
+Using `MyCustomData[]` as a return type
+
+[source, java]
+
+----
+@DataProvider(name = "test1")
+public MyCustomData[] createData() {
+  return new MyCustomData[]{ new MyCustomData() };
+}
+----
+
+Or its lazy option with `Iterator<MyCustomData>`
+
+[source, java]
+
+----
+@DataProvider(name = "test1")
+public Iterator<MyCustomData> createData() {
+  return Arrays.asList(new MyCustomData()).iterator();
+}
+----
+
+Parameter type (`Stream`) of `Iterator` can't be explicitly parametrized
+
+[source, java]
+
+----
+@DataProvider(name = "test1")
+public Iterator<Stream> createData() {
+  return Arrays.asList(Stream.of("a", "b", "c")).iterator();
+}
+----
+
+If you declare your `@DataProvider` as taking a `java.lang.reflect.Method` as first parameter, TestNG will pass the current test method for this first parameter. This is particularly useful when several test methods use the same `@DataProvider` and you want it to return different values depending on which test method it is supplying data for.
+
+For example, the following code prints the name of the test method inside its `@DataProvider`:
+
+
+[source, java]
+
+----
+@DataProvider(name = "dp")
+public Object[][] createData(Method m) {
+  System.out.println(m.getName());  // print test method name
+  return new Object[][] { new Object[] { "Cedric" }};
+}
+
+@Test(dataProvider = "dp")
+public void test1(String s) {
+}
+
+@Test(dataProvider = "dp")
+public void test2(String s) {
+}
+----
+
+and will therefore display:
+
+[source, bash]
+
+----
+test1
+test2
+----
+
+Data providers can run in parallel with the attribute parallel:
+
+[source, java]
+
+----
+@DataProvider(parallel = true)
+public Object[][] getTestData() {
+// ...
+}
+----
+
+Each of the parallel data providers running from an XML file runs with a thread pool which has a size of `10` by default. You can modify this value in the `<suite>` tag of your XML file:
+
+[source, xml]
+
+----
+<suite name="Suite1" data-provider-thread-count="20" >
+<!-- content ignored for brevity -->
+</suite>
+----
+
+If you want to run a few specific data providers in a different thread pool, you need to run them from a different XML file.
+
+==== Controlling ThreadPool Usage
+
+Starting from TestNG `7.9.0`, there are some additional ways in which the thread-pools that run the parallel tests can be controlled. For these new features to be consumed, update your suite file to use the `testng-1.1.dtd` (as seen below) so that your IDE can provide you with autocompletion:
+
+
+[source, xml]
+
+----
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.1.dtd" >
+<suite name="sample">
+<!-- content ignored for brevity -->
+</suite>
+----
+
+* `share-thread-pool-for-data-providers` - When this attribute is set to true at the suite level, TestNG will start using a shared thread pool for all the data driven tests in a given `<suite>`. The size of the thread pool is determined using the attribute `data-provider-thread-count`. This attribute has a default value of `false`.
+* `use-global-thread-pool` - When this attribute is set to true at the suite level, TestNG will start using a common thread pool for running both your regular test methods and data driven test methods. The size of the thread pool is determined using the attribute thread-count. This attribute has a default value of `false`.
+
+==== Parameters from System Properties
+
+TestNG can be passed parameters on the command line of the Java Virtual Machine using system properties (`-D`). Parameters passed in this way are not required to be pre-defined in `testng.xml`, but will override any parameters defined there.
+
+[source, bash]
+
+----
+java -Dfirst-name=Cedrick -Dlast-name="von Braun" org.testng.TestNG testng.xml
+----
+
+The Java system property variable is a string with no spaces that represents the name of the property. The value variable is a string that represents the value of the property. If the value is a string with spaces, then enclose it in quotation marks.
+
+TIP: In TestNG 6.x parameters defined in testng.xml could not be overwritten by system properties
+
+===== Parameters in reports
+
+Parameters used to invoke your test methods are shown in the HTML reports generated by TestNG. Here is an example:
+
+image::parameters.png[]

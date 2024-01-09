@@ -1,0 +1,188 @@
+== TestNG Documentation
+
+include::docs/introduction.adoc[]
+
+include::docs/annotations.adoc[]
+
+include::docs/testng_xml.adoc[]
+
+include::docs/running_testng.adoc[]
+
+include::docs/test_methods_classes_groups.adoc[]
+
+include::docs/parameters.adoc[]
+
+include::docs/dependencies.adoc[]
+
+include::docs/factories.adoc[]
+
+include::docs/class_level_annotations.adoc[]
+
+include::docs/ignoring_tests.adoc[]
+
+include::docs/parallelism_and_timeouts.adoc[]
+
+include::docs/rerunning_failed_tests.adoc[]
+
+include::docs/junit_tests.adoc[]
+
+include::docs/run_testng_via_code.adoc[]
+
+include::docs/beanshell.adoc[]
+
+include::docs/annotation_transformers.adoc[]
+
+include::docs/method_interceptors.adoc[]
+
+include::docs/testng_listeners.adoc[]
+
+include::docs/dependency_injection.adoc[]
+
+include::docs/method_invocations.adoc[]
+
+include::docs/ihookable.adoc[]
+
+include::docs/altering_suites.adoc[]
+
+include::test_results.adoc[]
+
+include::yaml.adoc[]
+
+== Dry Run for your tests
+
+When launched in dry run mode, TestNG will display a list of the test methods that would be invoked but without actually calling them.
+
+You can enable dry run mode for TestNG by passing the JVM argument `-Dtestng.mode.dryrun=true`
+
+== JVM Arguments in TestNG
+
+|===
+|JVM Argument |Comment |Default value
+
+|`testng.favor.custom.thread-pool.executor`
+|A Boolean indicating whether TestNG should resort to going back to using the custom implementation for managing Thread pools. If this flag is enabled, then thread pool sharing between data driven tests and thread pool sharing between regular and data driven tests WILL NOT work properly.
+|false
+
+|`testng.thread.affinity`
+|A Boolean indicating whether TestNG should resort to running dependent methods on the same thread as the upstream methods.
+|false
+
+|`testng.mode.dryrun`
+|A Boolean indicating whether TestNG should simulate a real execution. In this mode the test methods are not actually executed.
+|false
+
+|`testng.test.classpath`
+|A String that represents a list of zip files or jars that need to be added to the TestNG classpath for it to retrieve test classes for execution.
+|`""`
+
+|`skip.caller.clsLoader`
+|A Boolean indicating whether TestNG should skip using the current ClassLoader for loading classes.
+|false
+
+|`testng.dtd.http`
+|A Boolean indicating whether TestNG should load DTDs from http endpoints.
+|false
+
+|`testng.show.stack.frames`
+|A Boolean indicating whether TestNG should show detailed stack traces in reports.
+|false
+
+|`testng.memory.friendly`
+|A Boolean indicating whether TestNG should be memory cognizant and use lightweight test method representations.
+|false
+
+|`testng.strict.parallel`
+|A Boolean indicating that TestNG should attempt to start all test methods simultaneously when there are more than one test tags and parallelism has been set to methods.
+|false
+
+|`emailable.report2.name`
+|A String indicating the file name into which the emailable reports are to be written into.
+|`emailable-report.html`
+
+|`oldTestngEmailableReporter`
+|A Boolean indicating whether TestNG should use the old emailable report listener for building simple html emailable report.
+|false
+
+|`noEmailableReporter`
+|A Boolean indicating whether TestNG should use the NEW emailable report listener for building simple html emailable report.
+|true
+
+|`testng.report.xml.name`
+|A String indicating the file name into which the xml reports are to be written into.
+|`testng-results.xml`
+
+|`fileStringBuffer`
+|A Boolean indicating whether TestNG should output verbose logs when working with very large text data.
+|false
+
+|`stacktrace.success.output.level`
+a|
+A String indicating the log levels to be included in the XML Reports (Valid values include :
+
+* `NONE` (no stacktraces),
+* `SHORT` (short stacktrace),
+* `FULL` (full stacktrace),
+* `BOTH` (both short and full stacktrace).
+|FULL
+
+|===
+
+== Logging framework integration in TestNG
+
+Starting from TestNG version `7.5` TestNG makes use of the logging facade provided by Slf4j.
+TestNG by default does not bring in any explicit Slf4j facade implementation.
+
+To control the logs being output by TestNG internals, please add a dependency on any suitable Slf4j implementation (Native Or Wrapped implementation) from https://www.slf4j.org/docs.html[here]
+
+Prior to TestNG version 7.5, TestNG supports logging via a custom logging framework similar to `Log4j`. To control logging, add a resource named `log4testng.properties` to your classpath.
+
+The logging levels are:
+
+* `TRACE`
+* `DEBUG`
+* `INFO`
+* `WARN`
+* `ERROR` and
+* `FATAL`.
+
+The Logging framework has the following characteristics:
+
+* All logging is done using System.out (for levels < ERROR) or System.err. There is no way to specify Appenders.
+* There is no way to control logging programmatically.
+* The `log4testng.properties` resource is searched in the classpath on the first call to the logging API. If it is not present, logging defaults to the `WARN` level.
+
+The property file contains lines in the following format:
+
+[source, properties]
+
+----
+# log4testng will log its own behavior (generally used for debugging this package only).
+log4testng.debug=true
+
+# Specifies the root Loggers logging level. Will log DEBUG level and above
+log4testng.rootLogger=DEBUG
+
+# The org.testng.reporters.EmailableReporter Logger will log TRACE level and above
+log4testng.logger.org.testng.reporters.EmailableReporter=TRACE
+
+# All Logger in packages below org.testng will log WARN level and above
+log4testng.logger.org.testng=WARN
+----
+
+In your source files you will typically instantiate and use loggers this ways:
+
+[source, java]
+
+----
+import org.testng.log4testng.Logger;
+
+class ThisClass {
+  private static final Logger LOGGER = Logger.getLogger(ThisClass.class);
+
+  ...
+  LOGGER.debug("entering myMethod()");
+  ...
+  LOGGER.warn("unknown file: " + filename);
+  ...
+  LOGGER.error("Unexpected error", exception);
+----

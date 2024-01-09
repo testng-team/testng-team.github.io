@@ -1,0 +1,67 @@
+== YAML
+
+TestNG supports https://www.yaml.org/[YAML] as an alternate way of specifying your suite file. For example, the following XML file:
+
+[source, xml]
+
+----
+<suite name="SingleSuite" verbose="2" thread-count="4">
+
+  <parameter name="n" value="42" />
+
+  <test name="Regression2">
+    <groups>
+      <run>
+        <exclude name="broken" />
+      </run>
+    </groups>
+
+    <classes>
+      <class name="test.listeners.ResultEndMillisTest" />
+    </classes>
+  </test>
+</suite>
+----
+
+and here is its YAML version:
+
+[source, yaml]
+
+----
+name: SingleSuite
+threadCount: 4
+parameters: { n: 42 }
+
+tests:
+  - name: Regression2
+    parameters: { count: 10 }
+    excludedGroups: [ broken ]
+    classes:
+      - test.listeners.ResultEndMillisTest
+----
+
+Here is TestNG's own https://github.com/testng-team/testng/blob/master/testng-core/src/test/resources/testng.xml[suite file], and its https://github.com/testng-team/testng/blob/master/testng-core/src/test/resources/testng.yaml[YAML counterpart].
+
+You might find the YAML file format easier to read and to maintain. YAML files are also recognized by the TestNG Eclipse plug-in. You can find more information about YAML and TestNG in https://beust.com/weblog/2010/08/15/yaml-the-forgotten-victim-of-the-format-wars/[this blog post].
+
+WARNING: TestNG by default does not bring in the YAML related library into your classpath. So depending upon your build system (Gradle/Maven) you need to add an explicit reference to YAML library in your build file.
+
+For e.g, If you were using Maven, you would need to add a dependency as below into your pom.xml file:
+
+[source, xml]
+
+----
+<dependency>
+  <groupid>org.yaml</groupid>
+  <artifactid>snakeyaml</artifactid>
+  <version>1.23</version>
+</dependency>
+----
+
+Or if you were using Gradle, you would add a dependency as below into your build.gradle file:
+
+[source, groovy]
+
+----
+compile group: 'org.yaml', name: 'snakeyaml', version: '1.23'
+----

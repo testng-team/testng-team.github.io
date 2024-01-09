@@ -1,0 +1,3 @@
+== Javadocs
+
+Please refer {javadocs-base-url}/index.html[here] for detailed javadocs.

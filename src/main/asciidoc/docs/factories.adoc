@@ -1,0 +1,143 @@
+=== Factories
+
+Factories allow you to create tests dynamically. For example, imagine you want to create a test method that will access a page on a website several times, and you want to invoke it with different values:
+
+[source, java]
+
+----
+public class TestWebServer {
+  @Test(parameters = { "number-of-times" })
+  public void accessPage(int numberOfTimes) {
+    while (numberOfTimes-- > 0) {
+     // access the web page
+    }
+  }
+}
+----
+
+[source, xml]
+
+----
+<test name="T1">
+  <parameter name="number-of-times" value="10"/>
+  <classes>
+    <class name= "TestWebServer" />
+  </classes>
+</test>
+
+<test name="T2">
+  <parameter name="number-of-times" value="20"/>
+  <classes>
+    <class name= "TestWebServer"/>
+  </classes>
+</test>
+
+<test name="T3">
+  <parameter name="number-of-times" value="30"/>
+  <classes>
+    <class name= "TestWebServer"/>
+  </classes>
+</test>
+----
+
+This can become quickly impossible to manage, so instead, you should use a factory:
+
+[source, java]
+
+----
+public class WebTestFactory {
+  @Factory
+  public Object[] createInstances() {
+   Object[] result = new Object[10];
+   for (int i = 0; i < 10; i++) {
+      result[i] = new WebTest(i * 10);
+    }
+    return result;
+  }
+}
+----
+
+and the new test class is now:
+
+[source, java]
+
+----
+public class WebTest {
+  private int m_numberOfTimes;
+  public WebTest(int numberOfTimes) {
+    m_numberOfTimes = numberOfTimes;
+  }
+
+  @Test
+  public void testServer() {
+   for (int i = 0; i < m_numberOfTimes; i++) {
+     // access the web page
+    }
+  }
+}
+----
+
+Your `testng.xml` only needs to reference the class that contains the factory method, since the test instances themselves will be created at runtime:
+
+[source, xml]
+
+----
+<class name="WebTestFactory" />
+----
+
+Or, if building a test suite instance programmatically, you can add the factory in the same manner as for tests:
+
+[source, java]
+
+----
+TestNG testNG = new TestNG();
+testNG.setTestClasses(WebTestFactory.class);
+testNG.run();
+----
+
+The factory method can receive parameters just like `@Test` and `@Before`/`@After` and it must return `Object[]`.  The objects returned can be of any class (not necessarily the same class as the factory class) and they don't even need to contain TestNG annotations (in which case they will be ignored by TestNG).
+
+Factories can also be used with data providers, and you can leverage this functionality by putting the `@Factory` annotation either on a regular method or on a constructor. Here is an example of a constructor factory:
+
+[source, java]
+
+----
+@Factory(dataProvider = "dp")
+public FactoryDataProviderSampleTest(int n) {
+  super(n);
+}
+
+@DataProvider
+static public Object[][] dp() {
+  return new Object[][] {
+    new Object[] { 41 },
+    new Object[] { 42 },
+  };
+}
+----
+
+The example will make TestNG create two test classes, on with the constructor invoked with the value `41` and the other with `42`.
+
+Optionally, you can specify indices for the data provider when using it with `@Factory` annotation.
+When indices are specified, only the elements at the specified indices are passed as parameters for the factory annotated constructor.
+
+[source, java]
+
+----
+@Factory(dataProvider = "dp", indices = {1, 3})
+public ExampleTestCase(String text) {
+  this.i = i;
+}
+
+@DataProvider(name = "dp")
+public static Object[] getData() {
+  return new Object[]{
+      "Java", "Kotlin", "Golang", "Rust"
+  };
+}
+----
+
+In the above example, the values Kotlin (2nd element) and Rust (4th element) are passed as parameters to the `@Factory` annotated constructor and totally 2 `ExampleTestCase` instances are created.
+
+
+

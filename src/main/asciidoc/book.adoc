@@ -1,0 +1,33 @@
+== The TestNG TextBook: Next Generation Java Testing
+
+image::book-cover.jpg[]
+
+Our book is now available from https://www.amazon.com/Next-Generation-Java-Testing-Advanced/dp/0321503104/ref=pd_bbs_sr_1/104-7105897-1187923?ie=UTF8&s=books&qid=1193417110&sr=8-1[Amazon] and various other retail stores (check out the xref:book-toc.adoc[table of contents]).
+
+=== Book Description
+
+Enterprise Java developers must achieve broader, deeper test coverage, going beyond unit testing to implement functional and integration testing with systematic acceptance. *Next Generation Java Testing* introduces breakthrough Java testing techniques and TestNG, a powerful open source Java testing platform.
+
+*Cédric Beust*, TestNG's creator, and leading Java developer *Hani Suleiman*, present powerful, flexible testing patterns that will work with virtually any testing tool, framework, or language. They show how to leverage key Java platform improvements designed to facilitate effective testing, such as dependency injection and mock objects. They also thoroughly introduce TestNG, demonstrating how it overcomes the limitations of older frameworks and enables new techniques, making it far easier to test today's complex software systems.
+
+Pragmatic and results-focused, *Next Generation Java Testing* will help Java developers build more robust! code for today's mission-critical environments.
+
+This book
+
+* Illuminates the tradeoffs associated with testing, so you can make better decisions about what and how to test
+* Introduces TestNG, explains its goals and features, and shows how to apply them in real-world environments
+* Shows how to integrate TestNG with your existing code, development frameworks, and software libraries
+* Demonstrates how to test crucial code features, such as encapsulation, state sharing, scopes, and thread safety
+* Shows how to test application elements, including JavaEE APIs, databases, Web pages, and XML files
+* Presents advanced techniques: testing partial failures, factories, dependent testing, remote invocation, cluster-based test farms, and more
+* Walks through installing and using TestNG plug-ins for Eclipse, and IDEA
+* Contains extensive code examples
+
+Whether you use TestNG, JUnit, or another testing framework, the ! testing design patterns presented in this book will show you how to im prove your tests by giving you concrete advice on how to make your code and your design more testable.
+
+
+=== About the Author
+
+*Cédric Beust*, a senior software engineer at Google, is an active member of the Java Community Process who has been extensively involved in the development of the latest Java release. He is the creator and main contributor to the TestNG project.
+
+*Hani Suleiman* is CTO of Formicary, a consulting and portal company specializing in financial applications. He is one of two individual members who has been elected to the Executive Committee of the Java Community Process.

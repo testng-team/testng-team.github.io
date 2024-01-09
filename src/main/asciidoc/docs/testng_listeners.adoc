@@ -1,0 +1,164 @@
+=== TestNG Listeners
+
+There are several interfaces that allow you to modify TestNG's behavior. These interfaces are broadly called "TestNG Listeners". Here are a few listeners:
+
+* IAlterSuiteListener (xref:altering_suites.adoc[doc], https://javadoc.io/static/org.testng/testng/latest/org/testng/IAlterSuiteListener.html[javadoc])
+* IAnnotationTransformer (xref:annotation_transformers.adoc[doc], https://javadoc.io/static/org.testng/testng/latest/org/testng/IAnnotationTransformer.html[javadoc])
+* IConfigurationListener(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurationListener.html[javadoc])
+* IDataProviderInterceptor(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderInterceptor.html[javadoc])
+* IDataProviderListener(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderListener.html[javadoc])
+* IExecutionListener(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionListener.html[javadoc])
+* IExecutionVisualiser(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionVisualiser.html[javadoc])
+* IHookable (xref:ihookable.adoc[doc], https://javadoc.io/static/org.testng/testng/latest/org/testng/IHookable.html[javadoc])
+* IConfigurable(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurable.html[javadoc])
+* IInvokedMethodListener (doc, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])
+* IMethodInterceptor (xref:method_interceptors.adoc[doc], {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])
+* IReporter (xref:../test_results/logging_and_results.adoc#_logging_reporters[doc], {javadocs-base-url}/org/testng/IReporter.html[javadoc])
+* ISuiteListener (doc, {javadocs-base-url}/org/testng/ISuiteListener.html[javadoc])
+* ITestListener (xref:../test_results/logging_and_results#_logging_listeners[doc], {javadocs-base-url}/org/testng/ITestListener.html[javadoc])
+
+==== Specifying listeners with testng.xml or in Java
+
+Here is how you can define listeners in your `testng.xml` file:
+
+[source, xml]
+
+----
+<suite>
+  <listeners>
+    <listener class-name="com.example.MyListener" />
+    <listener class-name="com.example.MyMethodInterceptor" />
+  </listeners>
+<!-- rest of the contents omitted for brevity -->
+</suite>
+----
+
+Or if you prefer to define these listeners in Java:
+
+[source, java]
+
+----
+@Listeners({ com.example.MyListener.class, com.example.MyMethodInterceptor.class })
+public class MyTest {
+  // ...
+}
+----
+
+The `@Listeners` annotation can contain any class that extends `org.testng.ITestNGListener` except `IAnnotationTransformer`. The reason is that these listeners need to be known very early in the process so that TestNG can use them to rewrite your annotations, therefore you need to specify these listeners in your `testng.xml` file.
+
+Note that the `@Listeners` annotation will apply to your entire suite file, just as if you had specified it in a testng.xml file. If you want to restrict its scope (for example, only running on the current class), the code in your listener could first check the test method that's about to run and decide what to do then. Here's how it can be done.
+
+* First define a new custom annotation that can be used to specify this restriction:
+
+[source, java]
+
+----
+@Retention(RetentionPolicy.RUNTIME)
+@Target ({ElementType.TYPE})
+public @interface DisableListener {}
+----
+
+* Add an edit check as below within your regular listeners:
+
+[source, java]
+
+----
+public void beforeInvocation(IInvokedMethod iInvokedMethod, ITestResult iTestResult) {
+  ConstructorOrMethod consOrMethod =iInvokedMethod.getTestMethod().getConstructorOrMethod();
+  DisableListener disable = consOrMethod.getMethod().getDeclaringClass().getAnnotation(DisableListener.class);
+  if (disable != null) {
+    return;
+  }
+  // else resume your normal operations
+}
+----
+
+* Annotate test classes wherein the listener is not to be invoked:
+
+[source,java]
+
+----
+@DisableListener
+@Listeners({ com.example.MyListener.class, com.example.MyMethodInterceptor.class })
+public class MyTest {
+  // ...
+}
+----
+
+[#_specifying_listeners_with_serviceloader]
+==== Specifying listeners with ServiceLoader
+
+Finally, the JDK offers a very elegant mechanism to specify implementations of interfaces on the class path via the https://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html[ServiceLoader] class.
+
+With ServiceLoader, all you need to do is create a jar file that contains your listener(s) and a few configuration files, put that jar file on the classpath when you run TestNG and TestNG will automatically find them.
+
+Here is a concrete example of how it works.
+
+Let's start by creating a listener (any TestNG listener should work):
+
+[source,java]
+
+----
+package test.tmp;
+
+public class TmpSuiteListener implements ISuiteListener {
+  @Override
+  public void onFinish(ISuite suite) {
+    System.out.println("Finishing");
+  }
+
+  @Override
+  public void onStart(ISuite suite) {
+    System.out.println("Starting");
+  }
+}
+----
+
+Compile this file, then create a file at the location `META-INF/services/org.testng.ITestNGListener`, which will name the implementation(s) you want for this interface.
+
+You should end up with the following directory structure, with only two files:
+
+[source, bash]
+
+----
+$ tree
+|____META-INF
+| |____services
+| | |____org.testng.ITestNGListener
+|____test
+| |____tmp
+| | |____TmpSuiteListener.class
+
+$ cat META-INF/services/org.testng.ITestNGListener
+test.tmp.TmpSuiteListener
+----
+
+Create a jar of this directory:
+
+[source, bash]
+
+----
+$ jar cvf ../sl.jar .
+added manifest
+ignoring entry META-INF/
+adding: META-INF/services/(in = 0) (out= 0)(stored 0%)
+adding: META-INF/services/org.testng.ITestNGListener(in = 26) (out= 28)(deflated -7%)
+adding: test/(in = 0) (out= 0)(stored 0%)
+adding: test/tmp/(in = 0) (out= 0)(stored 0%)
+adding: test/tmp/TmpSuiteListener.class(in = 849) (out= 470)(deflated 44%)
+----
+
+Next, put this jar file on your classpath when you invoke TestNG:
+
+[source, bash]
+
+----
+$ java -classpath sl.jar:testng.jar org.testng.TestNG testng-single.yaml
+Starting
+f2 11 2
+PASSED: f2("2")
+Finishing
+----
+
+This mechanism allows you to apply the same set of listeners to an entire organization just by adding a jar file to the classpath, instead of asking every single developer to remember to specify these listeners in their `testng.xml` file.
+

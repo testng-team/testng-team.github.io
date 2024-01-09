@@ -1,0 +1,41 @@
+==== Annotation Transformers
+
+TestNG allows you to modify the content of all the annotations at runtime. This is especially useful if the annotations in the source code are right most of the time, but there are a few situations where you'd like to override their value.
+
+In order to achieve this, you need to use an Annotation Transformer.
+
+An Annotation Transformer is a class that implements {javadocs-base-url}/org/testng/IAnnotationTransformer.html[IAnnotationTransformer]
+
+Like all the other TestNG listeners, you can specify this class either on the command line or with ant:
+
+[source, bash]
+
+----
+java org.testng.TestNG -listener MyTransformer testng.xml
+----
+
+or programmatically:
+
+[source, java]
+
+----
+TestNG tng = new TestNG();
+tng.setAnnotationTransformer(new MyTransformer());
+// ...
+----
+
+When the method `transform()` is invoked, you can call any of the setters on the `ITestAnnotation` test parameter to alter its value before TestNG proceeds further.
+
+For example, here is how you would override the attribute invocationCount but only on the test method invoke() of one of your test classes:
+
+[source, java]
+
+----
+public class MyTransformer implements IAnnotationTransformer {
+  public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
+    if ("invoke".equals(testMethod.getName())) {
+      annotation.setInvocationCount(5);
+    }
+  }
+}
+----
