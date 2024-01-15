@@ -2,20 +2,20 @@
 
 There are several interfaces that allow you to modify TestNG's behavior. These interfaces are broadly called "TestNG Listeners". Here are a few listeners:
 
-* IAlterSuiteListener (xref:altering_suites.adoc[doc], https://javadoc.io/static/org.testng/testng/latest/org/testng/IAlterSuiteListener.html[javadoc])
-* IAnnotationTransformer (xref:annotation_transformers.adoc[doc], https://javadoc.io/static/org.testng/testng/latest/org/testng/IAnnotationTransformer.html[javadoc])
-* IConfigurationListener(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurationListener.html[javadoc])
-* IDataProviderInterceptor(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderInterceptor.html[javadoc])
-* IDataProviderListener(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IDataProviderListener.html[javadoc])
-* IExecutionListener(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionListener.html[javadoc])
-* IExecutionVisualiser(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IExecutionVisualiser.html[javadoc])
-* IHookable (xref:ihookable.adoc[doc], https://javadoc.io/static/org.testng/testng/latest/org/testng/IHookable.html[javadoc])
-* IConfigurable(doc, https://javadoc.io/static/org.testng/testng/latest/org/testng/IConfigurable.html[javadoc])
+* IAlterSuiteListener (xref:altering_suites.adoc[doc], {javadocs-base-url}/org/testng/IAlterSuiteListener.html[javadoc])
+* IAnnotationTransformer (xref:annotation_transformers.adoc[doc], {javadocs-base-url}/org/testng/IAnnotationTransformer.html[javadoc])
+* IConfigurationListener(doc, {javadocs-base-url}/org/testng/IConfigurationListener.html[javadoc])
+* IDataProviderInterceptor(doc, {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[javadoc])
+* IDataProviderListener(doc, {javadocs-base-url}/org/testng/IDataProviderListener.html[javadoc])
+* IExecutionListener(doc, {javadocs-base-url}/org/testng/IExecutionListener.html[javadoc])
+* IExecutionVisualiser(doc, {javadocs-base-url}/org/testng/IExecutionVisualiser.html[javadoc])
+* IHookable (xref:ihookable.adoc[doc], {javadocs-base-url}/org/testng/IHookable.html[javadoc])
+* IConfigurable(doc, {javadocs-base-url}/org/testng/IConfigurable.html[javadoc])
 * IInvokedMethodListener (doc, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])
 * IMethodInterceptor (xref:method_interceptors.adoc[doc], {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])
-* IReporter (xref:../test_results/logging_and_results.adoc#_logging_reporters[doc], {javadocs-base-url}/org/testng/IReporter.html[javadoc])
+* IReporter (xref:logging_and_results.adoc#_logging_reporters[doc], {javadocs-base-url}/org/testng/IReporter.html[javadoc])
 * ISuiteListener (doc, {javadocs-base-url}/org/testng/ISuiteListener.html[javadoc])
-* ITestListener (xref:../test_results/logging_and_results#_logging_listeners[doc], {javadocs-base-url}/org/testng/ITestListener.html[javadoc])
+* ITestListener (xref:logging_and_results.adoc#_logging_listeners[doc], {javadocs-base-url}/org/testng/ITestListener.html[javadoc])
 
 ==== Specifying listeners with testng.xml or in Java
 

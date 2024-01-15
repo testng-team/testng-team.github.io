@@ -1,17 +1,13 @@
 = TestNG Documentation
 :sectnums:
 :toc:
-:doctype: article
-:example-caption!:
 :toclevels: 5
 :toc-title: Table Of Contents
-:experimental:                                                      
 :description: TestNG user documentation
 :keywords: TestNG
 :imagesdir: ./img
 :docinfodir: ../../main/resources/docinfos
 :javadocs-base-url: https://javadoc.io/static/org.testng/testng/{version-label}
-:backend: html5
 :revnumber:
 
 include::welcome.adoc[]
