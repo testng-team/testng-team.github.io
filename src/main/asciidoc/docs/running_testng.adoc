@@ -26,7 +26,7 @@ Additionally, the following command-line switches are available:
 |Option |Argument |Documentation
 
 |`-configfailurepolicy`
-|`skip`|`continue`
+|`skip`,`continue`
 |Whether TestNG should continue to execute the remaining tests in the suite or skip them if an @Before* method fails. Default behavior is `skip`.
 
 |`-d`
@@ -50,7 +50,7 @@ Additionally, the following command-line switches are available:
 |Lets you specify your own test listeners. The classes need to implement `org.testng.ITestListener`
 
 |`-usedefaultlisteners`
-|`true`|`false`
+|`true`,`false`
 |Whether to use the default listeners
 
 |`-methods`
@@ -62,7 +62,7 @@ Additionally, the following command-line switches are available:
 |Lets you specify method selectors on the command line. For example: `com.example.Selector1:3,com.example.Selector2:2`
 
 |`-parallel`
-|`methods|tests|classes`
+|`methods,tests,classes`
 |If specified, sets the default mechanism used to determine how to use parallel threads when running tests. If not set, default mechanism is not to use parallel threads at all. This can be overridden in the suite definition.
 
 |`-reporter`
@@ -108,11 +108,11 @@ You can have as many occurrences of this option, one for each reporter that need
 |This attribute should contain the path to a valid XML file inside the test jar (e.g. `resources/testng.xml`). The default is `testng.xml`, which means a file called `testng.xml` at the root of the jar file. This option will be ignored unless `-testjar` is specified.
 
 |`-shareThreadPoolForDataProviders`
-|`true`|`false`
+|`true`,`false`
 |Indicates if TestNG should use a global shared thread-pool (at suite level) for running data driven tests. TestNG will consider the value set for the configuration parameter `-dataproviderthreadcount` as the size of the thread pool.
 
 |`-useGlobalThreadPool`
-|`true`|`false`
+|`true`,`false`
 |Indicates if TestNG should use a global shared thread-pool (at suite level) for running regular and data driven tests. TestNG will consider the value set for the configuration parameter `-threadcount` as the size of the thread pool.
 
 |`-log` (or) `-verbose`
@@ -120,11 +120,11 @@ You can have as many occurrences of this option, one for each reporter that need
 |Level of verbosity to be used when logging messages.
 
 |`-junit`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG run in JUnit mode.
 
 |`-mixed`
-|`true`|`false`
+|`true`,`false`
 |Mixed mode - autodetect the type of current test and run it with appropriate runner.
 
 |`-objectfactory`
@@ -132,11 +132,11 @@ You can have as many occurrences of this option, one for each reporter that need
 |Fully qualified class name that implements `org.testng.ITestObjectFactory` which can be used to create test class and listener instances.
 
 |`-ignoreMissedTestNames`
-|`true`|`false`
+|`true`,`false`
 |Ignore missed test names given by `-testnames` and continue to run existing tests, if any.
 
 |`-skipfailedinvocationcounts`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG skip failed invocation counts for data driven tests and tests driven by invocation counts.
 
 |`-testRunFactory`
@@ -148,11 +148,11 @@ You can have as many occurrences of this option, one for each reporter that need
 |Size of the thread pool to use to run suites.
 
 |`-randomizesuites`
-|`true`|`false`
+|`true`,`false`
 |Whether to run suites in same order as specified in XML or not.
 
 |`-alwaysrunlisteners`
-|`true`|`false`
+|`true`,`false`
 |Should method invocation listeners be run even for skipped methods.
 
 |`-dependencyinjectorfactory`
@@ -160,35 +160,35 @@ You can have as many occurrences of this option, one for each reporter that need
 |Fully qualified class name that implements org.testng.IInjectorFactory which can be used to handle with dependency injection.
 
 |`-failwheneverythingskipped'
-|`true`|`false`
+|`true`,`false`
 |Should TestNG fail execution if all tests were skipped and nothing was run.
 
 |`-spilistenerstoskip`
-|A comma seperated string that represents a fully qualified class name(s).
+|A comma separated string that represents a fully qualified class name(s).
 |Comma separated fully qualified class names of listeners that should be skipped from being wired in via Service Loaders.
 
 |`-overrideincludedmethods`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG exclude explicitly included test methods if they belong to any excluded groups as defined in the suite xml file.
 
 |`-includeAllDataDrivenTestsWhenSkipping`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG report all iterations of a data driven test as individual skips, in-case of upstream failures.
 
 |`-propagateDataProviderFailureAsTestFailure`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG consider failures in Data Providers as test failures.
 
 |`-generateResultsPerSuite`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG generate results on a per suite basis by creating a sub directory for each suite and dumping results into it.
 
 |`-shareThreadPoolForDataProviders`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG use a global Shared ThreadPool (At suite level) for running data providers.
 
 |`-useGlobalThreadPool`
-|`true`|`false`
+|`true`,`false`
 |Should TestNG use a global Shared ThreadPool (At suite level) for running regular and data driven tests.
 
 |===
