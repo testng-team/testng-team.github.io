@@ -17,6 +17,7 @@
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel2">
 <li><a href="#_listening_to_method_invocations">Listening to method invocations</a></li>
+<li><a href="#_listening_to_configuration_invocations">Listening to configuration invocations</a></li>
 </ul>
 </div>
 </div>
@@ -27,10 +28,84 @@
 <p>The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with <code>@Test</code>) or configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_listening_to_configuration_invocations">Listening to configuration invocations</h3>
+<div class="paragraph">
+<p>The listener {javadocs-base-url}/org/testng/IConfigurationListener.html[IConfigurationListener] allows you to be notified whenever TestNG is about to invoke a configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>. This listener also lets you be notified about whether a configuration passed, failed (or) if it got skipped.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample listener implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IConfigurationListener;
+import org.testng.ITestNGMethod;
+import org.testng.ITestResult;
+
+public class MyConfigurationListener implements IConfigurationListener {
+
+    @Override
+    public void beforeConfiguration(ITestResult tr, ITestNGMethod tm) {
+        //The "ITestNGMethod" will be a valid object ONLY for @BeforeMethod and @AfterMethod
+        System.err.println("Commencing execution of Config method " + tr.getMethod().getQualifiedName() +
+                " for the test method " + tm.getQualifiedName());
+    }
+
+    @Override
+    public void onConfigurationSuccess(ITestResult tr, ITestNGMethod tm) {
+        //The "ITestNGMethod" will be a valid object ONLY for @BeforeMethod and @AfterMethod
+        System.err.println("Successfully executed Config method " + tr.getMethod().getQualifiedName() +
+                " for the test method " + tm.getQualifiedName());
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample test class that&#8217;s using this above listener.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(MyConfigurationListener.class)
+public class SampleTestClass {
+
+    @BeforeMethod
+    public void beforeMethodConfig() {
+        System.err.println("Executing config method beforeMethodConfig()");
+    }
+
+    @Test
+    public void testMethod() {
+        System.err.println("Executing test method");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how the execution console would look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Commencing execution of Config method org.testng.demo.SampleTestClass.beforeClass for the test method org.testng.demo.SampleTestClass.testMethod
+Successfully executed Config method org.testng.demo.SampleTestClass.beforeClass for the test method org.testng.demo.SampleTestClass.testMethod
+
+===============================================
+Default Suite
+Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
+===============================================</code></pre>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-17 13:41:17 UTC
+Last updated 2024-01-17 15:29:30 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
