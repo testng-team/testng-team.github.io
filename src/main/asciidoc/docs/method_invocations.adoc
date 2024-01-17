@@ -2,3 +2,74 @@
 
 The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with `@Test`) or configuration (annotated with any of the `@Before` or `@After` annotation) method and declare it as a listener, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
 
+=== Listening to configuration invocations
+
+The listener {javadocs-base-url}/org/testng/IConfigurationListener.html[IConfigurationListener] allows you to be notified whenever TestNG is about to invoke a configuration (annotated with any of the `@Before` or `@After` annotation) method and declare it as a listener, as explained in the section about xref:testng_listeners.adoc[TestNG listeners]. This listener also lets you be notified about whether a configuration passed, failed (or) if it got skipped.
+
+Here's a sample listener implementation.
+
+[source, java]
+
+----
+import org.testng.IConfigurationListener;
+import org.testng.ITestNGMethod;
+import org.testng.ITestResult;
+
+public class MyConfigurationListener implements IConfigurationListener {
+
+    @Override
+    public void beforeConfiguration(ITestResult tr, ITestNGMethod tm) {
+        //The "ITestNGMethod" will be a valid object ONLY for @BeforeMethod and @AfterMethod
+        System.err.println("Commencing execution of Config method " + tr.getMethod().getQualifiedName() +
+                " for the test method " + tm.getQualifiedName());
+    }
+
+    @Override
+    public void onConfigurationSuccess(ITestResult tr, ITestNGMethod tm) {
+        //The "ITestNGMethod" will be a valid object ONLY for @BeforeMethod and @AfterMethod
+        System.err.println("Successfully executed Config method " + tr.getMethod().getQualifiedName() +
+                " for the test method " + tm.getQualifiedName());
+    }
+}
+----
+
+Here's a sample test class that's using this above listener.
+
+[source, java]
+
+----
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(MyConfigurationListener.class)
+public class SampleTestClass {
+
+    @BeforeMethod
+    public void beforeMethodConfig() {
+        System.err.println("Executing config method beforeMethodConfig()");
+    }
+
+    @Test
+    public void testMethod() {
+        System.err.println("Executing test method");
+    }
+}
+----
+
+Here's how the execution console would look like:
+
+[source, bash]
+
+----
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Commencing execution of Config method org.testng.demo.SampleTestClass.beforeClass for the test method org.testng.demo.SampleTestClass.testMethod
+Successfully executed Config method org.testng.demo.SampleTestClass.beforeClass for the test method org.testng.demo.SampleTestClass.testMethod
+
+===============================================
+Default Suite
+Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
+===============================================
+----

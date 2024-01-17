@@ -4,7 +4,7 @@ There are several interfaces that allow you to modify TestNG's behavior. These i
 
 * IAlterSuiteListener (xref:altering_suites.adoc[doc], {javadocs-base-url}/org/testng/IAlterSuiteListener.html[javadoc])
 * IAnnotationTransformer (xref:annotation_transformers.adoc[doc], {javadocs-base-url}/org/testng/IAnnotationTransformer.html[javadoc])
-* IConfigurationListener(doc, {javadocs-base-url}/org/testng/IConfigurationListener.html[javadoc])
+* IConfigurationListener(xref:method_invocations.adoc#_listening_to_configuration_invocations[doc], {javadocs-base-url}/org/testng/IConfigurationListener.html[javadoc])
 * IDataProviderInterceptor(doc, {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[javadoc])
 * IDataProviderListener(doc, {javadocs-base-url}/org/testng/IDataProviderListener.html[javadoc])
 * IExecutionListener(doc, {javadocs-base-url}/org/testng/IExecutionListener.html[javadoc])
