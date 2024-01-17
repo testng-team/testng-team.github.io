@@ -345,6 +345,105 @@ public Object[][] getTestData() {
 </div>
 </div>
 <div class="sect3">
+<h4 id="_retries_and_data_providers">Retries and data providers</h4>
+<div class="paragraph">
+<p>TestNG allows you to retry a data provider incase it has encountered any issues when calling it the first time.</p>
+</div>
+<div class="paragraph">
+<p>This is similar to how regular test methods can be retried as explained in <a href="#_rerunning_failed_tests">this section</a>.</p>
+</div>
+<div class="paragraph">
+<p>To be able to retry a data provider, the following needs to be done.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>First we would need to implement the interface <code>org.testng.IRetryDataProvider</code>.</p>
+</li>
+<li>
+<p>Next you would need to tie this implementation to the data provider annotation using the attribute <code>retryUsing</code> of the <code>@DataProvider</code> annotation.</p>
+</li>
+<li>
+<p>With that we can now retry a failed ata provider.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample retry implementation:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IDataProviderMethod;
+import org.testng.IRetryDataProvider;
+import java.util.concurrent.atomic.AtomicInteger;
+public class RetryDataProvider implements IRetryDataProvider {
+
+    private final AtomicInteger counter = new AtomicInteger(1);
+
+    @Override
+    public boolean retry(IDataProviderMethod dataProvider) {
+        boolean status = counter.getAndIncrement() &lt;= 2;
+        String clazz = dataProvider.getMethod().getDeclaringClass().getName();
+        String dataProviderMethodName = dataProvider.getMethod().getName();
+        String methodName = clazz + "." + dataProviderMethodName + "()";
+        System.err.println("Retry the data provider method " + methodName + " ? " + status);
+        return status;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how a test class that consumes this retry mechanism can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+public class RetriableDataProviderSample {
+
+    private boolean throwException = true;
+
+    @Test(dataProvider = "test-data")
+    public void sampleTestMethod(int input) {
+        System.err.println("Input value = " + input);
+    }
+
+    @DataProvider(retryUsing = RetryDataProvider.class, name = "test-data")
+    public Object[][] testDataSupplier() {
+        if (throwException) {
+            throwException = false;
+            System.err.println("Simulating a problem when invoking the data provider");
+            throw new IllegalStateException("Simulating a failure in data provider");
+        }
+        return new Object[][]{
+                {1}, {2}
+        };
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>And when you run this sample, the output would look something like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Simulating a problem when invoking the data provider
+Retry the data provider method org.testng.demo.RetriableDataProviderSample.testDataSupplier() ? true
+Input value = 1
+Input value = 2
+
+===============================================
+Default Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
 <h4 id="_controlling_threadpool_usage">Controlling ThreadPool Usage</h4>
 <div class="paragraph">
 <p>Starting from TestNG <code>7.9.0</code>, there are some additional ways in which the thread-pools that run the parallel tests can be controlled. For these new features to be consumed, update your suite file to use the <code>testng-1.1.dtd</code> (as seen below) so that your IDE can provide you with autocompletion:</p>
@@ -409,7 +508,7 @@ In TestNG 6.x parameters defined in testng.xml could not be overwritten by syste
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-15 16:53:50 UTC
+Last updated 2024-01-17 13:41:17 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
