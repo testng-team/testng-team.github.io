@@ -2,6 +2,86 @@
 
 The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with `@Test`) or configuration (annotated with any of the `@Before` or `@After` annotation) method and declare it as a listener, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
 
+Here's a sample listener implementation.
+
+[source, java]
+
+----
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
+import org.testng.ITestResult;
+
+public class SimpleInvokedMethodListener implements IInvokedMethodListener {
+    @Override
+    public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+        log("Commencing", method);
+    }
+
+    @Override
+    public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+        log("Completed", method);
+    }
+
+    private static void log(String prefix, IInvokedMethod method) {
+        String type = "Configuration";
+        if (method.isTestMethod()) {
+            type = "Test";
+        }
+        String msg = prefix + " executing [" + type + "] method "
+                + method.getTestMethod().getQualifiedName() + "()";
+        System.err.println(msg);
+    }
+}
+----
+
+Here's a sample test class that's using this above listener.
+
+[source, java]
+
+----
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SimpleInvokedMethodListener.class)
+public class SampleTestCase {
+
+    @BeforeMethod
+    public void setup() {}
+
+    @Test
+    public void testMethod1() {}
+
+    @Test
+    public void testMethod2() {}
+}
+
+----
+
+Here's how the execution console would look like:
+
+[source, bash]
+
+----
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Commencing executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Completed executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Commencing executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod1()
+Completed executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod1()
+Commencing executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Completed executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Commencing executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod2()
+Completed executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod2()
+
+===============================================
+Default Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================
+----
+
+
 === Listening to configuration invocations
 
 The listener {javadocs-base-url}/org/testng/IConfigurationListener.html[IConfigurationListener] allows you to be notified whenever TestNG is about to invoke a configuration (annotated with any of the `@Before` or `@After` annotation) method and declare it as a listener, as explained in the section about xref:testng_listeners.adoc[TestNG listeners]. This listener also lets you be notified about whether a configuration passed, failed (or) if it got skipped.
@@ -139,5 +219,101 @@ Completed execution for the test class : org.testng.demo.configs.SampleTestCase
 ===============================================
 Default Suite
 Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================
+----
+
+=== Listening to data provider invocations
+
+The listener {javadocs-base-url}/org/testng/IDataProviderListener.html[IDataProviderListener] allows you to be notified whenever TestNG is about invoke data provider methods.
+Refer to xref:parameters.adoc#_parameters_with_dataproviders[here] to learn how to work with data driven tests.
+
+Add the listener implementation, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
+
+Here's a sample listener implementation.
+
+[source, java]
+
+----
+import org.testng.IDataProviderListener;
+import org.testng.IDataProviderMethod;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
+
+public static class SimpleDataProviderListener implements IDataProviderListener {
+
+    @Override
+    public void beforeDataProviderExecution(IDataProviderMethod dataProviderMethod, ITestNGMethod method, ITestContext iTestContext) {
+        log("Commencing", dataProviderMethod, method);
+    }
+
+    @Override
+    public void afterDataProviderExecution(IDataProviderMethod dataProviderMethod, ITestNGMethod method, ITestContext iTestContext) {
+        log("Completed", dataProviderMethod, method);
+    }
+
+    private static void log(String prefix, IDataProviderMethod dataProviderMethod, ITestNGMethod method) {
+        String msg = prefix + " execution of data provider : " + dataProviderMethod.getMethod().getName()
+                + "() associated with the test method " + method.getQualifiedName() + "()";
+        System.err.println(msg);
+    }
+
+    @Override
+    public void onDataProviderFailure(ITestNGMethod method, ITestContext ctx, RuntimeException t) {
+        String msg = "The data provider " + method.getQualifiedName() + "() failed because of "
+                + t.getMessage();
+        System.err.println(msg);
+    }
+}
+----
+
+A sample test class that is using this listener.
+
+[source, java]
+
+----
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SimpleDataProviderListener.class)
+public class SampleDataDrivenTestCase {
+
+    @Test(dataProvider = "passing")
+    public void passingTest(int ignored) {}
+
+    @DataProvider(name = "passing")
+    public Object[][] getPassingDataProvider() {
+        return new Object[][] {
+                {1}, {2}
+        };
+    }
+
+    @Test(dataProvider = "failing")
+    public void skippedTest(int ignored) {}
+
+    @DataProvider(name = "failing")
+    public Object[][] getFailingDataProvider() {
+        throw new IllegalStateException("Initialisation failed");
+    }
+}
+----
+
+The execution output would look like below:
+
+[source, bash]
+
+----
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Commencing execution of data provider : getPassingDataProvider() associated with the test method org.testng.demo.SampleDataDrivenTestCase.passingTest()
+Completed execution of data provider : getPassingDataProvider() associated with the test method org.testng.demo.SampleDataDrivenTestCase.passingTest()
+Commencing execution of data provider : getFailingDataProvider() associated with the test method org.testng.demo.SampleDataDrivenTestCase.skippedTest()
+The data provider org.testng.demo.SampleDataDrivenTestCase.skippedTest() failed because of java.lang.IllegalStateException: Initialisation failed
+
+... # Rest of the output omitted for brevity
+===============================================
+Default Suite
+Total tests run: 3, Passes: 2, Failures: 1, Skips: 0
 ===============================================
 ----
