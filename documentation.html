@@ -39,6 +39,7 @@
 <li><a href="#_listening_to_method_invocations">Listening to method invocations</a></li>
 <li><a href="#_listening_to_configuration_invocations">Listening to configuration invocations</a></li>
 <li><a href="#_listening_to_class_level_invocations">Listening to class level invocations</a></li>
+<li><a href="#_listening_to_data_provider_invocations">Listening to data provider invocations</a></li>
 <li><a href="#_overriding_test_methods">Overriding test methods</a></li>
 <li><a href="#_overriding_configuration_methods">Overriding configuration methods</a></li>
 <li><a href="#_altering_suites_or_tests">Altering suites (or) tests</a></li>
@@ -2497,7 +2498,7 @@ tng.setAnnotationTransformer(new MyTransformer());
 <p>IDataProviderInterceptor(doc, {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[javadoc])</p>
 </li>
 <li>
-<p>IDataProviderListener(doc, {javadocs-base-url}/org/testng/IDataProviderListener.html[javadoc])</p>
+<p>IDataProviderListener(<a href="method_invocations.html#_listening_to_data_provider_invocations">doc</a>, {javadocs-base-url}/org/testng/IDataProviderListener.html[javadoc])</p>
 </li>
 <li>
 <p>IExecutionListener(doc, {javadocs-base-url}/org/testng/IExecutionListener.html[javadoc])</p>
@@ -2512,7 +2513,10 @@ tng.setAnnotationTransformer(new MyTransformer());
 <p>IConfigurable(<a href="iconfigurable.html">doc</a>, {javadocs-base-url}/org/testng/IConfigurable.html[javadoc])</p>
 </li>
 <li>
-<p>IInvokedMethodListener (doc, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])</p>
+<p>IInvokedMethodListener (<a href="method_invocations.html#_listening_to_method_invocations">doc</a>, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])</p>
+</li>
+<li>
+<p>IClassListener(<a href="method_invocations.html#_listening_to_class_level_invocations">doc</a>, {javadocs-base-url}/org/testng/IClassListener.html[javadoc])</p>
 </li>
 <li>
 <p>IMethodInterceptor (<a href="method_interceptors.html">doc</a>, {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])</p>
@@ -3046,6 +3050,84 @@ public class TestClass {
 <div class="paragraph">
 <p>The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with <code>@Test</code>) or configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
 </div>
+<div class="paragraph">
+<p>Here&#8217;s a sample listener implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
+import org.testng.ITestResult;
+
+public class SimpleInvokedMethodListener implements IInvokedMethodListener {
+    @Override
+    public void beforeInvocation(IInvokedMethod method, ITestResult testResult) {
+        log("Commencing", method);
+    }
+
+    @Override
+    public void afterInvocation(IInvokedMethod method, ITestResult testResult) {
+        log("Completed", method);
+    }
+
+    private static void log(String prefix, IInvokedMethod method) {
+        String type = "Configuration";
+        if (method.isTestMethod()) {
+            type = "Test";
+        }
+        String msg = prefix + " executing [" + type + "] method "
+                + method.getTestMethod().getQualifiedName() + "()";
+        System.err.println(msg);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample test class that&#8217;s using this above listener.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SimpleInvokedMethodListener.class)
+public class SampleTestCase {
+
+    @BeforeMethod
+    public void setup() {}
+
+    @Test
+    public void testMethod1() {}
+
+    @Test
+    public void testMethod2() {}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how the execution console would look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Commencing executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Completed executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Commencing executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod1()
+Completed executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod1()
+Commencing executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Completed executing [Configuration] method org.testng.demo.configs.SampleTestCase.setup()
+Commencing executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod2()
+Completed executing [Test] method org.testng.demo.configs.SampleTestCase.testMethod2()
+
+===============================================
+Default Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================</code></pre>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_listening_to_configuration_invocations">Listening to configuration invocations</h3>
@@ -3188,6 +3270,105 @@ Completed execution for the test class : org.testng.demo.configs.SampleTestCase
 ===============================================
 Default Suite
 Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listening_to_data_provider_invocations">Listening to data provider invocations</h3>
+<div class="paragraph">
+<p>The listener {javadocs-base-url}/org/testng/IDataProviderListener.html[IDataProviderListener] allows you to be notified whenever TestNG is about invoke data provider methods.
+Refer to <a href="parameters.html#_parameters_with_dataproviders">here</a> to learn how to work with data driven tests.</p>
+</div>
+<div class="paragraph">
+<p>Add the listener implementation, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample listener implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IDataProviderListener;
+import org.testng.IDataProviderMethod;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
+
+public static class SimpleDataProviderListener implements IDataProviderListener {
+
+    @Override
+    public void beforeDataProviderExecution(IDataProviderMethod dataProviderMethod, ITestNGMethod method, ITestContext iTestContext) {
+        log("Commencing", dataProviderMethod, method);
+    }
+
+    @Override
+    public void afterDataProviderExecution(IDataProviderMethod dataProviderMethod, ITestNGMethod method, ITestContext iTestContext) {
+        log("Completed", dataProviderMethod, method);
+    }
+
+    private static void log(String prefix, IDataProviderMethod dataProviderMethod, ITestNGMethod method) {
+        String msg = prefix + " execution of data provider : " + dataProviderMethod.getMethod().getName()
+                + "() associated with the test method " + method.getQualifiedName() + "()";
+        System.err.println(msg);
+    }
+
+    @Override
+    public void onDataProviderFailure(ITestNGMethod method, ITestContext ctx, RuntimeException t) {
+        String msg = "The data provider " + method.getQualifiedName() + "() failed because of "
+                + t.getMessage();
+        System.err.println(msg);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A sample test class that is using this listener.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SimpleDataProviderListener.class)
+public class SampleDataDrivenTestCase {
+
+    @Test(dataProvider = "passing")
+    public void passingTest(int ignored) {}
+
+    @DataProvider(name = "passing")
+    public Object[][] getPassingDataProvider() {
+        return new Object[][] {
+                {1}, {2}
+        };
+    }
+
+    @Test(dataProvider = "failing")
+    public void skippedTest(int ignored) {}
+
+    @DataProvider(name = "failing")
+    public Object[][] getFailingDataProvider() {
+        throw new IllegalStateException("Initialisation failed");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The execution output would look like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Commencing execution of data provider : getPassingDataProvider() associated with the test method org.testng.demo.SampleDataDrivenTestCase.passingTest()
+Completed execution of data provider : getPassingDataProvider() associated with the test method org.testng.demo.SampleDataDrivenTestCase.passingTest()
+Commencing execution of data provider : getFailingDataProvider() associated with the test method org.testng.demo.SampleDataDrivenTestCase.skippedTest()
+The data provider org.testng.demo.SampleDataDrivenTestCase.skippedTest() failed because of java.lang.IllegalStateException: Initialisation failed
+
+... # Rest of the output omitted for brevity
+===============================================
+Default Suite
+Total tests run: 3, Passes: 2, Failures: 1, Skips: 0
 ===============================================</code></pre>
 </div>
 </div>
@@ -4104,7 +4285,7 @@ class ThisClass {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-18 06:51:59 UTC
+Last updated 2024-01-18 08:11:17 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
