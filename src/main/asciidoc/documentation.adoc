@@ -42,6 +42,8 @@ include::docs/method_invocations.adoc[]
 
 include::docs/ihookable.adoc[]
 
+include::docs/iconfigurable.adoc[]
+
 include::docs/altering_suites.adoc[]
 
 include::test_results.adoc[]

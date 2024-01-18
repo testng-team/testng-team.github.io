@@ -1,0 +1,76 @@
+=== Overriding configuration methods
+
+:url: https://javadoc.io/static/org.testng/testng/{version-label}
+
+TestNG allows you to override and possibly skip the invocation of configuration methods.
+You achieve this by implementing the interface {url}/org/testng/IConfigurable.html[IConfigurable] inside either your test class (or) in your base class from which your test classes extend.
+
+Below is a complete sample.
+
+Sample base class:
+
+[source, java]
+
+----
+import org.testng.IConfigurable;
+import org.testng.IConfigureCallBack;
+import org.testng.ITestResult;
+import org.testng.SkipException;
+import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
+
+public class AbstractTestCase implements IConfigurable {
+    protected static final String OMIT_CONFIG = "omit-config";
+
+    @Override
+    public void run(IConfigureCallBack callBack, ITestResult testResult) {
+        //Look for the Method parameter on our configuration method
+        Optional<Method> foundTestMethod = Arrays.stream(testResult.getParameters())
+                .filter(it -> (it instanceof Method))
+                .map(it -> (Method) it)
+                .findFirst();
+        if (foundTestMethod.isPresent()) {
+            // We found our configuration method.
+            Method found = foundTestMethod.get();
+            CustomAttribute[] attributes = found.getAnnotation(Test.class).attributes();
+            // We now check for the custom attribute that indicates our configuration method needs to be skipped.
+            boolean skip = Arrays.stream(attributes).anyMatch(it -> OMIT_CONFIG.equalsIgnoreCase(it.name()));
+            if (skip) {
+                throw new SkipException("Skipping execution of config method " + testResult.getMethod().getQualifiedName());
+            }
+        }
+        // If we are here, then it means we just need to execute the configuration method.
+        callBack.runConfigurationMethod(testResult);
+    }
+}
+----
+
+A test class that extends the above base class can look like below:
+
+[source, java]
+
+----
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+
+public class SampleTestCase extends AbstractTestCase {
+
+    //We would like to ignore skips and have TestNG run this config method always
+    @BeforeMethod(ignoreFailure = true)
+    public void setup(Method method) {}
+
+    //We would like to skip configuration for this test
+    @Test(attributes = { @CustomAttribute(name = OMIT_CONFIG) })
+    public void testMethod1() {}
+
+    @Test
+    public void testMethod2() {}
+}
+----

@@ -10,7 +10,7 @@ There are several interfaces that allow you to modify TestNG's behavior. These i
 * IExecutionListener(doc, {javadocs-base-url}/org/testng/IExecutionListener.html[javadoc])
 * IExecutionVisualiser(doc, {javadocs-base-url}/org/testng/IExecutionVisualiser.html[javadoc])
 * IHookable (xref:ihookable.adoc[doc], {javadocs-base-url}/org/testng/IHookable.html[javadoc])
-* IConfigurable(doc, {javadocs-base-url}/org/testng/IConfigurable.html[javadoc])
+* IConfigurable(xref:iconfigurable.adoc[doc], {javadocs-base-url}/org/testng/IConfigurable.html[javadoc])
 * IInvokedMethodListener (doc, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])
 * IMethodInterceptor (xref:method_interceptors.adoc[doc], {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])
 * IReporter (xref:logging_and_results.adoc#_logging_reporters[doc], {javadocs-base-url}/org/testng/IReporter.html[javadoc])

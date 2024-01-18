@@ -3,7 +3,7 @@
 :url: https://javadoc.io/static/org.testng/testng/{version-label}
 
 TestNG allows you to override and possibly skip the invocation of test methods.
-One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by providing a listener that implements {url}/org/testng/IHookable.html[IHookable].
+One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by implementing the interface {url}/org/testng/IHookable.html[IHookable] inside either your test class (or) in your base class from which your test classes extend.
 
 Here is an example with JAAS:
 
