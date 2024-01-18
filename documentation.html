@@ -39,6 +39,7 @@
 <li><a href="#_listening_to_method_invocations">Listening to method invocations</a></li>
 <li><a href="#_listening_to_configuration_invocations">Listening to configuration invocations</a></li>
 <li><a href="#_overriding_test_methods">Overriding test methods</a></li>
+<li><a href="#_overriding_configuration_methods">Overriding configuration methods</a></li>
 <li><a href="#_altering_suites_or_tests">Altering suites (or) tests</a></li>
 </ul>
 </li>
@@ -2507,7 +2508,7 @@ tng.setAnnotationTransformer(new MyTransformer());
 <p>IHookable (<a href="ihookable.html">doc</a>, {javadocs-base-url}/org/testng/IHookable.html[javadoc])</p>
 </li>
 <li>
-<p>IConfigurable(doc, {javadocs-base-url}/org/testng/IConfigurable.html[javadoc])</p>
+<p>IConfigurable(<a href="iconfigurable.html">doc</a>, {javadocs-base-url}/org/testng/IConfigurable.html[javadoc])</p>
 </li>
 <li>
 <p>IInvokedMethodListener (doc, {javadocs-base-url}/org/testng/IInvokedMethodListener.html[javadoc])</p>
@@ -3123,7 +3124,7 @@ Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
 <h3 id="_overriding_test_methods">Overriding test methods</h3>
 <div class="paragraph">
 <p>TestNG allows you to override and possibly skip the invocation of test methods.
-One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by providing a listener that implements <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IHookable.html">IHookable</a>.</p>
+One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by implementing the interface <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IHookable.html">IHookable</a> inside either your test class (or) in your base class from which your test classes extend.</p>
 </div>
 <div class="paragraph">
 <p>Here is an example with JAAS:</p>
@@ -3141,6 +3142,84 @@ One example of where this is useful is if you need to your test methods with a s
       }
     };
   }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_overriding_configuration_methods">Overriding configuration methods</h3>
+<div class="paragraph">
+<p>TestNG allows you to override and possibly skip the invocation of configuration methods.
+You achieve this by implementing the interface <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurable.html">IConfigurable</a> inside either your test class (or) in your base class from which your test classes extend.</p>
+</div>
+<div class="paragraph">
+<p>Below is a complete sample.</p>
+</div>
+<div class="paragraph">
+<p>Sample base class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IConfigurable;
+import org.testng.IConfigureCallBack;
+import org.testng.ITestResult;
+import org.testng.SkipException;
+import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
+
+public class AbstractTestCase implements IConfigurable {
+    protected static final String OMIT_CONFIG = "omit-config";
+
+    @Override
+    public void run(IConfigureCallBack callBack, ITestResult testResult) {
+        //Look for the Method parameter on our configuration method
+        Optional&lt;Method&gt; foundTestMethod = Arrays.stream(testResult.getParameters())
+                .filter(it -&gt; (it instanceof Method))
+                .map(it -&gt; (Method) it)
+                .findFirst();
+        if (foundTestMethod.isPresent()) {
+            // We found our configuration method.
+            Method found = foundTestMethod.get();
+            CustomAttribute[] attributes = found.getAnnotation(Test.class).attributes();
+            // We now check for the custom attribute that indicates our configuration method needs to be skipped.
+            boolean skip = Arrays.stream(attributes).anyMatch(it -&gt; OMIT_CONFIG.equalsIgnoreCase(it.name()));
+            if (skip) {
+                throw new SkipException("Skipping execution of config method " + testResult.getMethod().getQualifiedName());
+            }
+        }
+        // If we are here, then it means we just need to execute the configuration method.
+        callBack.runConfigurationMethod(testResult);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A test class that extends the above base class can look like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+
+public class SampleTestCase extends AbstractTestCase {
+
+    //We would like to ignore skips and have TestNG run this config method always
+    @BeforeMethod(ignoreFailure = true)
+    public void setup(Method method) {}
+
+    //We would like to skip configuration for this test
+    @Test(attributes = { @CustomAttribute(name = OMIT_CONFIG) })
+    public void testMethod1() {}
+
+    @Test
+    public void testMethod2() {}
 }</code></pre>
 </div>
 </div>
@@ -3953,7 +4032,7 @@ class ThisClass {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-17 15:29:30 UTC
+Last updated 2024-01-18 06:31:30 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.18">
+<title>Overriding configuration methods</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
+<link rel="stylesheet" href="./asciidoctor.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel2">
+<li><a href="#_overriding_configuration_methods">Overriding configuration methods</a></li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div class="sect2">
+<h3 id="_overriding_configuration_methods">Overriding configuration methods</h3>
+<div class="paragraph">
+<p>TestNG allows you to override and possibly skip the invocation of configuration methods.
+You achieve this by implementing the interface <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurable.html">IConfigurable</a> inside either your test class (or) in your base class from which your test classes extend.</p>
+</div>
+<div class="paragraph">
+<p>Below is a complete sample.</p>
+</div>
+<div class="paragraph">
+<p>Sample base class:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IConfigurable;
+import org.testng.IConfigureCallBack;
+import org.testng.ITestResult;
+import org.testng.SkipException;
+import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
+
+public class AbstractTestCase implements IConfigurable {
+    protected static final String OMIT_CONFIG = "omit-config";
+
+    @Override
+    public void run(IConfigureCallBack callBack, ITestResult testResult) {
+        //Look for the Method parameter on our configuration method
+        Optional&lt;Method&gt; foundTestMethod = Arrays.stream(testResult.getParameters())
+                .filter(it -&gt; (it instanceof Method))
+                .map(it -&gt; (Method) it)
+                .findFirst();
+        if (foundTestMethod.isPresent()) {
+            // We found our configuration method.
+            Method found = foundTestMethod.get();
+            CustomAttribute[] attributes = found.getAnnotation(Test.class).attributes();
+            // We now check for the custom attribute that indicates our configuration method needs to be skipped.
+            boolean skip = Arrays.stream(attributes).anyMatch(it -&gt; OMIT_CONFIG.equalsIgnoreCase(it.name()));
+            if (skip) {
+                throw new SkipException("Skipping execution of config method " + testResult.getMethod().getQualifiedName());
+            }
+        }
+        // If we are here, then it means we just need to execute the configuration method.
+        callBack.runConfigurationMethod(testResult);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A test class that extends the above base class can look like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.Test;
+
+import java.lang.reflect.Method;
+
+public class SampleTestCase extends AbstractTestCase {
+
+    //We would like to ignore skips and have TestNG run this config method always
+    @BeforeMethod(ignoreFailure = true)
+    public void setup(Method method) {}
+
+    //We would like to skip configuration for this test
+    @Test(attributes = { @CustomAttribute(name = OMIT_CONFIG) })
+    public void testMethod1() {}
+
+    @Test
+    public void testMethod2() {}
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2024-01-18 06:31:30 UTC
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
+</body>
+</html>
