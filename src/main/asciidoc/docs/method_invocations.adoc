@@ -73,3 +73,71 @@ Default Suite
 Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
 ===============================================
 ----
+
+=== Listening to class level invocations
+
+The listener {javadocs-base-url}/org/testng/IClassListener.html[IClassListener] allows you to be notified whenever TestNG is about to start processing a test class and invoke its configuration/tests.
+
+Add the listener implementation, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
+
+Here's a sample listener implementation.
+
+[source, java]
+
+----
+import org.testng.IClassListener;
+import org.testng.ITestClass;
+
+public class ClassLevelListener implements IClassListener {
+
+    @Override
+    public void onBeforeClass(ITestClass testClass) {
+        System.err.println("Commencing execution for the test class : " + testClass.getRealClass().getName());
+    }
+
+    @Override
+    public void onAfterClass(ITestClass testClass) {
+        System.err.println("Completed execution for the test class : " + testClass.getRealClass().getName());
+    }
+}
+----
+
+Here's a sample test class that consumes the above shown sample listener.
+
+[source, java]
+
+----
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(ClassLevelListener.class)
+public class SampleTestCase {
+
+    @BeforeMethod
+    public void setup() {}
+
+    @Test
+    public void testMethod1() {}
+
+    @Test
+    public void testMethod2() {}
+}
+----
+
+Execution output would be as below:
+
+[source, bash]
+
+----
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Commencing execution for the test class : org.testng.demo.configs.SampleTestCase
+Completed execution for the test class : org.testng.demo.configs.SampleTestCase
+
+===============================================
+Default Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================
+----
