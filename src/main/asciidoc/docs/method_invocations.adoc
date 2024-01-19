@@ -63,7 +63,6 @@ TestNG is finished execution
 Process finished with exit code 0
 ----
 
-
 === Listening to method invocations
 
 The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with `@Test`) or configuration (annotated with any of the `@Before` or `@After` annotation) method and declare it as a listener, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
@@ -146,7 +145,6 @@ Default Suite
 Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
 ===============================================
 ----
-
 
 === Listening to configuration invocations
 
@@ -382,4 +380,87 @@ The data provider org.testng.demo.SampleDataDrivenTestCase.skippedTest() failed 
 Default Suite
 Total tests run: 3, Passes: 2, Failures: 1, Skips: 0
 ===============================================
+----
+
+=== Listening to Suite level invocations
+
+The listener {javadocs-base-url}/org/testng/ISuiteListener.html[ISuiteListener] allows you to be notified whenever TestNG is about to start processing a `<suite>`.
+
+This listener can be used to perform setup/teardown activities at the suite level.
+
+Add the listener implementation, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
+
+Here's a sample listener implementation.
+
+[source, java]
+
+----
+import org.testng.ISuite;
+import org.testng.ISuiteListener;
+
+public class SimpleSuiteListener implements ISuiteListener {
+
+    @Override
+    public void onStart(ISuite suite) {
+        log("Commencing", suite);
+    }
+
+    @Override
+    public void onFinish(ISuite suite) {
+        log("Completed", suite);
+    }
+
+    private static void log(String prefix, ISuite suite) {
+        String msg = prefix + " execution for the suite named <" + suite.getName() + ">";
+        System.err.println(msg);
+    }
+}
+----
+
+A suite `<suite>` xml file could look like below:
+
+[source, xml]
+
+----
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Regression-test-suite" verbose="2">
+    <listeners>
+        <listener class-name="org.testng.demo.SimpleSuiteListener"/>
+    </listeners>
+    <test name="P1-Build-Certification-Tests" verbose="2">
+        <classes>
+            <class name="org.testng.demo.SampleTestCase"/>
+        </classes>
+    </test>
+</suite>
+----
+
+The execution output would look like below:
+
+[source, bash]
+
+----
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+...
+... TestNG 7.9.0 by Cédric Beust (cedric@beust.com)
+...
+
+Commencing execution for the suite named <Regression-test-suite>
+PASSED: org.testng.demo.configs.SampleTestCase.testMethod1
+
+===============================================
+    P1-Build-Certification-Tests
+    Tests run: 1, Failures: 0, Skips: 0
+===============================================
+
+Completed execution for the suite named <Regression-test-suite>
+
+===============================================
+Regression-test-suite
+Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
+===============================================
+
+Process finished with exit code 0
 ----
