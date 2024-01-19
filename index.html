@@ -128,27 +128,28 @@
 </ul>
 </li>
 <li><a href="#_method_interceptors">3.16. Method Interceptors</a></li>
-<li><a href="#_testng_listeners">3.17. TestNG Listeners</a>
+<li><a href="#_interceptors_for_data_providers">3.17. Interceptors for Data Providers</a></li>
+<li><a href="#_testng_listeners">3.18. TestNG Listeners</a>
 <ul class="sectlevel3">
-<li><a href="#_specifying_listeners_with_testng_xml_or_in_java">3.17.1. Specifying listeners with testng.xml or in Java</a></li>
-<li><a href="#_specifying_listeners_with_serviceloader">3.17.2. Specifying listeners with ServiceLoader</a></li>
+<li><a href="#_specifying_listeners_with_testng_xml_or_in_java">3.18.1. Specifying listeners with testng.xml or in Java</a></li>
+<li><a href="#_specifying_listeners_with_serviceloader">3.18.2. Specifying listeners with ServiceLoader</a></li>
 </ul>
 </li>
-<li><a href="#_dependency_injection">3.18. Dependency injection</a>
+<li><a href="#_dependency_injection">3.19. Dependency injection</a>
 <ul class="sectlevel3">
-<li><a href="#_native_dependency_injection">3.18.1. Native dependency injection</a></li>
-<li><a href="#_guice_dependency_injection">3.18.2. Guice dependency injection</a></li>
+<li><a href="#_native_dependency_injection">3.19.1. Native dependency injection</a></li>
+<li><a href="#_guice_dependency_injection">3.19.2. Guice dependency injection</a></li>
 </ul>
 </li>
-<li><a href="#_listening_to_testng_lifecycle_events">3.19. Listening to TestNG lifecycle events</a></li>
-<li><a href="#_listening_to_method_invocations">3.20. Listening to method invocations</a></li>
-<li><a href="#_listening_to_configuration_invocations">3.21. Listening to configuration invocations</a></li>
-<li><a href="#_listening_to_class_level_invocations">3.22. Listening to class level invocations</a></li>
-<li><a href="#_listening_to_data_provider_invocations">3.23. Listening to data provider invocations</a></li>
-<li><a href="#_listening_to_suite_level_invocations">3.24. Listening to Suite level invocations</a></li>
-<li><a href="#_overriding_test_methods">3.25. Overriding test methods</a></li>
-<li><a href="#_overriding_configuration_methods">3.26. Overriding configuration methods</a></li>
-<li><a href="#_altering_suites_or_tests">3.27. Altering suites (or) tests</a></li>
+<li><a href="#_listening_to_testng_lifecycle_events">3.20. Listening to TestNG lifecycle events</a></li>
+<li><a href="#_listening_to_method_invocations">3.21. Listening to method invocations</a></li>
+<li><a href="#_listening_to_configuration_invocations">3.22. Listening to configuration invocations</a></li>
+<li><a href="#_listening_to_class_level_invocations">3.23. Listening to class level invocations</a></li>
+<li><a href="#_listening_to_data_provider_invocations">3.24. Listening to data provider invocations</a></li>
+<li><a href="#_listening_to_suite_level_invocations">3.25. Listening to Suite level invocations</a></li>
+<li><a href="#_overriding_test_methods">3.26. Overriding test methods</a></li>
+<li><a href="#_overriding_configuration_methods">3.27. Overriding configuration methods</a></li>
+<li><a href="#_altering_suites_or_tests">3.28. Altering suites (or) tests</a></li>
 </ul>
 </li>
 <li><a href="#_test_results">4. Test results</a>
@@ -3018,7 +3019,137 @@ tng.setAnnotationTransformer(new MyTransformer());
 </div>
 </div>
 <div class="sect2">
-<h3 id="_testng_listeners">3.17. TestNG Listeners</h3>
+<h3 id="_interceptors_for_data_providers">3.17. Interceptors for Data Providers</h3>
+<div class="paragraph">
+<p>Once TestNG has invoked your data provider, it basically has the data set that is required to be fed via multiple iterations to a <code>@Test</code> annotated test method.</p>
+</div>
+<div class="paragraph">
+<p>But there can be situations wherein you may want to modify the data set before the data set is fed to the test method.</p>
+</div>
+<div class="paragraph">
+<p>This is where the data provider aware interceptors come into picture.</p>
+</div>
+<div class="paragraph">
+<p>TestNG provides a listener named <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderInterceptor.html">IDataProviderInterceptor</a> which lets you do this.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IDataProviderInterceptor;
+import org.testng.IDataProviderMethod;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+public class SampleDataInterceptor implements IDataProviderInterceptor {
+    @Override
+    public Iterator&lt;Object[]&gt; intercept(
+            Iterator&lt;Object[]&gt; original, IDataProviderMethod dataProviderMethod,
+                                        ITestNGMethod method, ITestContext iTestContext) {
+        // The test method would have custom attributes. From them look for a custom attribute
+        // whose name is "filter". It's value would the fully qualified class name that
+        // can be instantiated using reflection and then used to filter the data provider
+        // provided data set.
+        Optional&lt;String&gt; found = Arrays.stream(method.getAttributes())
+                .filter(it -&gt; "filter".equalsIgnoreCase(it.name()))
+                .flatMap(it -&gt; Arrays.stream(it.values()))
+                .findFirst();
+        if (found.isPresent()) {
+            String clazzName = found.get();
+            Predicate&lt;Object&gt; predicate = predicate(clazzName);
+            Spliterator&lt;Object[]&gt; split = Spliterators.spliteratorUnknownSize(original, Spliterator.ORDERED);
+            return StreamSupport.stream(split,false)
+                    .filter(predicate)
+                    .collect(Collectors.toList())
+                    .iterator();
+        }
+        return original;
+    }
+
+    private static Predicate&lt;Object&gt; predicate(String clazzName) {
+        try {
+            return (Predicate&lt;Object&gt;) Class.forName(clazzName).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            return input -&gt; true;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how the filtering capability can look like. This filtering would basically prune through the data set and only allow even numbers to be used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import java.util.function.Predicate;
+public class MyFilter implements Predicate&lt;Object&gt; {
+
+    @Override
+    public boolean test(Object object) {
+        if (object.getClass().isArray()) {
+            Object number = ((Object[]) object)[0];
+            return (Integer) number % 2 == 0;
+        }
+        return false;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how a test case that consumes this listener can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SampleDataInterceptor.class)
+public class SampleDataDrivenTestCase {
+
+    @Test(dataProvider = "numbers",
+            attributes = {
+                    @CustomAttribute(name = "filter", values = {"org.testng.demo.MyFilter" })
+            }
+    )
+    public void passingTest(int i) {
+        System.err.println("Value = " + i);
+    }
+
+    @DataProvider(name = "numbers")
+    public Object[][] getNumbers() {
+        return new Object[][]{{1}, {2}, {3}, {4}};
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how the execution output can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Value = 2
+Value = 4
+
+===============================================
+Default Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_testng_listeners">3.18. TestNG Listeners</h3>
 <div class="paragraph">
 <p>There are several interfaces that allow you to modify TestNG&#8217;s behavior. These interfaces are broadly called "TestNG Listeners". Here are a few listeners:</p>
 </div>
@@ -3032,9 +3163,6 @@ tng.setAnnotationTransformer(new MyTransformer());
 </li>
 <li>
 <p>IConfigurationListener(<a href="method_invocations.html#_listening_to_configuration_invocations">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurationListener.html">javadoc</a>)</p>
-</li>
-<li>
-<p>IDataProviderInterceptor(doc, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderInterceptor.html">javadoc</a>)</p>
 </li>
 <li>
 <p>IDataProviderListener(<a href="method_invocations.html#_listening_to_data_provider_invocations">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderListener.html">javadoc</a>)</p>
@@ -3058,7 +3186,10 @@ tng.setAnnotationTransformer(new MyTransformer());
 <p>IClassListener(<a href="method_invocations.html#_listening_to_class_level_invocations">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IClassListener.html">javadoc</a>)</p>
 </li>
 <li>
-<p>IMethodInterceptor (<a href="method_interceptors.html">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IMethodInterceptor.html">javadoc</a>)</p>
+<p>IMethodInterceptor (<a href="method_interceptors.html#_method_interceptors">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IMethodInterceptor.html">javadoc</a>)</p>
+</li>
+<li>
+<p>IDataProviderInterceptor(<a href="method_interceptors.html#_interceptors_for_data_providers">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderInterceptor.html">javadoc</a>)</p>
 </li>
 <li>
 <p>IReporter (<a href="logging_and_results.html#_logging_reporters">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IReporter.html">javadoc</a>)</p>
@@ -3072,7 +3203,7 @@ tng.setAnnotationTransformer(new MyTransformer());
 </ul>
 </div>
 <div class="sect3">
-<h4 id="_specifying_listeners_with_testng_xml_or_in_java">3.17.1. Specifying listeners with testng.xml or in Java</h4>
+<h4 id="_specifying_listeners_with_testng_xml_or_in_java">3.18.1. Specifying listeners with testng.xml or in Java</h4>
 <div class="paragraph">
 <p>Here is how you can define listeners in your <code>testng.xml</code> file:</p>
 </div>
@@ -3155,7 +3286,7 @@ public class MyTest {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_specifying_listeners_with_serviceloader">3.17.2. Specifying listeners with ServiceLoader</h4>
+<h4 id="_specifying_listeners_with_serviceloader">3.18.2. Specifying listeners with ServiceLoader</h4>
 <div class="paragraph">
 <p>Finally, the JDK offers a very elegant mechanism to specify implementations of interfaces on the class path via the <a href="https://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html">ServiceLoader</a> class.</p>
 </div>
@@ -3238,12 +3369,12 @@ Finishing</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_dependency_injection">3.18. Dependency injection</h3>
+<h3 id="_dependency_injection">3.19. Dependency injection</h3>
 <div class="paragraph">
 <p>TestNG supports two different kinds of dependency injection: native (performed by TestNG itself) and external (performed by a dependency injection framework such as Guice).</p>
 </div>
 <div class="sect3">
-<h4 id="_native_dependency_injection">3.18.1. Native dependency injection</h4>
+<h4 id="_native_dependency_injection">3.19.1. Native dependency injection</h4>
 <div class="paragraph">
 <p>TestNG lets you declare additional parameters in your methods. When this happens, TestNG will automatically fill these parameters with the right value. Dependency injection can be used in the following places:</p>
 </div>
@@ -3439,7 +3570,7 @@ Finishing</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_guice_dependency_injection">3.18.2. Guice dependency injection</h4>
+<h4 id="_guice_dependency_injection">3.19.2. Guice dependency injection</h4>
 <div class="paragraph">
 <p>If you use <a href="https://github.com/google/guice/wiki/Motivation">Guice</a>, TestNG gives you an easy way to inject your test objects with a Guice module:</p>
 </div>
@@ -3585,7 +3716,7 @@ public class TestClass {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_testng_lifecycle_events">3.19. Listening to TestNG lifecycle events</h3>
+<h3 id="_listening_to_testng_lifecycle_events">3.20. Listening to TestNG lifecycle events</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionListener.html">IExecutionListener</a> allows you to be notified whenever TestNG is about to commence/conclude its execution. This listener can be used to perform setup and teardown activities at the test application layer itself ( for e.g., you could leverage this listener to boot up docker containers that are required for your application and shutdown them gracefully.)</p>
 </div>
@@ -3654,7 +3785,7 @@ Process finished with exit code 0</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_method_invocations">3.20. Listening to method invocations</h3>
+<h3 id="_listening_to_method_invocations">3.21. Listening to method invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IInvokedMethodListener.html">IInvokedMethodListener</a> allows you to be notified whenever TestNG is about to invoke a test (annotated with <code>@Test</code>) or configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
 </div>
@@ -3738,7 +3869,7 @@ Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_configuration_invocations">3.21. Listening to configuration invocations</h3>
+<h3 id="_listening_to_configuration_invocations">3.22. Listening to configuration invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurationListener.html">IConfigurationListener</a> allows you to be notified whenever TestNG is about to invoke a configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>. This listener also lets you be notified about whether a configuration passed, failed (or) if it got skipped.</p>
 </div>
@@ -3812,7 +3943,7 @@ Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_class_level_invocations">3.22. Listening to class level invocations</h3>
+<h3 id="_listening_to_class_level_invocations">3.23. Listening to class level invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IClassListener.html">IClassListener</a> allows you to be notified whenever TestNG is about to start processing a test class and invoke its configuration/tests.</p>
 </div>
@@ -3883,7 +4014,7 @@ Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_data_provider_invocations">3.23. Listening to data provider invocations</h3>
+<h3 id="_listening_to_data_provider_invocations">3.24. Listening to data provider invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderListener.html">IDataProviderListener</a> allows you to be notified whenever TestNG is about invoke data provider methods.
 Refer to <a href="parameters.html#_parameters_with_dataproviders">here</a> to learn how to work with data driven tests.</p>
@@ -3982,7 +4113,7 @@ Total tests run: 3, Passes: 2, Failures: 1, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_suite_level_invocations">3.24. Listening to Suite level invocations</h3>
+<h3 id="_listening_to_suite_level_invocations">3.25. Listening to Suite level invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/ISuiteListener.html">ISuiteListener</a> allows you to be notified whenever TestNG is about to start processing a <code>&lt;suite&gt;</code>.</p>
 </div>
@@ -4069,7 +4200,7 @@ Process finished with exit code 0</code></pre>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_overriding_test_methods">3.25. Overriding test methods</h3>
+<h3 id="_overriding_test_methods">3.26. Overriding test methods</h3>
 <div class="paragraph">
 <p>TestNG allows you to override and possibly skip the invocation of test methods.
 One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by implementing the interface <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IHookable.html">IHookable</a> inside either your test class (or) in your base class from which your test classes extend.</p>
@@ -4095,7 +4226,7 @@ One example of where this is useful is if you need to your test methods with a s
 </div>
 </div>
 <div class="sect2">
-<h3 id="_overriding_configuration_methods">3.26. Overriding configuration methods</h3>
+<h3 id="_overriding_configuration_methods">3.27. Overriding configuration methods</h3>
 <div class="paragraph">
 <p>TestNG allows you to override and possibly skip the invocation of configuration methods.
 You achieve this by implementing the interface <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurable.html">IConfigurable</a> inside either your test class (or) in your base class from which your test classes extend.</p>
@@ -4173,7 +4304,7 @@ public class SampleTestCase extends AbstractTestCase {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_altering_suites_or_tests">3.27. Altering suites (or) tests</h3>
+<h3 id="_altering_suites_or_tests">3.28. Altering suites (or) tests</h3>
 <div class="paragraph">
 <p>Sometimes you may need to just want to alter a suite (or) a test tag in a suite xml in runtime without having to change the contents of a suite file.</p>
 </div>
@@ -6487,7 +6618,7 @@ The element has one classname attribute which is mandatory, indicating the class
 <div id="footer">
 <div id="footer-text">
 7.9.0 <br>
-Last updated 2024-01-19 03:38:14 UTC
+Last updated 2024-01-19 08:07:22 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>

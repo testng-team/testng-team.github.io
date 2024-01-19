@@ -34,6 +34,7 @@
 <li><a href="#_running_testng_programmatically">Running TestNG programmatically</a></li>
 <li><a href="#_beanshell_and_advanced_group_selection">BeanShell and advanced group selection</a></li>
 <li><a href="#_method_interceptors">Method Interceptors</a></li>
+<li><a href="#_interceptors_for_data_providers">Interceptors for Data Providers</a></li>
 <li><a href="#_testng_listeners">TestNG Listeners</a></li>
 <li><a href="#_dependency_injection">Dependency injection</a></li>
 <li><a href="#_listening_to_testng_lifecycle_events">Listening to TestNG lifecycle events</a></li>
@@ -2481,6 +2482,136 @@ tng.setAnnotationTransformer(new MyTransformer());
 </div>
 </div>
 <div class="sect2">
+<h3 id="_interceptors_for_data_providers">Interceptors for Data Providers</h3>
+<div class="paragraph">
+<p>Once TestNG has invoked your data provider, it basically has the data set that is required to be fed via multiple iterations to a <code>@Test</code> annotated test method.</p>
+</div>
+<div class="paragraph">
+<p>But there can be situations wherein you may want to modify the data set before the data set is fed to the test method.</p>
+</div>
+<div class="paragraph">
+<p>This is where the data provider aware interceptors come into picture.</p>
+</div>
+<div class="paragraph">
+<p>TestNG provides a listener named {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[IDataProviderInterceptor] which lets you do this.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IDataProviderInterceptor;
+import org.testng.IDataProviderMethod;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+public class SampleDataInterceptor implements IDataProviderInterceptor {
+    @Override
+    public Iterator&lt;Object[]&gt; intercept(
+            Iterator&lt;Object[]&gt; original, IDataProviderMethod dataProviderMethod,
+                                        ITestNGMethod method, ITestContext iTestContext) {
+        // The test method would have custom attributes. From them look for a custom attribute
+        // whose name is "filter". It's value would the fully qualified class name that
+        // can be instantiated using reflection and then used to filter the data provider
+        // provided data set.
+        Optional&lt;String&gt; found = Arrays.stream(method.getAttributes())
+                .filter(it -&gt; "filter".equalsIgnoreCase(it.name()))
+                .flatMap(it -&gt; Arrays.stream(it.values()))
+                .findFirst();
+        if (found.isPresent()) {
+            String clazzName = found.get();
+            Predicate&lt;Object&gt; predicate = predicate(clazzName);
+            Spliterator&lt;Object[]&gt; split = Spliterators.spliteratorUnknownSize(original, Spliterator.ORDERED);
+            return StreamSupport.stream(split,false)
+                    .filter(predicate)
+                    .collect(Collectors.toList())
+                    .iterator();
+        }
+        return original;
+    }
+
+    private static Predicate&lt;Object&gt; predicate(String clazzName) {
+        try {
+            return (Predicate&lt;Object&gt;) Class.forName(clazzName).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            return input -&gt; true;
+        }
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how the filtering capability can look like. This filtering would basically prune through the data set and only allow even numbers to be used.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import java.util.function.Predicate;
+public class MyFilter implements Predicate&lt;Object&gt; {
+
+    @Override
+    public boolean test(Object object) {
+        if (object.getClass().isArray()) {
+            Object number = ((Object[]) object)[0];
+            return (Integer) number % 2 == 0;
+        }
+        return false;
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how a test case that consumes this listener can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SampleDataInterceptor.class)
+public class SampleDataDrivenTestCase {
+
+    @Test(dataProvider = "numbers",
+            attributes = {
+                    @CustomAttribute(name = "filter", values = {"org.testng.demo.MyFilter" })
+            }
+    )
+    public void passingTest(int i) {
+        System.err.println("Value = " + i);
+    }
+
+    @DataProvider(name = "numbers")
+    public Object[][] getNumbers() {
+        return new Object[][]{{1}, {2}, {3}, {4}};
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how the execution output can look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Value = 2
+Value = 4
+
+===============================================
+Default Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_testng_listeners">TestNG Listeners</h3>
 <div class="paragraph">
 <p>There are several interfaces that allow you to modify TestNG&#8217;s behavior. These interfaces are broadly called "TestNG Listeners". Here are a few listeners:</p>
@@ -2495,9 +2626,6 @@ tng.setAnnotationTransformer(new MyTransformer());
 </li>
 <li>
 <p>IConfigurationListener(<a href="method_invocations.html#_listening_to_configuration_invocations">doc</a>, {javadocs-base-url}/org/testng/IConfigurationListener.html[javadoc])</p>
-</li>
-<li>
-<p>IDataProviderInterceptor(doc, {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[javadoc])</p>
 </li>
 <li>
 <p>IDataProviderListener(<a href="method_invocations.html#_listening_to_data_provider_invocations">doc</a>, {javadocs-base-url}/org/testng/IDataProviderListener.html[javadoc])</p>
@@ -2521,7 +2649,10 @@ tng.setAnnotationTransformer(new MyTransformer());
 <p>IClassListener(<a href="method_invocations.html#_listening_to_class_level_invocations">doc</a>, {javadocs-base-url}/org/testng/IClassListener.html[javadoc])</p>
 </li>
 <li>
-<p>IMethodInterceptor (<a href="method_interceptors.html">doc</a>, {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])</p>
+<p>IMethodInterceptor (<a href="method_interceptors.html#_method_interceptors">doc</a>, {javadocs-base-url}/org/testng/IMethodInterceptor.html[javadoc])</p>
+</li>
+<li>
+<p>IDataProviderInterceptor(<a href="method_interceptors.html#_interceptors_for_data_providers">doc</a>, {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[javadoc])</p>
 </li>
 <li>
 <p>IReporter (<a href="logging_and_results.html#_logging_reporters">doc</a>, {javadocs-base-url}/org/testng/IReporter.html[javadoc])</p>
@@ -4443,7 +4574,7 @@ class ThisClass {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-19 03:38:14 UTC
+Last updated 2024-01-19 08:07:22 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
