@@ -1,4 +1,4 @@
-== TestNG Maven plug-ins
+== Using TestNG with Maven
 
 Maven 2 supports TestNG out of the box without the need to download any additional plugins (other than TestNG itself). It is recommended that you use version 2.4 or above of the Surefire plugin (this is the case in all recent versions of Maven).
 
