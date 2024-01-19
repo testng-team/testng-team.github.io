@@ -73,6 +73,17 @@ $ ./gradlew build
 
 You will then find the jar file in the `testng/build/libs` directory
 
+Some useful tasks:
+
+* `./gradlew tasks` - to see what all tasks are available
+* `./gradlew test` - to kick off the tests (incremental build)
+* `./gradlew clean test` - if you want to have a clean build.
+* `./gradlew autostyleApply` - Applies code formatting steps to sourcecode in-place.
+* `./gradlew autostyleCheck` - Checks that sourcecode satisfies formatting steps.
+* `./gradlew check` - Runs the below checks:
+** "Applies code formatting steps to sourcecode in-place." and
+** "Checks that sourcecode satisfies formatting steps.".
+
 ==== Build the TestNG Eclipse Plugin from source code
 
 TestNG Eclipse Plugin is https://github.com/testng-team/testng-eclipse[hosted on GitHub], you can download the source code and https://github.com/testng-team/testng-eclipse/blob/master/README.md#building[build by ourselves].
