@@ -32,5 +32,8 @@ include::miscellaneous.adoc[]
 
 include::book.adoc[]
 
-include::kobalt.adoc[]
+include::reportng.adoc[]
 
+include::github.adoc[]
+
+include::kobalt.adoc[]

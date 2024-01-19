@@ -1,0 +1,5 @@
+== ReportNG - A reporting tool
+
+ReportNG was originally built by https://github.com/dwdyer[Dan Dyer]. Since the author of this codebase archived this repo, the TestNG dev team decided to fork this codebase from https://github.com/dwdyer/reportng[dwdyer/reportng] to https://github.com/testng-team/reportng[here]
+
+Detailed documentation on how to use ReportNG is available https://testng.org/reportng/[here]

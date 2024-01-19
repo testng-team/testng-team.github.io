@@ -1,0 +1,17 @@
+== GitHub Repository
+
+=== TestNG Core
+
+The TestNG Core codebase is available https://github.com/testng-team/testng[here].
+
+=== TestNG Documentation
+
+The TestNG Documentation codebase is available https://github.com/testng-team/testng-team.github.io[here].
+
+=== TestNG Eclipse plugin
+
+The TestNG Eclipse plugin codebase is available https://github.com/testng-team/testng-eclipse[here].
+
+=== ReportNG - A reporting tool
+
+ReportNG which the TestNG Team forked from https://github.com/dwdyer/reportng[dwdyer/reportng] is available https://github.com/testng-team/reportng[here]
