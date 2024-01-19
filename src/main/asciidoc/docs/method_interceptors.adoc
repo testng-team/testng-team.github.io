@@ -48,3 +48,128 @@ public List<IMethodInstance> intercept(List<IMethodInstance> methods, ITestConte
 }
 ----
 
+=== Interceptors for Data Providers
+
+Once TestNG has invoked your data provider, it basically has the data set that is required to be fed via multiple iterations to a `@Test` annotated test method.
+
+But there can be situations wherein you may want to modify the data set before the data set is fed to the test method.
+
+This is where the data provider aware interceptors come into picture.
+
+TestNG provides a listener named {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[IDataProviderInterceptor] which lets you do this.
+
+Here's a sample implementation.
+
+[source, java]
+
+----
+import org.testng.IDataProviderInterceptor;
+import org.testng.IDataProviderMethod;
+import org.testng.ITestContext;
+import org.testng.ITestNGMethod;
+
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+public class SampleDataInterceptor implements IDataProviderInterceptor {
+    @Override
+    public Iterator<Object[]> intercept(
+            Iterator<Object[]> original, IDataProviderMethod dataProviderMethod,
+                                        ITestNGMethod method, ITestContext iTestContext) {
+        // The test method would have custom attributes. From them look for a custom attribute
+        // whose name is "filter". It's value would the fully qualified class name that
+        // can be instantiated using reflection and then used to filter the data provider
+        // provided data set.
+        Optional<String> found = Arrays.stream(method.getAttributes())
+                .filter(it -> "filter".equalsIgnoreCase(it.name()))
+                .flatMap(it -> Arrays.stream(it.values()))
+                .findFirst();
+        if (found.isPresent()) {
+            String clazzName = found.get();
+            Predicate<Object> predicate = predicate(clazzName);
+            Spliterator<Object[]> split = Spliterators.spliteratorUnknownSize(original, Spliterator.ORDERED);
+            return StreamSupport.stream(split,false)
+                    .filter(predicate)
+                    .collect(Collectors.toList())
+                    .iterator();
+        }
+        return original;
+    }
+
+    private static Predicate<Object> predicate(String clazzName) {
+        try {
+            return (Predicate<Object>) Class.forName(clazzName).getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            return input -> true;
+        }
+    }
+}
+----
+
+Here's how the filtering capability can look like. This filtering would basically prune through the data set and only allow even numbers to be used.
+
+[source, java]
+
+----
+import java.util.function.Predicate;
+public class MyFilter implements Predicate<Object> {
+
+    @Override
+    public boolean test(Object object) {
+        if (object.getClass().isArray()) {
+            Object number = ((Object[]) object)[0];
+            return (Integer) number % 2 == 0;
+        }
+        return false;
+    }
+}
+----
+
+Here's how a test case that consumes this listener can look like:
+
+[source, java]
+
+----
+import org.testng.annotations.CustomAttribute;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SampleDataInterceptor.class)
+public class SampleDataDrivenTestCase {
+
+    @Test(dataProvider = "numbers",
+            attributes = {
+                    @CustomAttribute(name = "filter", values = {"org.testng.demo.MyFilter" })
+            }
+    )
+    public void passingTest(int i) {
+        System.err.println("Value = " + i);
+    }
+
+    @DataProvider(name = "numbers")
+    public Object[][] getNumbers() {
+        return new Object[][]{{1}, {2}, {3}, {4}};
+    }
+}
+----
+
+Here's how the execution output can look like:
+
+[source, bash]
+
+----
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+Value = 2
+Value = 4
+
+===============================================
+Default Suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================
+----
+
