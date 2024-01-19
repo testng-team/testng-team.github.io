@@ -140,13 +140,14 @@
 <li><a href="#_guice_dependency_injection">3.18.2. Guice dependency injection</a></li>
 </ul>
 </li>
-<li><a href="#_listening_to_method_invocations">3.19. Listening to method invocations</a></li>
-<li><a href="#_listening_to_configuration_invocations">3.20. Listening to configuration invocations</a></li>
-<li><a href="#_listening_to_class_level_invocations">3.21. Listening to class level invocations</a></li>
-<li><a href="#_listening_to_data_provider_invocations">3.22. Listening to data provider invocations</a></li>
-<li><a href="#_overriding_test_methods">3.23. Overriding test methods</a></li>
-<li><a href="#_overriding_configuration_methods">3.24. Overriding configuration methods</a></li>
-<li><a href="#_altering_suites_or_tests">3.25. Altering suites (or) tests</a></li>
+<li><a href="#_listening_to_testng_lifecycle_events">3.19. Listening to TestNG lifecycle events</a></li>
+<li><a href="#_listening_to_method_invocations">3.20. Listening to method invocations</a></li>
+<li><a href="#_listening_to_configuration_invocations">3.21. Listening to configuration invocations</a></li>
+<li><a href="#_listening_to_class_level_invocations">3.22. Listening to class level invocations</a></li>
+<li><a href="#_listening_to_data_provider_invocations">3.23. Listening to data provider invocations</a></li>
+<li><a href="#_overriding_test_methods">3.24. Overriding test methods</a></li>
+<li><a href="#_overriding_configuration_methods">3.25. Overriding configuration methods</a></li>
+<li><a href="#_altering_suites_or_tests">3.26. Altering suites (or) tests</a></li>
 </ul>
 </li>
 <li><a href="#_test_results">4. Test results</a>
@@ -3038,7 +3039,7 @@ tng.setAnnotationTransformer(new MyTransformer());
 <p>IDataProviderListener(<a href="method_invocations.html#_listening_to_data_provider_invocations">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderListener.html">javadoc</a>)</p>
 </li>
 <li>
-<p>IExecutionListener(doc, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionListener.html">javadoc</a>)</p>
+<p>IExecutionListener(<a href="method_invocations.html#_listening_to_testng_lifecycle_events">doc</a>, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionListener.html">javadoc</a>)</p>
 </li>
 <li>
 <p>IExecutionVisualiser(doc, <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionVisualiser.html">javadoc</a>)</p>
@@ -3583,7 +3584,76 @@ public class TestClass {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_method_invocations">3.19. Listening to method invocations</h3>
+<h3 id="_listening_to_testng_lifecycle_events">3.19. Listening to TestNG lifecycle events</h3>
+<div class="paragraph">
+<p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionListener.html">IExecutionListener</a> allows you to be notified whenever TestNG is about to commence/conclude its execution. This listener can be used to perform setup and teardown activities at the test application layer itself ( for e.g., you could leverage this listener to boot up docker containers that are required for your application and shutdown them gracefully.)</p>
+</div>
+<div class="paragraph">
+<p>Please note that this is the first listener TestNG would execute before it commences executing any of the <code>&lt;suite&gt;</code> found and also this would be the last listener to be invoked by TestNG (after the reporting listeners) before TestNG exits.</p>
+</div>
+<div class="paragraph">
+<p>This listener should be declared, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample listener implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IExecutionListener;
+
+public class SimpleExecutionListener implements IExecutionListener {
+
+    @Override
+    public void onExecutionStart() {
+        System.err.println("TestNG is commencing execution");
+    }
+
+    @Override
+    public void onExecutionFinish() {
+        System.err.println("TestNG is finished execution");
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample test class that uses this above listener.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SimpleExecutionListener.class)
+public class SampleTestCase {
+
+    @Test
+    public void testMethod1() {}
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The execution output would look like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+TestNG is commencing execution
+
+===============================================
+Default Suite
+Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
+===============================================
+
+TestNG is finished execution
+
+Process finished with exit code 0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_listening_to_method_invocations">3.20. Listening to method invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IInvokedMethodListener.html">IInvokedMethodListener</a> allows you to be notified whenever TestNG is about to invoke a test (annotated with <code>@Test</code>) or configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
 </div>
@@ -3667,7 +3737,7 @@ Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_configuration_invocations">3.20. Listening to configuration invocations</h3>
+<h3 id="_listening_to_configuration_invocations">3.21. Listening to configuration invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurationListener.html">IConfigurationListener</a> allows you to be notified whenever TestNG is about to invoke a configuration (annotated with any of the <code>@Before</code> or <code>@After</code> annotation) method and declare it as a listener, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>. This listener also lets you be notified about whether a configuration passed, failed (or) if it got skipped.</p>
 </div>
@@ -3741,7 +3811,7 @@ Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_class_level_invocations">3.21. Listening to class level invocations</h3>
+<h3 id="_listening_to_class_level_invocations">3.22. Listening to class level invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IClassListener.html">IClassListener</a> allows you to be notified whenever TestNG is about to start processing a test class and invoke its configuration/tests.</p>
 </div>
@@ -3812,7 +3882,7 @@ Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_listening_to_data_provider_invocations">3.22. Listening to data provider invocations</h3>
+<h3 id="_listening_to_data_provider_invocations">3.23. Listening to data provider invocations</h3>
 <div class="paragraph">
 <p>The listener <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderListener.html">IDataProviderListener</a> allows you to be notified whenever TestNG is about invoke data provider methods.
 Refer to <a href="parameters.html#_parameters_with_dataproviders">here</a> to learn how to work with data driven tests.</p>
@@ -3911,7 +3981,7 @@ Total tests run: 3, Passes: 2, Failures: 1, Skips: 0
 </div>
 </div>
 <div class="sect2">
-<h3 id="_overriding_test_methods">3.23. Overriding test methods</h3>
+<h3 id="_overriding_test_methods">3.24. Overriding test methods</h3>
 <div class="paragraph">
 <p>TestNG allows you to override and possibly skip the invocation of test methods.
 One example of where this is useful is if you need to your test methods with a specific security manager. You achieve this by implementing the interface <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IHookable.html">IHookable</a> inside either your test class (or) in your base class from which your test classes extend.</p>
@@ -3937,7 +4007,7 @@ One example of where this is useful is if you need to your test methods with a s
 </div>
 </div>
 <div class="sect2">
-<h3 id="_overriding_configuration_methods">3.24. Overriding configuration methods</h3>
+<h3 id="_overriding_configuration_methods">3.25. Overriding configuration methods</h3>
 <div class="paragraph">
 <p>TestNG allows you to override and possibly skip the invocation of configuration methods.
 You achieve this by implementing the interface <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurable.html">IConfigurable</a> inside either your test class (or) in your base class from which your test classes extend.</p>
@@ -4015,7 +4085,7 @@ public class SampleTestCase extends AbstractTestCase {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_altering_suites_or_tests">3.25. Altering suites (or) tests</h3>
+<h3 id="_altering_suites_or_tests">3.26. Altering suites (or) tests</h3>
 <div class="paragraph">
 <p>Sometimes you may need to just want to alter a suite (or) a test tag in a suite xml in runtime without having to change the contents of a suite file.</p>
 </div>
@@ -6329,7 +6399,7 @@ The element has one classname attribute which is mandatory, indicating the class
 <div id="footer">
 <div id="footer-text">
 7.9.0 <br>
-Last updated 2024-01-18 08:11:17 UTC
+Last updated 2024-01-19 03:21:06 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
