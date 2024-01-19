@@ -1,3 +1,69 @@
+=== Listening to TestNG lifecycle events
+
+The listener {javadocs-base-url}/org/testng/IExecutionListener.html[IExecutionListener] allows you to be notified whenever TestNG is about to commence/conclude its execution. This listener can be used to perform setup and teardown activities at the test application layer itself ( for e.g., you could leverage this listener to boot up docker containers that are required for your application and shutdown them gracefully.)
+
+Please note that this is the first listener TestNG would execute before it commences executing any of the `<suite>` found and also this would be the last listener to be invoked by TestNG (after the reporting listeners) before TestNG exits.
+
+This listener should be declared, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].
+
+Here's a sample listener implementation.
+
+[source, java]
+
+----
+import org.testng.IExecutionListener;
+
+public class SimpleExecutionListener implements IExecutionListener {
+
+    @Override
+    public void onExecutionStart() {
+        System.err.println("TestNG is commencing execution");
+    }
+
+    @Override
+    public void onExecutionFinish() {
+        System.err.println("TestNG is finished execution");
+    }
+}
+----
+
+Here's a sample test class that uses this above listener.
+
+[source, java]
+
+----
+import org.testng.annotations.Listeners;
+import org.testng.annotations.Test;
+
+@Listeners(SimpleExecutionListener.class)
+public class SampleTestCase {
+
+    @Test
+    public void testMethod1() {}
+}
+----
+
+The execution output would look like below:
+
+[source, bash]
+
+----
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+TestNG is commencing execution
+
+===============================================
+Default Suite
+Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
+===============================================
+
+TestNG is finished execution
+
+Process finished with exit code 0
+----
+
+
 === Listening to method invocations
 
 The listener {javadocs-base-url}/org/testng/IInvokedMethodListener.html[IInvokedMethodListener] allows you to be notified whenever TestNG is about to invoke a test (annotated with `@Test`) or configuration (annotated with any of the `@Before` or `@After` annotation) method and declare it as a listener, as explained in the section about xref:testng_listeners.adoc[TestNG listeners].

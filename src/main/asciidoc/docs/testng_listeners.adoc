@@ -7,7 +7,7 @@ There are several interfaces that allow you to modify TestNG's behavior. These i
 * IConfigurationListener(xref:method_invocations.adoc#_listening_to_configuration_invocations[doc], {javadocs-base-url}/org/testng/IConfigurationListener.html[javadoc])
 * IDataProviderInterceptor(doc, {javadocs-base-url}/org/testng/IDataProviderInterceptor.html[javadoc])
 * IDataProviderListener(xref:method_invocations.adoc#_listening_to_data_provider_invocations[doc], {javadocs-base-url}/org/testng/IDataProviderListener.html[javadoc])
-* IExecutionListener(doc, {javadocs-base-url}/org/testng/IExecutionListener.html[javadoc])
+* IExecutionListener(xref:method_invocations.adoc#_listening_to_testng_lifecycle_events[doc], {javadocs-base-url}/org/testng/IExecutionListener.html[javadoc])
 * IExecutionVisualiser(doc, {javadocs-base-url}/org/testng/IExecutionVisualiser.html[javadoc])
 * IHookable (xref:ihookable.adoc[doc], {javadocs-base-url}/org/testng/IHookable.html[javadoc])
 * IConfigurable(xref:iconfigurable.adoc[doc], {javadocs-base-url}/org/testng/IConfigurable.html[javadoc])
