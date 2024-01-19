@@ -41,6 +41,7 @@
 <li><a href="#_listening_to_configuration_invocations">Listening to configuration invocations</a></li>
 <li><a href="#_listening_to_class_level_invocations">Listening to class level invocations</a></li>
 <li><a href="#_listening_to_data_provider_invocations">Listening to data provider invocations</a></li>
+<li><a href="#_listening_to_suite_level_invocations">Listening to Suite level invocations</a></li>
 <li><a href="#_overriding_test_methods">Overriding test methods</a></li>
 <li><a href="#_overriding_configuration_methods">Overriding configuration methods</a></li>
 <li><a href="#_altering_suites_or_tests">Altering suites (or) tests</a></li>
@@ -2526,7 +2527,7 @@ tng.setAnnotationTransformer(new MyTransformer());
 <p>IReporter (<a href="logging_and_results.html#_logging_reporters">doc</a>, {javadocs-base-url}/org/testng/IReporter.html[javadoc])</p>
 </li>
 <li>
-<p>ISuiteListener (doc, {javadocs-base-url}/org/testng/ISuiteListener.html[javadoc])</p>
+<p>ISuiteListener (<a href="method_invocations.html#_listening_to_suite_level_invocations">doc</a>, {javadocs-base-url}/org/testng/ISuiteListener.html[javadoc])</p>
 </li>
 <li>
 <p>ITestListener (<a href="logging_and_results.html#_logging_listeners">doc</a>, {javadocs-base-url}/org/testng/ITestListener.html[javadoc])</p>
@@ -3444,6 +3445,93 @@ Total tests run: 3, Passes: 2, Failures: 1, Skips: 0
 </div>
 </div>
 <div class="sect2">
+<h3 id="_listening_to_suite_level_invocations">Listening to Suite level invocations</h3>
+<div class="paragraph">
+<p>The listener {javadocs-base-url}/org/testng/ISuiteListener.html[ISuiteListener] allows you to be notified whenever TestNG is about to start processing a <code>&lt;suite&gt;</code>.</p>
+</div>
+<div class="paragraph">
+<p>This listener can be used to perform setup/teardown activities at the suite level.</p>
+</div>
+<div class="paragraph">
+<p>Add the listener implementation, as explained in the section about <a href="testng_listeners.html">TestNG listeners</a>.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a sample listener implementation.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.ISuite;
+import org.testng.ISuiteListener;
+
+public class SimpleSuiteListener implements ISuiteListener {
+
+    @Override
+    public void onStart(ISuite suite) {
+        log("Commencing", suite);
+    }
+
+    @Override
+    public void onFinish(ISuite suite) {
+        log("Completed", suite);
+    }
+
+    private static void log(String prefix, ISuite suite) {
+        String msg = prefix + " execution for the suite named &lt;" + suite.getName() + "&gt;";
+        System.err.println(msg);
+    }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A suite <code>&lt;suite&gt;</code> xml file could look like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="xml">&lt;!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd"&gt;
+&lt;suite name="Regression-test-suite" verbose="2"&gt;
+    &lt;listeners&gt;
+        &lt;listener class-name="org.testng.demo.SimpleSuiteListener"/&gt;
+    &lt;/listeners&gt;
+    &lt;test name="P1-Build-Certification-Tests" verbose="2"&gt;
+        &lt;classes&gt;
+            &lt;class name="org.testng.demo.SampleTestCase"/&gt;
+        &lt;/classes&gt;
+    &lt;/test&gt;
+&lt;/suite&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The execution output would look like below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+...
+... TestNG 7.9.0 by Cédric Beust (cedric@beust.com)
+...
+
+Commencing execution for the suite named &lt;Regression-test-suite&gt;
+PASSED: org.testng.demo.configs.SampleTestCase.testMethod1
+
+===============================================
+    P1-Build-Certification-Tests
+    Tests run: 1, Failures: 0, Skips: 0
+===============================================
+
+Completed execution for the suite named &lt;Regression-test-suite&gt;
+
+===============================================
+Regression-test-suite
+Total tests run: 1, Passes: 1, Failures: 0, Skips: 0
+===============================================
+
+Process finished with exit code 0</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_overriding_test_methods">Overriding test methods</h3>
 <div class="paragraph">
 <p>TestNG allows you to override and possibly skip the invocation of test methods.
@@ -4355,7 +4443,7 @@ class ThisClass {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-19 03:21:06 UTC
+Last updated 2024-01-19 03:38:14 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
