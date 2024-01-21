@@ -26,8 +26,6 @@ include::docs/rerunning_failed_tests.adoc[]
 
 include::docs/junit_tests.adoc[]
 
-include::docs/run_testng_via_code.adoc[]
-
 include::docs/beanshell.adoc[]
 
 include::docs/annotation_transformers.adoc[]

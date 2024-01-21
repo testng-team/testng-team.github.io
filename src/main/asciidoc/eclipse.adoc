@@ -1,10 +1,10 @@
-== Eclipse plug-in
+=== Eclipse plug-in
 
 The TestNG Eclipse plug-in allows you to run your TestNG tests from Eclipse and easily monitor their execution and their output.
 
 It has its own project repository called https://github.com/testng-team/testng-eclipse[testng-eclipse].
 
-=== Installation
+==== Installation
 
 Follow the instructions to install the https://testng.org/doc/download.html[plug-in].
 
@@ -14,7 +14,7 @@ Once done, restart Eclipse and select the menu `Window / Show View / Other...`  
 
 image::view.png[align, center]
 
-=== Creating a TestNG class
+==== Creating a TestNG class
 
 To create a new TestNG class, select the menu `File / New / TestNG`:
 
@@ -28,7 +28,7 @@ The next page lets you specify where that file will be created, whether it shoul
 
 The plug-in will make a guess about the best location where this file should be created (for example, if you are using Maven, the default location will be under `src/test/java`).
 
-=== Launch configuration
+==== Launch configuration
 
 Once you have created classes that contain TestNG annotations and/or one or more testng.xml files, you can create a TestNG Launch Configuration.  Select the `Run / Run... (or Run / Debug...)` menu and create a new TestNG configuration:
 
@@ -48,19 +48,19 @@ You should change the name of this configuration and pick a project, which can b
 
 Then you choose to launch your TestNG tests in the following ways:
 
-==== From a class file
+===== From a class file
 
 Make sure the box near Class is checked and then pick a class from your project.  You can click on the Browse... button and pick it directly from a list.  This list only contains classes that contain TestNG annotations:
 
 image::classes.png[]
 
-==== From groups
+===== From groups
 
 If you only want to launch one or several groups, you can type them in the text field or pick them from a list by clicking on the Browse... button
 
 image::groups.png[]
 
-==== From a definition file
+===== From a definition file
 
 Finally, you can select a suite definition from your project. It doesn't have to be named testng.xml, the plug-in will automatically identify all the applicable TestNG XML files in your project:
 
@@ -68,7 +68,7 @@ image::suites.png[]
 
 You can type the regex on the filter text field to narrow down to suite definition files matching your search from a long list of files.
 
-==== From a method
+===== From a method
 
 This launch isn't accomplished from the Launch dialog but directly from your Outline view:
 
@@ -80,7 +80,7 @@ Method launching is also available from the Package Explorer view and from the J
 
 Once you have selected one of these launches, you can also choose the logging of level. Then you can launch the tests by pressing the Debug (or Run) button, which will switch you to the Debug perspective and will open the main TestNG view.
 
-==== Specifying listeners and other settings
+===== Specifying listeners and other settings
 
 As you saw above, the plug-in will let you start tests in many different ways: from an XML file, from a method, a class, etc... When you are running an XML file, you can specify all the settings you want for this run in the XML file, but what if you want to run a package in parallel mode with specific listeners? How can you configure the settings for all the launches that are not done from an XML file?
 
@@ -90,7 +90,7 @@ image::template.png[]
 
 If you specify a valid suite file as "XML template file", TestNG will reuse all the settings found in this XML file, such as parallel, name, listeners, thread pool size, etc... Only the <test> tags in this file will be ignored since the plug-in will replace these by a generated <test> tag that represents the launch you chose.
 
-=== Viewing the test results
+==== Viewing the test results
 
 image::success.png[]
 
@@ -102,13 +102,13 @@ image::failure.png[]
 
 You can use the Failed tests tab to display only these tests that failed, and when you select such a test, the stack trace will be shown on the right-hand pane.  You can double click on the offending line to be taken directly to the failure in your code.
 
-=== Search
+==== Search
 
 image::search.png[]
 
 When you have hundreds of tests running, finding a specific one is not always easy, so you can type a few letters of the test method or its parameters in the Search box and the content of the tree will automatically narrow down to methods matching your search. Note in the screen shot above that the search also works on parameters provided by `@DataProvider`.
 
-=== Summary
+==== Summary
 
 image::summary1.png[]
 
@@ -118,7 +118,7 @@ The search box works in this view as well, and note that in the screen shot belo
 
 image::summary2.png[]
 
-=== Converting JUnit tests
+==== Converting JUnit tests
 
 You can easily convert JUnit 3 and JUnit 4 tests to TestNG.
 
@@ -150,7 +150,7 @@ When you are done, press the "Finish" button. Like all Eclipse refactorings, you
 
 image::menu-convert4.png[]
 
-=== Quick fixes
+==== Quick fixes
 
 The TestNG Eclipse plug-in offers several quick fixes while you are editing a TestNG class (accessible with Ctrl-1 on Windows/Linux and ⌘-1 on Mac OS):
 
@@ -162,9 +162,9 @@ This was covered in the https://testng.org/doc/eclipse.html#eclipse-quickfix[pre
 
 If you have several test methods annotated with @Test and you'd like to replace them all with a single @Test annotation at the class level, choose the "Pull annotation" quick fix. Reciprocally, you can move a class level @Test annotation onto all your public methods or apply a quick fix on an assert method to automatically import it.
 
-=== Preferences and Properties
+==== Preferences and Properties
 
-==== Workbench Preferences
+===== Workbench Preferences
 
 TestNG workbench preferences:
 
@@ -180,7 +180,7 @@ image::preferences.png[]
 * *Excluded stack traces*:
 * *Predefined Listeners*:
 
-==== Project Properties
+===== Project Properties
 
 Project level properties:
 
@@ -193,7 +193,7 @@ Here are properties on each project level, it will override the same properties 
 * *Template XML file*: see in https://testng.org/doc/eclipse.html#eclipse-workbench-preferences[TestNG workbench preferences]
 * *Predefined Listeners*: see in https://testng.org/doc/eclipse.html#eclipse-workbench-preferences[TestNG workbench preferences]
 
-=== M2E Integration
+==== M2E Integration
 
 The (optional) TestNG M2E Integration plug-in was introduced in 6.9.10. It allows you to run your tests with System Properties or JVM settings, which are defined by `maven-surefire-plugin` or `maven-failsafe-plugin` of `pom.xml`, to be appended to the runtime TestNG process. Once this plugin installed, you can see a dedicated preference page (workspace level settings):
 

@@ -1,4 +1,4 @@
-== TestNG Ant Task
+=== TestNG Ant Task
 
 You define the TestNG ant task as follows:
 
@@ -143,7 +143,7 @@ TIP: One of attributes `classpath`, `classpathref` or nested `<classpath>` must 
 
 TIP: One of the attributes `xmlfilesetref`, `classfilesetref` or nested `<xmlfileset>`, respectively `<classfileset>` must be used for providing the tests.
 
-=== TestNG modes
+==== TestNG modes
 
 The TestNG mode gets applied when tests are passed to TestNG using classfilesetref, methods or nested <classfileset> and tells TestNG what kind of tests it should look for and run:
 
@@ -153,25 +153,25 @@ The TestNG mode gets applied when tests are passed to TestNG using classfilesetr
 
 NOTE: `junit` and `mixed` modes require the JUnit jar file on the classpath.
 
-=== Nested Elements
+==== Nested Elements
 
-==== classpath
+===== classpath
 
 The `<testng>` task supports a nested <classpath> element that represents a PATH-like structure.
 
-==== bootclasspath
+===== bootclasspath
 
 The location of bootstrap class files can be specified using this PATH-like structure - will be ignored if fork is not set.
 
-==== xmlfileset
+===== xmlfileset
 
 The suite definitions (`testng.xml`) can be passed to the task with a FileSet structure.
 
-==== classfileset
+===== classfileset
 
 TestNG can also run directly on classes, also supplied with a FileSet structure.
 
-==== jvmarg
+===== jvmarg
 
 Additional parameters may be passed to the new VM via nested <jvmarg> elements. For example:
 
@@ -184,7 +184,7 @@ Additional parameters may be passed to the new VM via nested <jvmarg> elements. 
 </testng>
 ----
 
-==== sysproperty
+===== sysproperty
 
 Use nested `<sysproperty>` elements to specify system properties required by the class. These properties will be made available to the virtual machine during the execution of the test. The attributes for this element are the same as for environment variables:
 
@@ -199,7 +199,7 @@ Use nested `<sysproperty>` elements to specify system properties required by the
 
 will run the test and make the basedir property available to the test.
 
-==== propertyset
+===== propertyset
 
 You may also use a nested <propertyset> element to specify a set of system properties that are defined outside of the TestNG ant task. This allows for more flexible definitions of system properties, for instance selecting all properties with a specific prefix or matching a regex. See the https://ant.apache.org/manual/Types/propertyset.html[PropertySet] page in the https://ant.apache.org/manual/[Ant manual] for full details. Here's a simple example:
 
@@ -224,7 +224,7 @@ You may also use a nested <propertyset> element to specify a set of system prope
 
 In this case, the system properties named "myprop1" and "myprop2" are passed along to the TestNG process.
 
-==== reporter
+===== reporter
 
 An inner `<reporter>` element is an alternative way to inject a custom report listener allowing the user to set custom properties in order to fine-tune the behavior of the reporter at run-time.
 The element has one classname attribute which is mandatory, indicating the class of the custom listener. In order to set the properties of the reporter, the `<reporter>` element can contain several nested <property> elements which will provide the name and value attributes as seen below:
@@ -267,11 +267,11 @@ You have to consider though that for the moment only a limited set of property t
 * `long`
 * `short`
 
-==== env
+===== env
 
 It is possible to specify environment variables to pass to the TestNG forked virtual machine via nested `<env>` elements. For a description of the `<env>` element's attributes, see the description in the https://ant.apache.org/manual/CoreTasks/exec.html[exec] task.
 
-=== Examples
+==== Examples
 
 *Suite xml*
 

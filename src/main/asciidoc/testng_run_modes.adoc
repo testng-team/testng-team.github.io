@@ -1,0 +1,13 @@
+== Running TestNG
+
+include::eclipse.adoc[]
+
+include::idea.adoc[]
+
+include::gradle.adoc[]
+
+include::maven.adoc[]
+
+include::ant.adoc[]
+
+include::run_testng_via_code.adoc[]

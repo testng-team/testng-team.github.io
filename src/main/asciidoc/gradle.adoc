@@ -1,10 +1,10 @@
-== Using TestNG with Gradle
+=== Using TestNG with Gradle
 
 Gradle provides first class integration with TestNG and lets you run your TestNG tests.
 
 Please refer to the https://docs.gradle.org/current/userguide/java_testing.html[Official Gradle Documentation] for more details.
 
-=== Specifying your Gradle build file
+==== Specifying your Gradle build file
 
 The dependency in your project should look like the following:
 

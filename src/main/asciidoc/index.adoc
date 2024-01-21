@@ -20,15 +20,7 @@ include::migrating_from_junit.adoc[]
 
 include::javadocs.adoc[]
 
-include::eclipse.adoc[]
-
-include::idea.adoc[]
-
-include::gradle.adoc[]
-
-include::maven.adoc[]
-
-include::ant.adoc[]
+include::testng_run_modes.adoc[]
 
 include::miscellaneous.adoc[]
 
