@@ -15,36 +15,22 @@
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_eclipse_plug_in">Eclipse plug-in</a>
 <ul class="sectlevel2">
-<li><a href="#_installation">Installation</a></li>
-<li><a href="#_creating_a_testng_class">Creating a TestNG class</a></li>
-<li><a href="#_launch_configuration">Launch configuration</a></li>
-<li><a href="#_viewing_the_test_results">Viewing the test results</a></li>
-<li><a href="#_search">Search</a></li>
-<li><a href="#_summary">Summary</a></li>
-<li><a href="#_converting_junit_tests">Converting JUnit tests</a></li>
-<li><a href="#_quick_fixes">Quick fixes</a></li>
-<li><a href="#_preferences_and_properties">Preferences and Properties</a></li>
-<li><a href="#_m2e_integration">M2E Integration</a></li>
-</ul>
-</li>
+<li><a href="#_eclipse_plug_in">Eclipse plug-in</a></li>
 </ul>
 </div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_eclipse_plug_in">Eclipse plug-in</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_eclipse_plug_in">Eclipse plug-in</h3>
 <div class="paragraph">
 <p>The TestNG Eclipse plug-in allows you to run your TestNG tests from Eclipse and easily monitor their execution and their output.</p>
 </div>
 <div class="paragraph">
 <p>It has its own project repository called <a href="https://github.com/testng-team/testng-eclipse">testng-eclipse</a>.</p>
 </div>
-<div class="sect2">
-<h3 id="_installation">Installation</h3>
+<div class="sect3">
+<h4 id="_installation">Installation</h4>
 <div class="paragraph">
 <p>Follow the instructions to install the <a href="https://testng.org/doc/download.html">plug-in</a>.</p>
 </div>
@@ -60,8 +46,8 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_creating_a_testng_class">Creating a TestNG class</h3>
+<div class="sect3">
+<h4 id="_creating_a_testng_class">Creating a TestNG class</h4>
 <div class="paragraph">
 <p>To create a new TestNG class, select the menu <code>File / New / TestNG</code>:</p>
 </div>
@@ -85,8 +71,8 @@
 <p>The plug-in will make a guess about the best location where this file should be created (for example, if you are using Maven, the default location will be under <code>src/test/java</code>).</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_launch_configuration">Launch configuration</h3>
+<div class="sect3">
+<h4 id="_launch_configuration">Launch configuration</h4>
 <div class="paragraph">
 <p>Once you have created classes that contain TestNG annotations and/or one or more testng.xml files, you can create a TestNG Launch Configuration.  Select the <code>Run / Run&#8230;&#8203; (or Run / Debug&#8230;&#8203;)</code> menu and create a new TestNG configuration:</p>
 </div>
@@ -135,8 +121,8 @@
 <div class="paragraph">
 <p>Then you choose to launch your TestNG tests in the following ways:</p>
 </div>
-<div class="sect3">
-<h4 id="_from_a_class_file">From a class file</h4>
+<div class="sect4">
+<h5 id="_from_a_class_file">From a class file</h5>
 <div class="paragraph">
 <p>Make sure the box near Class is checked and then pick a class from your project.  You can click on the Browse&#8230;&#8203; button and pick it directly from a list.  This list only contains classes that contain TestNG annotations:</p>
 </div>
@@ -146,8 +132,8 @@
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_from_groups">From groups</h4>
+<div class="sect4">
+<h5 id="_from_groups">From groups</h5>
 <div class="paragraph">
 <p>If you only want to launch one or several groups, you can type them in the text field or pick them from a list by clicking on the Browse&#8230;&#8203; button</p>
 </div>
@@ -157,8 +143,8 @@
 </div>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_from_a_definition_file">From a definition file</h4>
+<div class="sect4">
+<h5 id="_from_a_definition_file">From a definition file</h5>
 <div class="paragraph">
 <p>Finally, you can select a suite definition from your project. It doesn&#8217;t have to be named testng.xml, the plug-in will automatically identify all the applicable TestNG XML files in your project:</p>
 </div>
@@ -171,8 +157,8 @@
 <p>You can type the regex on the filter text field to narrow down to suite definition files matching your search from a long list of files.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_from_a_method">From a method</h4>
+<div class="sect4">
+<h5 id="_from_a_method">From a method</h5>
 <div class="paragraph">
 <p>This launch isn&#8217;t accomplished from the Launch dialog but directly from your Outline view:</p>
 </div>
@@ -191,8 +177,8 @@
 <p>Once you have selected one of these launches, you can also choose the logging of level. Then you can launch the tests by pressing the Debug (or Run) button, which will switch you to the Debug perspective and will open the main TestNG view.</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_specifying_listeners_and_other_settings">Specifying listeners and other settings</h4>
+<div class="sect4">
+<h5 id="_specifying_listeners_and_other_settings">Specifying listeners and other settings</h5>
 <div class="paragraph">
 <p>As you saw above, the plug-in will let you start tests in many different ways: from an XML file, from a method, a class, etc&#8230;&#8203; When you are running an XML file, you can specify all the settings you want for this run in the XML file, but what if you want to run a package in parallel mode with specific listeners? How can you configure the settings for all the launches that are not done from an XML file?</p>
 </div>
@@ -209,8 +195,8 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_viewing_the_test_results">Viewing the test results</h3>
+<div class="sect3">
+<h4 id="_viewing_the_test_results">Viewing the test results</h4>
 <div class="imageblock">
 <div class="content">
 <img src="pics/success.png" alt="success">
@@ -231,8 +217,8 @@
 <p>You can use the Failed tests tab to display only these tests that failed, and when you select such a test, the stack trace will be shown on the right-hand pane.  You can double click on the offending line to be taken directly to the failure in your code.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_search">Search</h3>
+<div class="sect3">
+<h4 id="_search">Search</h4>
 <div class="imageblock">
 <div class="content">
 <img src="pics/search.png" alt="search">
@@ -242,8 +228,8 @@
 <p>When you have hundreds of tests running, finding a specific one is not always easy, so you can type a few letters of the test method or its parameters in the Search box and the content of the tree will automatically narrow down to methods matching your search. Note in the screen shot above that the search also works on parameters provided by <code>@DataProvider</code>.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_summary">Summary</h3>
+<div class="sect3">
+<h4 id="_summary">Summary</h4>
 <div class="imageblock">
 <div class="content">
 <img src="pics/summary1.png" alt="summary1">
@@ -261,8 +247,8 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_converting_junit_tests">Converting JUnit tests</h3>
+<div class="sect3">
+<h4 id="_converting_junit_tests">Converting JUnit tests</h4>
 <div class="paragraph">
 <p>You can easily convert JUnit 3 and JUnit 4 tests to TestNG.</p>
 </div>
@@ -321,8 +307,8 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_quick_fixes">Quick fixes</h3>
+<div class="sect3">
+<h4 id="_quick_fixes">Quick fixes</h4>
 <div class="paragraph">
 <p>The TestNG Eclipse plug-in offers several quick fixes while you are editing a TestNG class (accessible with Ctrl-1 on Windows/Linux and ⌘-1 on Mac OS):</p>
 </div>
@@ -339,10 +325,10 @@
 <p>If you have several test methods annotated with @Test and you&#8217;d like to replace them all with a single @Test annotation at the class level, choose the "Pull annotation" quick fix. Reciprocally, you can move a class level @Test annotation onto all your public methods or apply a quick fix on an assert method to automatically import it.</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_preferences_and_properties">Preferences and Properties</h3>
 <div class="sect3">
-<h4 id="_workbench_preferences">Workbench Preferences</h4>
+<h4 id="_preferences_and_properties">Preferences and Properties</h4>
+<div class="sect4">
+<h5 id="_workbench_preferences">Workbench Preferences</h5>
 <div class="paragraph">
 <p>TestNG workbench preferences:</p>
 </div>
@@ -382,8 +368,8 @@
 </ul>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_project_properties">Project Properties</h4>
+<div class="sect4">
+<h5 id="_project_properties">Project Properties</h5>
 <div class="paragraph">
 <p>Project level properties:</p>
 </div>
@@ -413,8 +399,8 @@
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_m2e_integration">M2E Integration</h3>
+<div class="sect3">
+<h4 id="_m2e_integration">M2E Integration</h4>
 <div class="paragraph">
 <p>The (optional) TestNG M2E Integration plug-in was introduced in 6.9.10. It allows you to run your tests with System Properties or JVM settings, which are defined by <code>maven-surefire-plugin</code> or <code>maven-failsafe-plugin</code> of <code>pom.xml</code>, to be appended to the runtime TestNG process. Once this plugin installed, you can see a dedicated preference page (workspace level settings):</p>
 </div>
@@ -499,10 +485,9 @@ If your maven-surefire-plugin is defined in a Maven profile, you will need to se
 </div>
 </div>
 </div>
-</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-21 08:11:36 UTC
+Last updated 2024-01-21 08:54:04 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
