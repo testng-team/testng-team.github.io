@@ -37,5 +37,3 @@ include::book.adoc[]
 include::reportng.adoc[]
 
 include::github.adoc[]
-
-include::kobalt.adoc[]
