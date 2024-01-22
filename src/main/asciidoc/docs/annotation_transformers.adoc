@@ -1,12 +1,23 @@
 ==== Annotation Transformers
 
-TestNG allows you to modify the content of all the annotations at runtime. This is especially useful if the annotations in the source code are right most of the time, but there are a few situations where you'd like to override their value.
+:url: https://javadoc.io/static/org.testng/testng/{version-label}
 
-In order to achieve this, you need to use an Annotation Transformer.
+TestNG allows you to modify the content of all the annotations at runtime.
 
-An Annotation Transformer is a class that implements {javadocs-base-url}/org/testng/IAnnotationTransformer.html[IAnnotationTransformer]
+This is especially useful if the annotations in the source code are right most of the time, but there are a few situations where you'd like to override their value.
 
-Like all the other TestNG listeners, you can specify this class either on the command line or with ant:
+In order to achieve this, you can build a class that implements {url}/org/testng/IAnnotationTransformer.html[IAnnotationTransformer]
+
+This is a special TestNG listener. It can be added into TestNG via the following mechanisms.
+
+==== Via xml suite file
+
+You can use the `<listeners>` tag to specify an implementation of `IAnnotationTransformer` in your suite xml file.
+
+==== Via command line arguments
+
+You can use the command line argument `-listener` to specify the fully qualified class name of the implementation of
+`IAnnotationTransformer` as shown below.
 
 [source, bash]
 
@@ -14,15 +25,37 @@ Like all the other TestNG listeners, you can specify this class either on the co
 java org.testng.TestNG -listener MyTransformer testng.xml
 ----
 
-or programmatically:
+==== Via your code
+
+An implementation of `IAnnotationTransformer` can be wired in via your code as well (In case you are working with using the TestNG APIs for programmatically running your tests.)
 
 [source, java]
 
 ----
 TestNG tng = new TestNG();
-tng.setAnnotationTransformer(new MyTransformer());
+tng.addListener(new MyTransformer());
 // ...
 ----
+
+WARNING: Please don't use the `@Listeners` annotation to wire-in an implementation of `org.testng.IAnnotationTransformer`.
+Doing so will cause your implementation to be ignored. This is because TestNG needs to be able to parse all annotations
+before starting to execute them and `@Listeners` is also one such annotation.
+
+The annotation transformer allows you to alter the below types of annotations at runtime:
+
+* `@Test` annotation on test methods.
+* Any of the common attributes associated with the below listed configuration annotations:
+** `@BeforeSuite`
+** `@AfterSuite`
+** `@BeforeTest`
+** `@AfterTest`
+** `@BeforeClass`
+** `@AfterClass`
+** `@BeforeMethod`
+** `@AfterMethod`
+* `@Listeners` annotation on test classes.
+* `@Factory` annotation used to mark constructors or a factory method as test factories.
+* `@DataProvider` annotated data providers.
 
 When the method `transform()` is invoked, you can call any of the setters on the `ITestAnnotation` test parameter to alter its value before TestNG proceeds further.
 
@@ -39,3 +72,4 @@ public class MyTransformer implements IAnnotationTransformer {
   }
 }
 ----
+
