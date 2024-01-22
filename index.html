@@ -124,6 +124,9 @@
 <li><a href="#_beanshell_and_advanced_group_selection">3.14. BeanShell and advanced group selection</a>
 <ul class="sectlevel3">
 <li><a href="#_annotation_transformers">3.14.1. Annotation Transformers</a></li>
+<li><a href="#_via_xml_suite_file">3.14.2. Via xml suite file</a></li>
+<li><a href="#_via_command_line_arguments">3.14.3. Via command line arguments</a></li>
+<li><a href="#_via_your_code">3.14.4. Via your code</a></li>
 </ul>
 </li>
 <li><a href="#_method_interceptors">3.15. Method Interceptors</a></li>
@@ -2859,31 +2862,111 @@ For example <a href="https://mvnrepository.com/artifact/org.apache-extras.beansh
 <div class="sect3">
 <h4 id="_annotation_transformers">3.14.1. Annotation Transformers</h4>
 <div class="paragraph">
-<p>TestNG allows you to modify the content of all the annotations at runtime. This is especially useful if the annotations in the source code are right most of the time, but there are a few situations where you&#8217;d like to override their value.</p>
+<p>TestNG allows you to modify the content of all the annotations at runtime.</p>
 </div>
 <div class="paragraph">
-<p>In order to achieve this, you need to use an Annotation Transformer.</p>
+<p>This is especially useful if the annotations in the source code are right most of the time, but there are a few situations where you&#8217;d like to override their value.</p>
 </div>
 <div class="paragraph">
-<p>An Annotation Transformer is a class that implements <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IAnnotationTransformer.html">IAnnotationTransformer</a></p>
+<p>In order to achieve this, you can build a class that implements <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IAnnotationTransformer.html">IAnnotationTransformer</a></p>
 </div>
 <div class="paragraph">
-<p>Like all the other TestNG listeners, you can specify this class either on the command line or with ant:</p>
+<p>This is a special TestNG listener. It can be added into TestNG via the following mechanisms.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_via_xml_suite_file">3.14.2. Via xml suite file</h4>
+<div class="paragraph">
+<p>You can use the <code>&lt;listeners&gt;</code> tag to specify an implementation of <code>IAnnotationTransformer</code> in your suite xml file.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_via_command_line_arguments">3.14.3. Via command line arguments</h4>
+<div class="paragraph">
+<p>You can use the command line argument <code>-listener</code> to specify the fully qualified class name of the implementation of
+<code>IAnnotationTransformer</code> as shown below.</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code data-lang="bash">java org.testng.TestNG -listener MyTransformer testng.xml</code></pre>
 </div>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_via_your_code">3.14.4. Via your code</h4>
 <div class="paragraph">
-<p>or programmatically:</p>
+<p>An implementation of <code>IAnnotationTransformer</code> can be wired in via your code as well (In case you are working with using the TestNG APIs for programmatically running your tests.)</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="prettyprint highlight"><code data-lang="java">TestNG tng = new TestNG();
-tng.setAnnotationTransformer(new MyTransformer());
+tng.addListener(new MyTransformer());
 // ...</code></pre>
 </div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+Please don&#8217;t use the <code>@Listeners</code> annotation to wire-in an implementation of <code>org.testng.IAnnotationTransformer</code>.
+Doing so will cause your implementation to be ignored. This is because TestNG needs to be able to parse all annotations
+before starting to execute them and <code>@Listeners</code> is also one such annotation.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The annotation transformer allows you to alter the below types of annotations at runtime:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@Test</code> annotation on test methods.</p>
+</li>
+<li>
+<p>Any of the common attributes associated with the below listed configuration annotations:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>@BeforeSuite</code></p>
+</li>
+<li>
+<p><code>@AfterSuite</code></p>
+</li>
+<li>
+<p><code>@BeforeTest</code></p>
+</li>
+<li>
+<p><code>@AfterTest</code></p>
+</li>
+<li>
+<p><code>@BeforeClass</code></p>
+</li>
+<li>
+<p><code>@AfterClass</code></p>
+</li>
+<li>
+<p><code>@BeforeMethod</code></p>
+</li>
+<li>
+<p><code>@AfterMethod</code></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><code>@Listeners</code> annotation on test classes.</p>
+</li>
+<li>
+<p><code>@Factory</code> annotation used to mark constructors or a factory method as test factories.</p>
+</li>
+<li>
+<p><code>@DataProvider</code> annotated data providers.</p>
+</li>
+</ul>
 </div>
 <div class="paragraph">
 <p>When the method <code>transform()</code> is invoked, you can call any of the setters on the <code>ITestAnnotation</code> test parameter to alter its value before TestNG proceeds further.</p>
@@ -6715,7 +6798,7 @@ tng.run();</code></pre>
 <div id="footer">
 <div id="footer-text">
 7.9.0 <br>
-Last updated 2024-01-21 08:54:04 UTC
+Last updated 2024-01-22 08:15:15 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
