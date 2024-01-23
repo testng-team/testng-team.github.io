@@ -132,7 +132,7 @@ The below table summarises the parameter types that can be natively injected for
 ^|No
 
 |`AfterSuite`
-^|Yes
+^|No
 ^|No
 ^|No
 ^|No
