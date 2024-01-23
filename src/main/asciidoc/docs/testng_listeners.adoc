@@ -29,7 +29,7 @@ Javadocs are available {javadocs-base-url}/org/testng/IExecutionListener.html[he
 
 ==== IExecutionVisualiser
 
-Documentation To be included.
+Refer xref:execution_visualiser.adoc[here] to learn more.
 Javadocs are available {javadocs-base-url}/org/testng/IExecutionVisualiser.html[here]
 
 ==== IHookable
