@@ -133,23 +133,9 @@
 <li><a href="#_interceptors_for_data_providers">3.16. Interceptors for Data Providers</a></li>
 <li><a href="#_testng_listeners">3.17. TestNG Listeners</a>
 <ul class="sectlevel3">
-<li><a href="#_ialtersuitelistener">3.17.1. IAlterSuiteListener</a></li>
-<li><a href="#_iannotationtransformer">3.17.2. IAnnotationTransformer</a></li>
-<li><a href="#_iconfigurationlistener">3.17.3. IConfigurationListener</a></li>
-<li><a href="#_idataproviderlistener">3.17.4. IDataProviderListener</a></li>
-<li><a href="#_iexecutionlistener">3.17.5. IExecutionListener</a></li>
-<li><a href="#_iexecutionvisualiser">3.17.6. IExecutionVisualiser</a></li>
-<li><a href="#_ihookable">3.17.7. IHookable</a></li>
-<li><a href="#_iconfigurable">3.17.8. IConfigurable</a></li>
-<li><a href="#_iinvokedmethodlistener">3.17.9. IInvokedMethodListener</a></li>
-<li><a href="#_iclasslistener">3.17.10. IClassListener</a></li>
-<li><a href="#_imethodinterceptor">3.17.11. IMethodInterceptor</a></li>
-<li><a href="#_idataproviderinterceptor">3.17.12. IDataProviderInterceptor</a></li>
-<li><a href="#_ireporter">3.17.13. IReporter</a></li>
-<li><a href="#_isuitelistener">3.17.14. ISuiteListener</a></li>
-<li><a href="#_itestlistener">3.17.15. ITestListener</a></li>
-<li><a href="#_specifying_listeners_with_testng_xml_or_in_java">3.17.16. Specifying listeners with testng.xml or in Java</a></li>
-<li><a href="#_specifying_listeners_with_serviceloader">3.17.17. Specifying listeners with ServiceLoader</a></li>
+<li><a href="#_listener_list">3.17.1. Listener list</a></li>
+<li><a href="#_specifying_listeners_with_testng_xml_or_in_java">3.17.2. Specifying listeners with testng.xml or in Java</a></li>
+<li><a href="#_specifying_listeners_with_serviceloader">3.17.3. Specifying listeners with ServiceLoader</a></li>
 </ul>
 </li>
 <li><a href="#_dependency_injection">3.18. Dependency injection</a>
@@ -3209,112 +3195,101 @@ Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
 <p>There are several interfaces that allow you to modify TestNG&#8217;s behavior. These interfaces are broadly called "TestNG Listeners". Here are a few listeners:</p>
 </div>
 <div class="sect3">
-<h4 id="_ialtersuitelistener">3.17.1. IAlterSuiteListener</h4>
-<div class="paragraph">
-<p>Refer <a href="altering_suites.html">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IAlterSuiteListener.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_iannotationtransformer">3.17.2. IAnnotationTransformer</h4>
-<div class="paragraph">
-<p>Refer <a href="annotation_transformers.html">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IAnnotationTransformer.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_iconfigurationlistener">3.17.3. IConfigurationListener</h4>
-<div class="paragraph">
-<p>Refer <a href="method_invocations.html#_listening_to_configuration_invocations">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurationListener.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_idataproviderlistener">3.17.4. IDataProviderListener</h4>
-<div class="paragraph">
-<p>Refer <a href="method_invocations.html#_listening_to_data_provider_invocations">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderListener.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_iexecutionlistener">3.17.5. IExecutionListener</h4>
-<div class="paragraph">
-<p>Refer <a href="method_invocations.html#_listening_to_testng_lifecycle_events">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionListener.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_iexecutionvisualiser">3.17.6. IExecutionVisualiser</h4>
-<div class="paragraph">
-<p>Refer <a href="execution_visualiser.html">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionVisualiser.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_ihookable">3.17.7. IHookable</h4>
-<div class="paragraph">
-<p>Refer <a href="ihookable.html">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IHookable.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_iconfigurable">3.17.8. IConfigurable</h4>
-<div class="paragraph">
-<p>Refer <a href="iconfigurable.html">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurable.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_iinvokedmethodlistener">3.17.9. IInvokedMethodListener</h4>
-<div class="paragraph">
-<p>Refer <a href="method_invocations.html#_listening_to_method_invocations">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IInvokedMethodListener.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_iclasslistener">3.17.10. IClassListener</h4>
-<div class="paragraph">
-<p>Refer <a href="method_invocations.html#_listening_to_class_level_invocations">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IClassListener.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_imethodinterceptor">3.17.11. IMethodInterceptor</h4>
-<div class="paragraph">
-<p>Refer <a href="method_interceptors.html#_method_interceptors">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IMethodInterceptor.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_idataproviderinterceptor">3.17.12. IDataProviderInterceptor</h4>
-<div class="paragraph">
-<p>Refer <a href="method_interceptors.html#_interceptors_for_data_providers">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderInterceptor.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_ireporter">3.17.13. IReporter</h4>
-<div class="paragraph">
-<p>Refer <a href="logging_and_results.html#_logging_reporters">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IReporter.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_isuitelistener">3.17.14. ISuiteListener</h4>
-<div class="paragraph">
-<p>Refer <a href="method_invocations.html#_listening_to_suite_level_invocations">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/ISuiteListener.html">here</a></p>
-</div>
+<h4 id="_listener_list">3.17.1. Listener list</h4>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Listener name</th>
+<th class="tableblock halign-left valign-top">User Documentation</th>
+<th class="tableblock halign-left valign-top">API Documentation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IAlterSuiteListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="altering_suites.html">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IAlterSuiteListener.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IAnnotationTransformer</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="annotation_transformers.html">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IAnnotationTransformer.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IConfigurationListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_invocations.html#_listening_to_configuration_invocations">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurationListener.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IDataProviderListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_invocations.html#_listening_to_data_provider_invocations">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderListener.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IExecutionListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_invocations.html#_listening_to_testng_lifecycle_events">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionListener.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IExecutionVisualiser</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="execution_visualiser.html">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IExecutionVisualiser.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IHookable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="ihookable.html">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IHookable.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IConfigurable</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="iconfigurable.html">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IConfigurable.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IInvokedMethodListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_invocations.html#_listening_to_method_invocations">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IInvokedMethodListener.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IClassListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_invocations.html#_listening_to_class_level_invocations">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IClassListener.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IMethodInterceptor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_interceptors.html#_method_interceptors">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IMethodInterceptor.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IDataProviderInterceptor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_interceptors.html#_interceptors_for_data_providers">docs</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IDataProviderInterceptor.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">IReporter</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="logging_and_results.html#_logging_reporters">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/IReporter.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ISuiteListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="method_invocations.html#_listening_to_suite_level_invocations">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/ISuiteListener.html">javadocs</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ITestListener</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="logging_and_results.html#_logging_listeners">docs</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/ITestListener.html">javadocs</a></p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
-<h4 id="_itestlistener">3.17.15. ITestListener</h4>
-<div class="paragraph">
-<p>Refer <a href="logging_and_results.html#_logging_listeners">here</a> to learn more.
-Javadocs are available <a href="https://javadoc.io/static/org.testng/testng/7.9.0/org/testng/ITestListener.html">here</a></p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_specifying_listeners_with_testng_xml_or_in_java">3.17.16. Specifying listeners with testng.xml or in Java</h4>
+<h4 id="_specifying_listeners_with_testng_xml_or_in_java">3.17.2. Specifying listeners with testng.xml or in Java</h4>
 <div class="paragraph">
 <p>Here is how you can define listeners in your <code>testng.xml</code> file:</p>
 </div>
@@ -3397,7 +3372,7 @@ public class MyTest {
 </div>
 </div>
 <div class="sect3">
-<h4 id="_specifying_listeners_with_serviceloader">3.17.17. Specifying listeners with ServiceLoader</h4>
+<h4 id="_specifying_listeners_with_serviceloader">3.17.3. Specifying listeners with ServiceLoader</h4>
 <div class="paragraph">
 <p>Finally, the JDK offers a very elegant mechanism to specify implementations of interfaces on the class path via the <a href="https://docs.oracle.com/javase/6/docs/api/java/util/ServiceLoader.html">ServiceLoader</a> class.</p>
 </div>
@@ -6869,7 +6844,7 @@ tng.run();</code></pre>
 <div id="footer">
 <div id="footer-text">
 7.9.0 <br>
-Last updated 2024-01-23 15:14:46 UTC
+Last updated 2024-01-26 16:38:08 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
