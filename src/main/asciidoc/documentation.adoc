@@ -59,17 +59,25 @@ You can enable dry run mode for TestNG by passing the JVM argument `-Dtestng.mod
 |===
 |JVM Argument |Comment |Default value
 
+|`testng.ignore.callback.skip`
+| A boolean indicating if TestNG should treat forgetting to call `org.testng.IHookable.run` (or) `org.testng.IConfigurable.run` despite it being defined in the code as a test/configuration failure.
+|`false`
+
+|`testng.preferential.listeners.package`
+| A comma separated list of packages that represent special listeners which users will expect to be executed after executing the regular listeners. Here special listeners can be anything that a user feels should be executed *ALWAYS* at the end.
+| `com.intellij.rt.*`
+
 |`testng.favor.custom.thread-pool.executor`
 |A Boolean indicating whether TestNG should resort to going back to using the custom implementation for managing Thread pools. If this flag is enabled, then thread pool sharing between data driven tests and thread pool sharing between regular and data driven tests WILL NOT work properly.
-|false
+| `false`
 
 |`testng.thread.affinity`
 |A Boolean indicating whether TestNG should resort to running dependent methods on the same thread as the upstream methods.
-|false
+| `false`
 
 |`testng.mode.dryrun`
 |A Boolean indicating whether TestNG should simulate a real execution. In this mode the test methods are not actually executed.
-|false
+| `false`
 
 |`testng.test.classpath`
 |A String that represents a list of zip files or jars that need to be added to the TestNG classpath for it to retrieve test classes for execution.
@@ -77,23 +85,23 @@ You can enable dry run mode for TestNG by passing the JVM argument `-Dtestng.mod
 
 |`skip.caller.clsLoader`
 |A Boolean indicating whether TestNG should skip using the current ClassLoader for loading classes.
-|false
+| `false`
 
 |`testng.dtd.http`
 |A Boolean indicating whether TestNG should load DTDs from http endpoints.
-|false
+| `false`
 
 |`testng.show.stack.frames`
 |A Boolean indicating whether TestNG should show detailed stack traces in reports.
-|false
+| `false`
 
 |`testng.memory.friendly`
 |A Boolean indicating whether TestNG should be memory cognizant and use lightweight test method representations.
-|false
+| `false`
 
 |`testng.strict.parallel`
 |A Boolean indicating that TestNG should attempt to start all test methods simultaneously when there are more than one test tags and parallelism has been set to methods.
-|false
+| `false`
 
 |`emailable.report2.name`
 |A String indicating the file name into which the emailable reports are to be written into.
@@ -101,11 +109,11 @@ You can enable dry run mode for TestNG by passing the JVM argument `-Dtestng.mod
 
 |`oldTestngEmailableReporter`
 |A Boolean indicating whether TestNG should use the old emailable report listener for building simple html emailable report.
-|false
+| `false`
 
 |`noEmailableReporter`
 |A Boolean indicating whether TestNG should use the NEW emailable report listener for building simple html emailable report.
-|true
+| `true`
 
 |`testng.report.xml.name`
 |A String indicating the file name into which the xml reports are to be written into.
@@ -113,7 +121,7 @@ You can enable dry run mode for TestNG by passing the JVM argument `-Dtestng.mod
 
 |`fileStringBuffer`
 |A Boolean indicating whether TestNG should output verbose logs when working with very large text data.
-|false
+| `false`
 
 |`stacktrace.success.output.level`
 a|

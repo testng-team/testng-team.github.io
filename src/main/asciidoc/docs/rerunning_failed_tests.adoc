@@ -1,8 +1,9 @@
+[#_rerunning_failed_tests]
 === Rerunning failed tests
 
-Every time tests fail in a suite, TestNG creates a file called `testng-failed.xml` in the output directory. This XML file contains the necessary information to rerun only these methods that failed, allowing you to quickly reproduce the failures without having to run the entirety of your tests.  Therefore, a typical session would look like this:
+Every time tests fail in a suite, TestNG creates a file called `testng-failed.xml` in the output directory.This XML file contains the necessary information to rerun only these methods that failed, allowing you to quickly reproduce the failures without having to run the entirety of your tests.Therefore, a typical session would look like this:
 
-[source, bash]
+[source,bash]
 
 ----
 java -classpath testng.jar;%CLASSPATH% org.testng.TestNG -d test-outputs testng.xml

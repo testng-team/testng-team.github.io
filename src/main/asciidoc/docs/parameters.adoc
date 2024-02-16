@@ -258,7 +258,7 @@ If you want to run a few specific data providers in a different thread pool, you
 
 TestNG allows you to retry a data provider incase it has encountered any issues when calling it the first time.
 
-This is similar to how regular test methods can be retried as explained in xref:_rerunning_failed_tests[this section].
+This is similar to how regular test methods can be retried as explained in xref:rerunning_failed_tests.adoc#_rerunning_failed_tests[this section].
 
 To be able to retry a data provider, the following needs to be done.
 
