@@ -237,3 +237,144 @@ java org.testng.TestNG -groups windows,linux -testclass org.test.MyTest
 The ant task and `testng.xml` allow you to launch TestNG with more parameters (methods to include, specifying parameters, etc...), so you should consider using the command line only when you are trying to learn about TestNG and you want to get up and running quickly.
 
 TIP: The command line flags that specify what tests should be run will be ignored if you also specify a testng.xml file, with the exception of `-includedgroups` and `-excludedgroups`, which will override all the group inclusions/exclusions found in `testng.xml`.
+
+==== Running tests from within a test jar
+
+TestNG can be provided with a jar that contains your test classes and you can execute the tests from within it.
+
+Let's see an example (We are going to use Maven for this example.)
+
+We will be using https://maven.apache.org/plugins/maven-assembly-plugin/usage.html[maven-assembly-plugin] and https://maven.apache.org/plugins/maven-jar-plugin/usage.html[maven-jar-plugin] to demonstrate how to do this.
+
+The project's directory structure will look like below:
+
+[source, bash]
+
+----
+.
+├── pom.xml
+└── src
+    └── test
+        ├── java
+        │   └── org
+        │       └── testng
+        │           ├── FirstTestCase.java
+        │           └── SecondTestCase.java
+        └── resources
+            ├── suites
+            │   ├── suite1.xml
+            │   └── suite2.xml
+            └── test-jar-with-dependencies.xml
+----
+
+The relevant `<dependencies>` section and the `<plugins>` section will look like below:
+
+[source, xml]
+
+----
+<dependencies>
+    <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>7.9.0</version>
+        <scope>test</scope>
+    </dependency>
+</dependencies>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.3.0</version>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>test-jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.6.0</version>
+            <configuration>
+                <descriptors>
+                    <descriptor>src/test/resources/test-jar-with-dependencies.xml</descriptor>
+                </descriptors>
+                <archive>
+                    <!-- We would like to create an executable jar so that we can execute it directly -->
+                    <manifest>
+                        <mainClass>org.testng.TestNG</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>single</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+----
+
+The contents of `src/test/resources/test-jar-with-dependencies.xml` will look like below:
+
+[source,xml]
+----
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd
+https://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 ">
+    <id>test-jar-with-dependencies</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <useProjectArtifact>true</useProjectArtifact>
+            <useProjectAttachments>true</useProjectAttachments>
+            <unpack>true</unpack>
+            <scope>test</scope>
+        </dependencySet>
+    </dependencySets>
+</assembly>
+----
+
+Now let's build the jars using the command `mvn clean package`.
+
+Now in order to run the tests, use the below command:
+
+[source, bash]
+
+----
+java -jar target/uber-testjar-demo-1.0-SNAPSHOT-test-jar-with-dependencies.jar -testjar target/uber-testjar-demo-1.0-SNAPSHOT-tests.jar
+----
+
+This command causes TestNG to look for test classes in the jar and it executes all of them.
+
+Here:
+
+* `target/uber-testjar-demo-1.0-SNAPSHOT-test-jar-with-dependencies.jar` - Represents the uber/fat jar which contains all the dependencies inside it.
+* `target/uber-testjar-demo-1.0-SNAPSHOT-tests.jar` - Contains all the tests that we created.
+* -`-testjar` - This argument informs TestNG that it should look for test classes inside the jar and NOT in the current CLASSPATH.
+
+
+If you would like to execute a specific suite file that exists in the jar, then use the below command:
+
+[source, bash]
+
+
+----
+java -jar target/uber-testjar-demo-1.0-SNAPSHOT-test-jar-with-dependencies.jar -testjar target/uber-testjar-demo-1.0-SNAPSHOT-tests.jar -xmlpathinjar suites/suite2.xml
+----
+
+Here we are specifying the path to the suite file using the command line argument `-xmlpathinjar`.
+
+For more details, refer to https://stackoverflow.com/a/11787964[this stackoverflow post].
