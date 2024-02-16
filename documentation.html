@@ -1418,7 +1418,7 @@ public Object[][] getTestData() {
 <p>TestNG allows you to retry a data provider incase it has encountered any issues when calling it the first time.</p>
 </div>
 <div class="paragraph">
-<p>This is similar to how regular test methods can be retried as explained in <a href="#_rerunning_failed_tests">this section</a>.</p>
+<p>This is similar to how regular test methods can be retried as explained in <a href="rerunning_failed_tests.html#_rerunning_failed_tests">this section</a>.</p>
 </div>
 <div class="paragraph">
 <p>To be able to retry a data provider, the following needs to be done.</p>
@@ -2082,7 +2082,7 @@ public void testServer() {
 <div class="sect2">
 <h3 id="_rerunning_failed_tests">Rerunning failed tests</h3>
 <div class="paragraph">
-<p>Every time tests fail in a suite, TestNG creates a file called <code>testng-failed.xml</code> in the output directory. This XML file contains the necessary information to rerun only these methods that failed, allowing you to quickly reproduce the failures without having to run the entirety of your tests.  Therefore, a typical session would look like this:</p>
+<p>Every time tests fail in a suite, TestNG creates a file called <code>testng-failed.xml</code> in the output directory.This XML file contains the necessary information to rerun only these methods that failed, allowing you to quickly reproduce the failures without having to run the entirety of your tests.Therefore, a typical session would look like this:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -4412,19 +4412,29 @@ TestNG by default does not bring in the YAML related library into your classpath
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.ignore.callback.skip</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A boolean indicating if TestNG should treat forgetting to call <code>org.testng.IHookable.run</code> (or) <code>org.testng.IConfigurable.run</code> despite it being defined in the code as a test/configuration failure.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.preferential.listeners.package</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A comma separated list of packages that represent special listeners which users will expect to be executed after executing the regular listeners. Here special listeners can be anything that a user feels should be executed <strong>ALWAYS</strong> at the end.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>com.intellij.rt.*</code></p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.favor.custom.thread-pool.executor</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should resort to going back to using the custom implementation for managing Thread pools. If this flag is enabled, then thread pool sharing between data driven tests and thread pool sharing between regular and data driven tests WILL NOT work properly.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.thread.affinity</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should resort to running dependent methods on the same thread as the upstream methods.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.mode.dryrun</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should simulate a real execution. In this mode the test methods are not actually executed.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.test.classpath</code></p></td>
@@ -4434,27 +4444,27 @@ TestNG by default does not bring in the YAML related library into your classpath
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>skip.caller.clsLoader</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should skip using the current ClassLoader for loading classes.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.dtd.http</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should load DTDs from http endpoints.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.show.stack.frames</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should show detailed stack traces in reports.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.memory.friendly</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should be memory cognizant and use lightweight test method representations.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.strict.parallel</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating that TestNG should attempt to start all test methods simultaneously when there are more than one test tags and parallelism has been set to methods.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>emailable.report2.name</code></p></td>
@@ -4464,12 +4474,12 @@ TestNG by default does not bring in the YAML related library into your classpath
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>oldTestngEmailableReporter</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should use the old emailable report listener for building simple html emailable report.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>noEmailableReporter</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should use the NEW emailable report listener for building simple html emailable report.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">true</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>true</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.report.xml.name</code></p></td>
@@ -4479,7 +4489,7 @@ TestNG by default does not bring in the YAML related library into your classpath
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>fileStringBuffer</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">A Boolean indicating whether TestNG should output verbose logs when working with very large text data.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">false</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>false</code></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>stacktrace.success.output.level</code></p></td>
@@ -4603,7 +4613,7 @@ class ThisClass {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-01-26 16:38:08 UTC
+Last updated 2024-02-16 08:05:04 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
