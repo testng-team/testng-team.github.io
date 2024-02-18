@@ -132,6 +132,7 @@
 <li><a href="#_listener_list">3.17.1. Listener list</a></li>
 <li><a href="#_specifying_listeners_with_testng_xml_or_in_java">3.17.2. Specifying listeners with testng.xml or in Java</a></li>
 <li><a href="#_specifying_listeners_with_serviceloader">3.17.3. Specifying listeners with ServiceLoader</a></li>
+<li><a href="#_ordering_listeners_in_testng">3.17.4. Ordering listeners in TestNG</a></li>
 </ul>
 </li>
 <li><a href="#_dependency_injection">3.18. Dependency injection</a>
@@ -3514,6 +3515,220 @@ Finishing</code></pre>
 <p>This mechanism allows you to apply the same set of listeners to an entire organization just by adding a jar file to the classpath, instead of asking every single developer to remember to specify these listeners in their <code>testng.xml</code> file.</p>
 </div>
 </div>
+<div class="sect3">
+<h4 id="_ordering_listeners_in_testng">3.17.4. Ordering listeners in TestNG</h4>
+<div class="paragraph">
+<p>TestNG now allows you to control the order in which listeners are executed.</p>
+</div>
+<div class="paragraph">
+<p>This is particularly useful when you have multiple listeners that are altering the test result states and so you would like to ensure that they do so in some deterministic order.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+This feature is ONLY available from TestNG version <code>7.10.0</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Following is how we can get this done.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To start with, you would need to build an implementation of the interface <code>org.testng.ListenerComparator</code></p>
+</li>
+<li>
+<p>Now this implementation needs to be plugged into TestNG via the configuration parameter <code>-listenercomparator</code></p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+TestNG orders only user&#8217;s listeners and which are not part of the exclusion list that can be specified via the JVM argument <code>-Dtestng.preferential.listeners.package</code> (Multiple fully qualified class names can be specified as comma separated values). If nothing is specified, TestNG by default excludes all the IntelliJ IDEA listeners under the package <code>com.intellij.rt.*</code>.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s see an example.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Let&#8217;s create a custom annotation that will help us define the order in which <strong>our</strong> listeners should be invoked.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">@Retention(java.lang.annotation.RetentionPolicy.RUNTIME)
+@Target({ TYPE})
+
+public @interface RunOrder {
+  int value();
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Now let&#8217;s create an implementation of <code>org.testng.ListenerComparator</code> which honours this custom annotation that we just now created.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.ITestNGListener;
+import org.testng.ListenerComparator;
+import java.util.Optional;
+
+public class AnnotationBackedListenerComparator implements ListenerComparator {
+
+  @Override
+  public int compare(ITestNGListener l1, ITestNGListener l2) {
+    int first = getRunOrder(l1);
+    int second = getRunOrder(l2);
+    return Integer.compare(first, second);
+  }
+
+  private static int getRunOrder(ITestNGListener listener) {
+    RunOrder runOrder = listener.getClass().getAnnotation(RunOrder.class);
+    return Optional.ofNullable(runOrder)
+        .map(RunOrder::value)
+        .orElse(Integer.MAX_VALUE); //If annotation was not found then return a max value so that
+    //the listener can be plugged in to the end.
+  }
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Lets say we have the below listeners as samples.</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">import org.testng.IExecutionListener;
+
+public class ExecutionListenerHolder {
+
+  public static final String PREFIX = ExecutionListenerHolder.class.getName() + "$";
+
+  public abstract static class KungFuWarrior implements IExecutionListener {
+    @Override
+    public void onExecutionStart() {
+      System.err.println(getClass().getSimpleName() + ".onExecutionStart");
+    }
+
+    @Override
+    public void onExecutionFinish() {
+      System.err.println(getClass().getSimpleName() + ".onExecutionFinish");
+    }
+  }
+
+  @RunOrder(1)
+  public static class MasterOogway extends KungFuWarrior { }
+
+  @RunOrder(2)
+  public static class MasterShifu extends KungFuWarrior { }
+
+  public static class DragonWarrior extends KungFuWarrior { }
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>A sample code snippet that uses the TestNG APIs to run the test could look like below:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">TestNG testng = create(NormalSampleTestCase.class);
+testng.addListener(new ExecutionListenerHolder.DragonWarrior());
+testng.addListener(new ExecutionListenerHolder.MasterShifu());
+testng.addListener(new ExecutionListenerHolder.MasterOogway());
+testng.setListenerComparator(new AnnotationBackedListenerComparator());
+testng.run();</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a variant of the same above sample, which invokes the <code>main()</code> method:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="java">String prefix = ExecutionListenerHolder.PREFIX;
+String[] args = new String[] {
+    "-listener",
+    prefix + "DragonWarrior,"+
+    prefix + "MasterShifu,"+
+    prefix + "MasterOogway",
+    "-testclass",
+    NormalSampleTestCase.class.getName(),
+    "-listenercomparator",
+    AnnotationBackedListenerComparator.class.getName()
+};
+TestNG.main(args);</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s how the trimmed version of execution output would look like:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="prettyprint highlight"><code data-lang="bash">MasterOogway.onExecutionStart
+MasterShifu.onExecutionStart
+DragonWarrior.onExecutionStart
+
+===============================================
+Command line suite
+Total tests run: 2, Passes: 2, Failures: 0, Skips: 0
+===============================================
+
+DragonWarrior.onExecutionFinish
+MasterShifu.onExecutionFinish
+MasterOogway.onExecutionFinish</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+As seen from the above output, we wanted to have the listener <code>MasterOogway</code> be invoked first, followed by the listener <code>MasterShifu</code> and finally <code>DragonWarrior</code> (because this class does not have any <code>@RunOrder</code> annotation and hence it should be ONLY added at the end)
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+Also it should be noted that the teardown methods get executed in a symmetrical order. So if <code>onExecutionStart()</code> of the listener <code>DragonWarrior</code> got executed as the last listener, then its corresponding <code>onExecutionFinish()</code> would be called first.
+</td>
+</tr>
+</table>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_dependency_injection">3.18. Dependency injection</h3>
@@ -6004,7 +6219,7 @@ tng.run();</code></pre>
 <div id="footer">
 <div id="footer-text">
 7.9.0 <br>
-Last updated 2024-02-18 14:49:44 UTC
+Last updated 2024-02-18 15:43:28 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
