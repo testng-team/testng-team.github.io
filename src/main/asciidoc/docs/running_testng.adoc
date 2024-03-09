@@ -236,7 +236,7 @@ java org.testng.TestNG -groups windows,linux -testclass org.test.MyTest
 
 The ant task and `testng.xml` allow you to launch TestNG with more parameters (methods to include, specifying parameters, etc...), so you should consider using the command line only when you are trying to learn about TestNG and you want to get up and running quickly.
 
-TIP: The command line flags that specify what tests should be run will be ignored if you also specify a testng.xml file, with the exception of `-includedgroups` and `-excludedgroups`, which will override all the group inclusions/exclusions found in `testng.xml`.
+TIP: The command line flags that specify what tests should be run will be ignored if you also specify a testng.xml file, with the exception of `-groups` and `-excludegroups`, which will override all the group inclusions/exclusions found in `testng.xml`.
 
 ==== Running tests from within a test jar
 
