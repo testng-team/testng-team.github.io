@@ -226,7 +226,7 @@ package com.example;
 
 public class ParentModule extends AbstractModule {
   @Override
-  protected void conigure() {
+  protected void configure() {
     bind(MyService.class).toProvider(MyServiceProvider.class);
     bind(MyContext.class).to(MyContextImpl.class).in(Singleton.class);
   }
