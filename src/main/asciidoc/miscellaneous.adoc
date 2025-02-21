@@ -7,12 +7,11 @@ Here are several articles and presentations about TestNG (English, French, Germa
 ==== English
 
 * https://www.slideshare.net/LevonApreyan/testng-framework-72078619[TestNG presentation (Levon Apreyan, February 2017)]
-* https://community.oracle.com/docs/DOC-916315[Use TestNG to create test logs that are structured like Javadocs (Raghunandan Seshadri, August 2015)]
-* https://blogs.atlassian.com/2013/02/testng-plus-junit-bamboo/[How I Learned to Stop Worrying and Love TestNG (March 2013)]
-* https://zeroturnaround.com/labs/using-spock-to-test-groovy-and-java-applications/[Using Spock to test Groovy AND Java applications (March 2013)]
+* https://web.archive.org/web/20131102213208/https://blogs.atlassian.com/2013/02/testng-plus-junit-bamboo/[How I Learned to Stop Worrying and Love TestNG (March 2013)]
+* https://blog.codepipes.com/testing/spock-for-java.html[Using Spock to test Groovy AND Java applications (March 2013)]
 * https://www.asjava.com/testng/testng-tutorials/[TestNG tutorials (Jammy Chen)]
 * https://kaczanowscy.pl/tomek/2012-04/why-testng-and-not-junit[Why TestNG and not JUnit? (Tomek Kaczanowski)]
-* https://www.randomsync.net/2012/02/excel-testng-driving-testng-tests.html[TestNG and Excel]
+* https://web.archive.org/web/20240808230300/http://www.randomsync.net/2012/02/excel-testng-driving-testng-tests.html[TestNG and Excel]
 * https://github.com/rackspace/python-proboscis[TestNG in Python]
 * https://www.opengamma.com/blog/2011/04/04/converting-opengamma-junit-testng[Converting a large codebase from JUnit 4 to TestNG]
 * https://seleniumexamples.com/blog/guide/using-soft-assertions-in-testng/[Using soft assertions with TestNG]
