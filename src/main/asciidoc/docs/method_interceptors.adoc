@@ -22,7 +22,7 @@ java -classpath "testng-jdk15.jar:test/build" org.testng.TestNG -listener test.m
    -testclass test.methodinterceptors.FooTest
 ----
 
-For the equivalent ant syntax, see the listeners attribute in the https://testng.org/doc/ant.html[ant documentation].
+For the equivalent ant syntax, see the listeners attribute in the https://testng.org/testng-ant[ant documentation].
 
 For example, here is a Method Interceptor that will reorder the methods so that test methods that belong to the group "fast" are always run first:
 

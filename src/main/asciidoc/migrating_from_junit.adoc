@@ -6,7 +6,7 @@ The easiest way to convert your JUnit tests to TestNG is to use the Eclipse Test
 
 === Asserts
 
-Note that the class `org.testng.Assert` uses a different argument ordering than the ones used by JUnit. If you are porting code that uses JUnit's asserts, you might want to us a static import of that class:
+Note that the class `org.testng.Assert` uses a different argument ordering than the ones used by JUnit. If you are porting code that uses JUnit's asserts, you might want to use a static import of that class:
 
 [source,java]
 
