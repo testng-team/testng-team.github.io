@@ -264,7 +264,7 @@ To be able to retry a data provider, the following needs to be done.
 
 * First we would need to implement the interface `org.testng.IRetryDataProvider`.
 * Next you would need to tie this implementation to the data provider annotation using the attribute `retryUsing` of the `@DataProvider` annotation.
-* With that we can now retry a failed ata provider.
+* With that we can now retry a failed data provider.
 
 Here's a sample retry implementation:
 
