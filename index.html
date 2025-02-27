@@ -2088,7 +2088,7 @@ public Object[][] getTestData() {
 <p>Next you would need to tie this implementation to the data provider annotation using the attribute <code>retryUsing</code> of the <code>@DataProvider</code> annotation.</p>
 </li>
 <li>
-<p>With that we can now retry a failed ata provider.</p>
+<p>With that we can now retry a failed data provider.</p>
 </li>
 </ul>
 </div>
@@ -3094,7 +3094,7 @@ before starting to execute them and <code>@Listeners</code> is also one such ann
 </div>
 </div>
 <div class="paragraph">
-<p>For the equivalent ant syntax, see the listeners attribute in the <a href="https://testng.org/doc/ant.html">ant documentation</a>.</p>
+<p>For the equivalent ant syntax, see the listeners attribute in the <a href="https://testng.org/testng-ant">ant documentation</a>.</p>
 </div>
 <div class="paragraph">
 <p>For example, here is a Method Interceptor that will reorder the methods so that test methods that belong to the group "fast" are always run first:</p>
@@ -5492,7 +5492,7 @@ class ThisClass {
 <div class="sect2">
 <h3 id="_asserts">9.2. Asserts</h3>
 <div class="paragraph">
-<p>Note that the class <code>org.testng.Assert</code> uses a different argument ordering than the ones used by JUnit. If you are porting code that uses JUnit&#8217;s asserts, you might want to us a static import of that class:</p>
+<p>Note that the class <code>org.testng.Assert</code> uses a different argument ordering than the ones used by JUnit. If you are porting code that uses JUnit&#8217;s asserts, you might want to use a static import of that class:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -5792,13 +5792,10 @@ tng.run();</code></pre>
 <p><a href="https://www.slideshare.net/LevonApreyan/testng-framework-72078619">TestNG presentation (Levon Apreyan, February 2017)</a></p>
 </li>
 <li>
-<p><a href="https://community.oracle.com/docs/DOC-916315">Use TestNG to create test logs that are structured like Javadocs (Raghunandan Seshadri, August 2015)</a></p>
+<p><a href="https://web.archive.org/web/20131102213208/https://blogs.atlassian.com/2013/02/testng-plus-junit-bamboo/">How I Learned to Stop Worrying and Love TestNG (March 2013)</a></p>
 </li>
 <li>
-<p><a href="https://blogs.atlassian.com/2013/02/testng-plus-junit-bamboo/">How I Learned to Stop Worrying and Love TestNG (March 2013)</a></p>
-</li>
-<li>
-<p><a href="https://zeroturnaround.com/labs/using-spock-to-test-groovy-and-java-applications/">Using Spock to test Groovy AND Java applications (March 2013)</a></p>
+<p><a href="https://blog.codepipes.com/testing/spock-for-java.html">Using Spock to test Groovy AND Java applications (March 2013)</a></p>
 </li>
 <li>
 <p><a href="https://www.asjava.com/testng/testng-tutorials/">TestNG tutorials (Jammy Chen)</a></p>
@@ -5807,22 +5804,19 @@ tng.run();</code></pre>
 <p><a href="https://kaczanowscy.pl/tomek/2012-04/why-testng-and-not-junit">Why TestNG and not JUnit? (Tomek Kaczanowski)</a></p>
 </li>
 <li>
-<p><a href="https://www.randomsync.net/2012/02/excel-testng-driving-testng-tests.html">TestNG and Excel</a></p>
+<p><a href="https://web.archive.org/web/20240808230300/http://www.randomsync.net/2012/02/excel-testng-driving-testng-tests.html">TestNG and Excel</a></p>
 </li>
 <li>
-<p><a href="https://github.com/rackspace/python-proboscis">TestNG in Python</a></p>
+<p><a href="https://web.archive.org/web/20130702055926/https://www.opengamma.com/blog/2011/04/04/converting-opengamma-junit-testng">Converting a large codebase from JUnit 4 to TestNG</a></p>
 </li>
 <li>
-<p><a href="https://www.opengamma.com/blog/2011/04/04/converting-opengamma-junit-testng">Converting a large codebase from JUnit 4 to TestNG</a></p>
-</li>
-<li>
-<p><a href="https://seleniumexamples.com/blog/guide/using-soft-assertions-in-testng/">Using soft assertions with TestNG</a></p>
+<p><a href="https://web.archive.org/web/20150331021211/https://seleniumexamples.com/blog/guide/using-soft-assertions-in-testng/">Using soft assertions with TestNG</a></p>
 </li>
 <li>
 <p><a href="https://kaczanowscy.pl/tomek/2011-02/visualization-dependent-test-methods">Visualizing live dependencies (Tomek Kaczanowski)</a></p>
 </li>
 <li>
-<p><a href="https://www.lysergicjava.com/?p=165">Passing parameters to @DataProviders.</a></p>
+<p><a href="https://web.archive.org/web/20180814022532/http://lysergicjava.com/index.php/2010/10/18/feeding-testng-data-providers-stupid-testng-tricks-volume-1/">Passing parameters to @DataProviders.</a></p>
 </li>
 <li>
 <p><a href="https://barisergun.blogspot.com/2010/09/integrated-mockito-testng-and-emma-on.html">TestNG, Emma and Mockito</a></p>
@@ -5831,31 +5825,28 @@ tng.run();</code></pre>
 <p><a href="https://www.dotneter.org/2010/09/data-driven-testing-using-selenium-testng-part-1-of-4.html">Data-driven testing using Selenium and TestNG (video)</a></p>
 </li>
 <li>
-<p><a href="https://blog.meesqa.com/2010/09/11/combine-multiple-testng-resultsxml-files-into-a-single-xml-file/">Combining multiple testng-results.xml file into a single file</a></p>
+<p><a href="https://web.archive.org/web/20171009105127/http://blog.meesqa.com/2010/09/11/combine-multiple-testng-resultsxml-files-into-a-single-xml-file/">Combining multiple testng-results.xml file into a single file</a></p>
 </li>
 <li>
-<p><a href="https://techo-ecco.com/blog/testng-with-cobertura/">TestNG + Cobertura</a></p>
+<p><a href="https://web.archive.org/web/20230108033405/https://blog.jayway.com/2009/12/14/powermock-testng-true/">TestNG + PowerMock + Mockito</a></p>
 </li>
 <li>
-<p><a href="https://blog.jayway.com/2009/12/14/powermock-testng-true/">TestNG + PowerMock + Mockito</a></p>
-</li>
-<li>
-<p><a href="https://maxheapsize.com/2009/09/23/test-jboss-rules-5-with-testng/">TestNG and Drools</a></p>
+<p><a href="https://web.archive.org/web/20160824125520/http://maxheapsize.com/2009/09/23/test-jboss-rules-5-with-testng/">TestNG and Drools</a></p>
 </li>
 <li>
 <p><a href="https://functionaltestautomation.blogspot.com/2009/10/dataprovider-data-driven-testing-with.html">Data Driven Testing with Selenium and TestNG</a></p>
 </li>
 <li>
-<p><a href="https://margelatu.org/2009/06/25/java-code-coverage-reports-in-eclipse/">Code coverage with Emma and TestNG</a></p>
+<p><a href="https://web.archive.org/web/20111012061619/http://www.margelatu.org/2009/06/25/java-code-coverage-reports-in-eclipse/">Code coverage with Emma and TestNG</a></p>
 </li>
 <li>
 <p><a href="https://www.mkyong.com/unittest/junit-4-vs-testng-comparison/">Comparison between JUnit 4 and TestNG</a></p>
 </li>
 <li>
-<p><a href="https://www.michaelminella.com/testing/unit-testing-with-testng-and-jmockit.html">Unit testing with TestNG and JMockit (part 1)</a></p>
+<p><a href="https://web.archive.org/web/20120229102945/https://michaelminella.com/testing/unit-testing-with-testng-and-jmockit.html">Unit testing with TestNG and JMockit (part 1)</a></p>
 </li>
 <li>
-<p><a href="https://www.michaelminella.com/testing/unit-testing-with-testng-and-jmockit-part-2.html">Unit testing with TestNG and JMockit (part 2)</a></p>
+<p><a href="https://web.archive.org/web/20130502063206/https://michaelminella.com/testing/unit-testing-with-testng-and-jmockit-part-2.html">Unit testing with TestNG and JMockit (part 2)</a></p>
 </li>
 <li>
 <p><a href="https://www.techbookreport.com/tbr0332.html">Review of the book</a></p>
@@ -6219,7 +6210,7 @@ tng.run();</code></pre>
 <div id="footer">
 <div id="footer-text">
 7.9.0 <br>
-Last updated 2024-11-17 15:12:10 UTC
+Last updated 2025-02-27 18:51:48 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
