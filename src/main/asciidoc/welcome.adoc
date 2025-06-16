@@ -99,7 +99,7 @@ If you think you found a bug, here is how to report it:
 * If the bug you observed is on the Eclipse plug-in, make sure your sample project contains the `.project` and `.classpath` files.
 * File a bug.
 
-For more information, you can either https://testng.org/doc/download.html[download TestNG], read the manual or browse the links at the top.
+For more information, you can either https://testng.org/#_download[download TestNG], read the manual or browse the links at the top.
 
 === License
 
