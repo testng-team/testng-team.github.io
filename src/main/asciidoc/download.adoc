@@ -49,7 +49,7 @@ TestNG is also hosted on GitHub, where you can download the source and build the
 [source,shell]
 
 ----
-$ git clone git://github.com/testng-team/testng.git
+$ git clone https://github.com/testng-team/testng.git
 $ cd testng
 $ ./gradlew build
 ----
