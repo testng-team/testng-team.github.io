@@ -35,7 +35,6 @@ Cedric Beust & Alexandru Popescu
 <!-- Attributes: -->
 <!--
 @attr  name        The name of this suite (as it will appear in the reports)
-@attr  junit       Whether to run in JUnit mode.
 @attr  verbose     How verbose the output on the console will be.  
                 This setting has no impact on the HTML reports.
 @attr  parallel   Whether TestNG should use different threads
@@ -62,11 +61,15 @@ for running both regular and data driven tests in parallel. (Works only with Tes
       for running parallel data providers. (Works only with TestNG versions 7.9.0 or higher)
 @attr  object-factory A class that implements IObjectFactory that will be used to
        instantiate the test objects.
+@attr lazy-factory If true, @Factory produced test class instances are created lazily
+      (just-in-time, right before the first configuration/test method of each instance runs)
+      instead of eagerly up-front. Honored only for constructor based factories. When unset,
+      the TestNG configuration decides (default eager). A @Factory(lazy=...) annotation value
+      overrides this suite level attribute.
 @attr allow-return-values If true, tests that return a value will be run as well
 -->
 <!ATTLIST suite
     name CDATA #REQUIRED
-    junit (true | false) "false"
     verbose CDATA #IMPLIED
     parallel (false | true | none | methods | tests | classes | instances) "none"
     parent-module CDATA #IMPLIED
@@ -81,6 +84,7 @@ for running both regular and data driven tests in parallel. (Works only with Tes
     share-thread-pool-for-data-providers (true | false) "false"
     object-factory CDATA #IMPLIED
     group-by-instances (true | false) "false"
+    lazy-factory (true | false) #IMPLIED
     preserve-order (true | false) "true"
     allow-return-values (true | false) "false"
 >
@@ -127,7 +131,6 @@ A test contains parameters and classes.  Additionally, you can define additional
 
 <!--
 @attr  name         The name of this test (as it will appear in the reports)
-@attr  junit        Whether to run in JUnit mode.
 @attr  verbose      How verbose the output on the console will be.
                 This setting has no impact on the HTML reports.
                 Default value: suite level verbose.
@@ -149,7 +152,6 @@ found in the XML file.
 -->
 <!ATTLIST test
     name CDATA #REQUIRED 
-    junit (true | false) "false"
     verbose  CDATA #IMPLIED
     parallel  (false | true | none | methods | tests | classes | instances) #IMPLIED
     thread-count CDATA #IMPLIED
