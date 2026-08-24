@@ -27,7 +27,7 @@ Additionally, the following command-line switches are available:
 
 |`-configfailurepolicy`
 |`skip`,`continue`
-|Whether TestNG should continue to execute the remaining tests in the suite or skip them if an @Before* method fails. Default behavior is `skip`.
+|Whether TestNG should keep attempting `@Before*`/`@After*` methods after one of them has failed once, or skip the remaining ones. Default behavior is `skip`. With `continue`, a configuration failure invalidates only the narrowest scope it belongs to — the failing instance for `@BeforeClass`, the failing test method invocation for `@BeforeMethod` — so sibling instances and sibling test methods still get their configuration methods invoked. A test method whose own setup failed is still skipped, with one exception: a failed `@BeforeTest` invalidates no instance at all, so under `continue` the test methods of that `<test>` do run. A `@BeforeSuite` failure always stops the suite regardless of this setting. In every case the configuration failure is reported, so `continue` never turns a broken setup into a green run.
 
 |`-d`
 |A directory
