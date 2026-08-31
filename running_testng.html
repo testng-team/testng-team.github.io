@@ -77,7 +77,7 @@ Additionally, the following command-line switches are available:</p>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-configfailurepolicy</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>skip</code>,<code>continue</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Whether TestNG should continue to execute the remaining tests in the suite or skip them if an @Before* method fails. Default behavior is <code>skip</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Whether TestNG should keep attempting <code>@Before*</code>/<code>@After*</code> methods after one of them has failed once, or skip the remaining ones. Default behavior is <code>skip</code>. With <code>continue</code>, a configuration failure invalidates only the narrowest scope it belongs to — the failing instance for <code>@BeforeClass</code>, the failing test method invocation for <code>@BeforeMethod</code> — so sibling instances and sibling test methods still get their configuration methods invoked. A test method whose own setup failed is still skipped, with one exception: a failed <code>@BeforeTest</code> invalidates no instance at all, so under <code>continue</code> the test methods of that <code>&lt;test&gt;</code> do run. A <code>@BeforeSuite</code> failure always stops the suite regardless of this setting. In every case the configuration failure is reported, so <code>continue</code> never turns a broken setup into a green run.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>-d</code></p></td>
@@ -517,7 +517,7 @@ https://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 "&gt;
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-15 03:59:22 UTC
+Last updated 2026-08-31 06:55:52 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
