@@ -765,7 +765,7 @@ C:&gt; java org.testng.TestNG @c:\command.txt</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="prettyprint highlight"><code data-lang="shell">java -Dtestng.test.classpath="c:/build;c:/java/classes;" org.testng.TestNG testng.xml</code></pre>
+<pre class="prettyprint highlight"><code data-lang="shell">java -cp "%CLASSPATH%;c:/build;c:/java/classes" -Dtestng.test.classpath="c:/build;c:/java/classes" org.testng.TestNG testng.xml</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -790,8 +790,8 @@ C:&gt; java org.testng.TestNG @c:\command.txt</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>testng.test.classpath</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">A semicolon separated series of directories that contain your test classes.</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">If this property is set, TestNG will use it to look for your test classes instead of the class path. This is convenient if you are using the package tag in your XML file and you have a lot of classes in your classpath, most of them not being test classes.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A list of class path entries: directories, <code>.jar</code> files or <code>.zip</code> files. Separate the entries with the path separator of your platform: <code>;</code> on Windows, <code>:</code> on Linux and macOS.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">If this property is set, a <code>&lt;package&gt;</code> in your XML file scans only the class path entries that the property lists. The property does not add entries to the class path, so each entry must also be on the class path. This is convenient when your XML file uses the package tag and your class path holds a lot of classes that are not test classes.</p></td>
 </tr>
 </tbody>
 </table>
@@ -4985,7 +4985,7 @@ class ThisClass {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-08-31 06:55:52 UTC
+Last updated 2026-11-25 13:36:23 UTC
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.min.js"></script>
