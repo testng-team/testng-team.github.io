@@ -32,6 +32,40 @@ Here is an example testng.xml file:
 </suite>
 ----
 
+==== Declaring the XSD instead of a DTD
+
+A suite file can declare the XML Schema https://testng.org/testng-1.1.xsd[testng-1.1.xsd] instead of a doctype.
+The schema mirrors `testng-1.1.dtd`: it changes what a suite file may _declare_, not what it may contain.
+The recommended prologue is:
+
+[source, xml]
+
+----
+<suite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="https://testng.org/testng-1.1.xsd"
+       name="Suite1" verbose="1">
+  <test name="Nopackage">
+    <classes>
+      <class name="NoPackageTest"/>
+    </classes>
+  </test>
+</suite>
+----
+
+To move an existing suite from the DTD to the XSD:
+
+. Remove the `<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">` line.
+. Add `xmlns:xsi` and `xsi:noNamespaceSchemaLocation` to the `<suite>` element, as shown above.
+
+A few things to know:
+
+* The schema has no target namespace, so the `<suite>` element stays un-namespaced and you use `xsi:noNamespaceSchemaLocation` (not `xsi:schemaLocation`).
+* Declare one grammar, not both. The DTD does not declare `xmlns:xsi` or `xsi:noNamespaceSchemaLocation`, so a file that carries a doctype and the schema attributes is not valid against the DTD.
+* A suite that declares a doctype is validated against the DTD, exactly as before. A suite that declares neither is validated against the schema.
+* TestNG validates against the copy of the schema bundled with it. It does not download the file the document points to, so running a suite does not depend on reaching testng.org.
+* Schema validation needs a namespace-aware parser. In a suite that declares no doctype, an undeclared XML prefix is now an error where it used to be read as part of the name. Setting the system property `testng.xml.validation` to `off` restores the previous behavior.
+* IDEs and standalone XML validators read the `xsi:noNamespaceSchemaLocation` declaration, so you get completion and validation while editing the file. TestNG itself writes this declaration into the suite files it generates, such as `testng-failed.xml`.
+
 You can specify package names instead of class names:
 
 [source, xml]
